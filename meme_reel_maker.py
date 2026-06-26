@@ -208,48 +208,66 @@ def build_video(overlay_text: str, output_path: Path) -> None:
 def post_to_facebook_reel(video_path: Path, caption: str) -> str:
     """
     Uploads a video as a Facebook Reel using the Graph API.
-    Returns the published post ID.
+    Uses the correct 3-step flow: start → upload bytes → finish/publish.
+    Returns the published video ID.
     """
     file_size = video_path.stat().st_size
+    base_url  = f"https://graph.facebook.com/v19.0/{FB_PAGE_ID}/video_reels"
 
-    # Step 1 — Initialise upload session
-    init_url  = f"https://graph.facebook.com/v19.0/{FB_PAGE_ID}/video_reels"
-    init_data = {
-        "upload_phase": "start",
-        "access_token": FB_ACCESS_TOKEN,
-    }
-    r = requests.post(init_url, data=init_data)
-    r.raise_for_status()
-    upload_session_id = r.json()["upload_session_id"]
-    video_id          = r.json()["video_id"]
-    print(f"[FB] Upload session: {upload_session_id}  video_id: {video_id}")
+    # ── Step 1: Start upload session ─────────────────────────────────────────
+    print("[FB] Step 1 — Starting upload session…")
+    r1 = requests.post(base_url, data={
+        "upload_phase":  "start",
+        "access_token":  FB_ACCESS_TOKEN,
+    })
+    print(f"[FB] Start response ({r1.status_code}): {r1.text}")
+    r1.raise_for_status()
+    resp1 = r1.json()
 
-    # Step 2 — Transfer bytes
-    upload_url = r.json().get("upload_url", f"https://rupload.facebook.com/video-upload/v19.0/{upload_session_id}")
+    # Guard: print full response so we always see what FB returns
+    if "upload_session_id" not in resp1 or "video_id" not in resp1:
+        raise RuntimeError(
+            f"FB start phase missing keys. Full response: {resp1}"
+        )
+
+    upload_session_id = resp1["upload_session_id"]
+    video_id          = resp1["video_id"]
+    # FB sometimes returns the upload_url directly; fall back to standard URL
+    upload_url = resp1.get(
+        "upload_url",
+        f"https://rupload.facebook.com/video-upload/v19.0/{upload_session_id}"
+    )
+    print(f"[FB] session={upload_session_id}  video_id={video_id}")
+
+    # ── Step 2: Upload raw bytes ──────────────────────────────────────────────
+    print("[FB] Step 2 — Uploading video bytes…")
     with open(video_path, "rb") as fh:
         video_bytes = fh.read()
 
-    headers = {
-        "Authorization":        f"OAuth {FB_ACCESS_TOKEN}",
-        "offset":               "0",
-        "file_size":            str(file_size),
-        "Content-Type":         "application/octet-stream",
-    }
-    r2 = requests.post(upload_url, headers=headers, data=video_bytes)
+    r2 = requests.post(
+        upload_url,
+        headers={
+            "Authorization": f"OAuth {FB_ACCESS_TOKEN}",
+            "offset":        "0",
+            "file_size":     str(file_size),
+            "Content-Type":  "application/octet-stream",
+        },
+        data=video_bytes,
+    )
+    print(f"[FB] Upload response ({r2.status_code}): {r2.text}")
     r2.raise_for_status()
-    print(f"[FB] Upload response: {r2.json()}")
 
-    # Step 3 — Publish
-    publish_data = {
-        "upload_phase":    "finish",
-        "video_id":        video_id,
-        "access_token":    FB_ACCESS_TOKEN,
-        "description":     caption,
-        "video_state":     "PUBLISHED",
-    }
-    r3 = requests.post(init_url, data=publish_data)
+    # ── Step 3: Finish & publish ──────────────────────────────────────────────
+    print("[FB] Step 3 — Publishing reel…")
+    r3 = requests.post(base_url, data={
+        "upload_phase":  "finish",
+        "video_id":      video_id,
+        "access_token":  FB_ACCESS_TOKEN,
+        "description":   caption,
+        "video_state":   "PUBLISHED",
+    })
+    print(f"[FB] Publish response ({r3.status_code}): {r3.text}")
     r3.raise_for_status()
-    print(f"[FB] Publish response: {r3.json()}")
     return video_id
 
 
