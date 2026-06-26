@@ -89,11 +89,23 @@ def generate_joke(fmt: dict) -> tuple[str, str]:
 
     # ── Parse format A ──────────────────────────────────────────────────────
     if "SETUP_LABEL" in fmt["prompt"]:
-        lines = {l.split(":")[0].strip(): ":".join(l.split(":")[1:]).strip()
-                 for l in raw.splitlines() if ":" in l}
-        setup_label     = lines.get("SETUP_LABEL", "Them")
-        setup           = lines.get("SETUP", "...")
-        punchline_label = lines.get("PUNCHLINE_LABEL", "Me")
+        import re
+        # Robust parsing: strip markdown bold markers, handle any casing/spacing
+        setup_label     = "Them"
+        setup           = "..."
+        punchline_label = "Me"
+        for line in raw.splitlines():
+            clean = re.sub(r'\*+', '', line).strip()  # remove **bold** markers
+            if re.match(r'SETUP_LABEL\s*:', clean, re.IGNORECASE):
+                val = clean.split(':', 1)[1].strip()
+                if val: setup_label = val
+            elif re.match(r'SETUP\s*:', clean, re.IGNORECASE):
+                val = clean.split(':', 1)[1].strip()
+                if val: setup = val
+            elif re.match(r'PUNCHLINE_LABEL\s*:', clean, re.IGNORECASE):
+                val = clean.split(':', 1)[1].strip()
+                if val: punchline_label = val
+        print(f"[Parsed] setup_label={setup_label!r}  setup={setup!r}  punchline_label={punchline_label!r}")
         overlay_text    = f"{setup_label}: {setup}\n\n{punchline_label}:"
         caption         = f"{setup_label}: {setup}\n{punchline_label}: 😂\n\n#memes #funny #relatable"
     else:
