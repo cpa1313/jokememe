@@ -48,17 +48,14 @@ MEME_FORMATS = [
             "Output ONLY those 4 lines, nothing else."
         ),
     },
-    # Format B: POV reaction setup  →  funny reaction video
+    # Format B: observation headline  →  funny reaction video
     {
         "template": "{headline}",
         "prompt": (
-            "Write a short, funny 'POV:' meme caption that sets up a relatable situation "
-            "so a reaction video makes sense. Examples:\n"
-            "'POV: Your boss books a 10am meeting on a Monday'\n"
-            "'POV: The WiFi drops right before you submit the assignment'\n"
-            "'POV: Your friend says \"it\\'s just 5 minutes away\" and it\\'s 45 minutes away'\n"
-            "Make it relatable, modern, and punchy. Max 15 words. "
-            "Start with 'POV:'. Output ONLY that line, nothing else."
+            "Write a single funny observation/headline meme (like 'FIFA forcing players to have "
+            "multiple hydration breaks to get a few ads in'). "
+            "It should be a relatable, slightly absurd take on everyday life, sports, or work. "
+            "Max 20 words. Output ONLY the headline, nothing else."
         ),
     },
 ]
@@ -178,15 +175,25 @@ def build_video(overlay_text: str, output_path: Path) -> None:
         f"line_spacing=10"
     )
 
-    # scale+pad to 9:16 portrait, THEN draw text — all inside filter_complex
+    # Layout: 1920px tall = 480px black text zone on top + 1440px video below
+    TEXT_ZONE_H = 480
+    VIDEO_H     = 1920 - TEXT_ZONE_H   # 1440
+
+    # scale+pad the video to fill the bottom zone exactly, then composite onto
+    # a black 1080x1920 canvas — text is always in the clear black area at top
     filter_complex = (
+        # 1. Scale video to fill the bottom video zone (letterbox if needed)
         "[0:v]"
-        "scale=1080:1920:force_original_aspect_ratio=decrease,"
-        "pad=1080:1920:(ow-iw)/2:(oh-ih)/2,"
-        f"{drawtext_shadow},"
-        f"{drawtext_main}"
-        "[vout];"
-        # Mix original audio with background music at 15% volume
+        f"scale=1080:{VIDEO_H}:force_original_aspect_ratio=decrease,"
+        f"pad=1080:{VIDEO_H}:(ow-iw)/2:(oh-ih)/2"
+        "[vid];"
+        # 2. Black full-frame canvas
+        f"color=black:s=1080x1920:r=30[bg];"
+        # 3. Overlay video at y=TEXT_ZONE_H
+        f"[bg][vid]overlay=0:{TEXT_ZONE_H}[composed];"
+        # 4. Draw shadow + main text in the black zone at top
+        f"[composed]{drawtext_shadow},{drawtext_main}[vout];"
+        # 5. Mix original audio with background music at 15% volume
         "[0:a][1:a]amix=inputs=2:duration=shortest:weights=1 0.15[aout]"
     )
 
