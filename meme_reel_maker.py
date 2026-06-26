@@ -40,12 +40,11 @@ MEME_FORMATS = [
     {
         "template": "{setup_label}: {setup}\n\n{punchline_label}:",
         "prompt": (
-            "Write a short, funny 2-line meme joke in this exact format:\n"
-            "SETUP_LABEL: <who is speaking first, e.g. 'Recruiter', 'Teacher', 'Boss'>\n"
-            "SETUP: <what they say>\n"
-            "PUNCHLINE_LABEL: <who reacts, e.g. 'Me', 'That one intern', 'The cat'>\n"
-            "Make it relatable, modern and punchy. Max 15 words per line. "
-            "Output ONLY those 4 lines, nothing else."
+            "You are a meme generator. Reply with EXACTLY 3 lines, no intro, no explanation, no markdown.\n"
+            "Line 1: SETUP_LABEL: [who speaks, e.g. Recruiter]\n"
+            "Line 2: SETUP: [what they say, max 12 words]\n"
+            "Line 3: PUNCHLINE_LABEL: [who reacts, e.g. Me]\n"
+            "Make it relatable, modern and punchy. ONLY output those 3 lines."
         ),
     },
     # Format B: observation headline  →  funny reaction video
@@ -90,21 +89,39 @@ def generate_joke(fmt: dict) -> tuple[str, str]:
     # ── Parse format A ──────────────────────────────────────────────────────
     if "SETUP_LABEL" in fmt["prompt"]:
         import re
-        # Robust parsing: strip markdown bold markers, handle any casing/spacing
-        setup_label     = "Them"
-        setup           = "..."
-        punchline_label = "Me"
-        for line in raw.splitlines():
-            clean = re.sub(r'\*+', '', line).strip()  # remove **bold** markers
-            if re.match(r'SETUP_LABEL\s*:', clean, re.IGNORECASE):
-                val = clean.split(':', 1)[1].strip()
+        setup_label     = None
+        setup           = None
+        punchline_label = None
+
+        # Strip markdown and collect non-empty lines
+        lines = [re.sub(r'\*+', '', l).strip() for l in raw.splitlines() if re.sub(r'\*+', '', l).strip()]
+
+        # Strategy 1: regex key matching
+        for line in lines:
+            if re.match(r'SETUP_LABEL\s*:', line, re.IGNORECASE):
+                val = line.split(':', 1)[1].strip()
                 if val: setup_label = val
-            elif re.match(r'SETUP\s*:', clean, re.IGNORECASE):
-                val = clean.split(':', 1)[1].strip()
+            elif re.match(r'SETUP\s*:', line, re.IGNORECASE):
+                val = line.split(':', 1)[1].strip()
                 if val: setup = val
-            elif re.match(r'PUNCHLINE_LABEL\s*:', clean, re.IGNORECASE):
-                val = clean.split(':', 1)[1].strip()
+            elif re.match(r'PUNCHLINE_LABEL\s*:', line, re.IGNORECASE):
+                val = line.split(':', 1)[1].strip()
                 if val: punchline_label = val
+
+        # Strategy 2: positional fallback — just grab line values in order
+        if not all([setup_label, setup, punchline_label]) and len(lines) >= 3:
+            print("[Parser] Regex fallback: using positional line extraction")
+            def extract_val(line):
+                return line.split(':', 1)[1].strip() if ':' in line else line
+            setup_label     = setup_label     or extract_val(lines[0])
+            setup           = setup           or extract_val(lines[1])
+            punchline_label = punchline_label or extract_val(lines[2])
+
+        # Final defaults if all else fails
+        setup_label     = setup_label     or "Them"
+        setup           = setup           or "..."
+        punchline_label = punchline_label or "Me"
+
         print(f"[Parsed] setup_label={setup_label!r}  setup={setup!r}  punchline_label={punchline_label!r}")
         overlay_text    = f"{setup_label}: {setup}\n\n{punchline_label}:"
         caption         = f"{setup_label}: {setup}\n{punchline_label}: 😂\n\n#memes #funny #relatable"
@@ -192,10 +209,10 @@ def build_video(overlay_text: str, output_path: Path) -> None:
     # Scale+pad the video to fill the bottom zone exactly, then composite onto
     # a white 1080x1920 canvas — text is always in the clear white area at top
     filter_complex = (
-        # 1. Scale video to fill the bottom video zone (letterbox if needed)
+        # 1. Scale video to FILL the bottom video zone (crop to avoid black bars)
         "[0:v]"
-        f"scale=1080:{VIDEO_H}:force_original_aspect_ratio=decrease,"
-        f"pad=1080:{VIDEO_H}:(ow-iw)/2:(oh-ih)/2:color=white"
+        f"scale=1080:{VIDEO_H}:force_original_aspect_ratio=increase,"
+        f"crop=1080:{VIDEO_H}"
         "[vid];"
         # 2. White full-frame canvas
         f"color=white:s=1080x1920:r=30[bg];"
