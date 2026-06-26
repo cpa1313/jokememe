@@ -30,7 +30,7 @@ jobs:
       # ── 4. Install Python dependencies ───────────────────────────────────
       - name: Install dependencies
         run: |
-          pip install groq requests
+          pip install groq requests Pillow
 
       # ── 5. Create output directory ────────────────────────────────────────
       - name: Prepare output folder
