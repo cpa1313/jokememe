@@ -203,7 +203,8 @@ def build_video(overlay_text: str, output_path: Path) -> None:
         return (s.replace("\\", "\\\\")
                   .replace("'",  "\u2019")   # curly apostrophe — safe in drawtext
                   .replace(":",  "\\:")
-                  .replace(",",  "\\,"))
+                  .replace(",",  "\\,")
+                  .replace("\n", "\\n"))     # literal \n required by drawtext
 
     escaped_text = esc(wrapped)
 
