@@ -14,7 +14,7 @@ from pathlib import Path
 
 # ── Auto-install missing packages ──────────────────────────────────────────
 def _ensure_packages(*packages):
-    import importlib
+    import importlib.util
     missing = [p for p in packages if not importlib.util.find_spec(p)]
     if missing:
         print(f"[Setup] Installing missing packages: {missing}")
