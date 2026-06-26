@@ -212,7 +212,7 @@ def post_to_facebook_reel(video_path: Path, caption: str) -> str:
     Returns the published video ID.
     """
     file_size = video_path.stat().st_size
-    base_url  = f"https://graph.facebook.com/v19.0/{FB_PAGE_ID}/video_reels"
+    base_url  = f"https://graph.facebook.com/v25.0/{FB_PAGE_ID}/video_reels"
 
     # ── Step 1: Start upload session ─────────────────────────────────────────
     print("[FB] Step 1 — Starting upload session…")
@@ -224,20 +224,17 @@ def post_to_facebook_reel(video_path: Path, caption: str) -> str:
     r1.raise_for_status()
     resp1 = r1.json()
 
-    # Guard: print full response so we always see what FB returns
-    if "upload_session_id" not in resp1 or "video_id" not in resp1:
-        raise RuntimeError(
-            f"FB start phase missing keys. Full response: {resp1}"
-        )
+    # Guard: must have at least video_id
+    if "video_id" not in resp1:
+        raise RuntimeError(f"FB start phase missing video_id. Full response: {resp1}")
 
-    upload_session_id = resp1["upload_session_id"]
-    video_id          = resp1["video_id"]
-    # FB sometimes returns the upload_url directly; fall back to standard URL
+    video_id = resp1["video_id"]
+    # Newer Graph API (v25+) returns upload_url directly instead of upload_session_id
     upload_url = resp1.get(
         "upload_url",
-        f"https://rupload.facebook.com/video-upload/v19.0/{upload_session_id}"
+        f"https://rupload.facebook.com/video-upload/v25.0/{video_id}"
     )
-    print(f"[FB] session={upload_session_id}  video_id={video_id}")
+    print(f"[FB] video_id={video_id}  upload_url={upload_url}")
 
     # ── Step 2: Upload raw bytes ──────────────────────────────────────────────
     print("[FB] Step 2 — Uploading video bytes…")
