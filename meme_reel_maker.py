@@ -48,14 +48,17 @@ MEME_FORMATS = [
             "Output ONLY those 4 lines, nothing else."
         ),
     },
-    # Format B: observation headline  →  funny reaction video
+    # Format B: POV reaction setup  →  funny reaction video
     {
         "template": "{headline}",
         "prompt": (
-            "Write a single funny observation/headline meme (like 'FIFA forcing players to have "
-            "multiple hydration breaks to get a few ads in'). "
-            "It should be a relatable, slightly absurd take on everyday life, sports, or work. "
-            "Max 20 words. Output ONLY the headline, nothing else."
+            "Write a short, funny 'POV:' meme caption that sets up a relatable situation "
+            "so a reaction video makes sense. Examples:\n"
+            "'POV: Your boss books a 10am meeting on a Monday'\n"
+            "'POV: The WiFi drops right before you submit the assignment'\n"
+            "'POV: Your friend says \"it\\'s just 5 minutes away\" and it\\'s 45 minutes away'\n"
+            "Make it relatable, modern, and punchy. Max 15 words. "
+            "Start with 'POV:'. Output ONLY that line, nothing else."
         ),
     },
 ]
