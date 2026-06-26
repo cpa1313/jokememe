@@ -63,10 +63,10 @@ MEME_FORMATS = [
 # ── Text styling constants ──────────────────────────────────────────────────
 FONT_PATH   = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 FONT_SIZE   = 52          # px — big enough for mobile
-TEXT_COLOR  = "white"
-SHADOW_COLOR= "black"
+TEXT_COLOR  = "black"
 TEXT_WRAP   = 28          # chars per line
-PADDING_TOP = 40          # px from top of frame
+PADDING_X   = 40          # px from left edge
+PADDING_TOP = 60          # px from top of text zone
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -137,16 +137,33 @@ def wrap_text(text: str, width: int = TEXT_WRAP) -> str:
     return "\n".join(lines)
 
 
+def get_video_duration(video_file: Path) -> float:
+    """Returns the duration of the video in seconds using ffprobe."""
+    result = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+         "-of", "default=noprint_wrappers=1:nokey=1", str(video_file)],
+        capture_output=True, text=True
+    )
+    try:
+        return float(result.stdout.strip())
+    except ValueError:
+        return 59.0  # fallback if ffprobe fails
+
+
 def build_video(overlay_text: str, output_path: Path) -> None:
     """
-    Picks a random video + music, overlays text at the top (white + black shadow),
-    mixes in background music at low volume, trims to ≤59 s for Reels.
+    Picks a random video + music, overlays text at the top (white bg, black text,
+    left-aligned), mixes in background music at low volume, matches source video duration.
     """
     video_file = pick_random(VIDEOS_DIR, [".mp4", ".mov", ".webm", ".avi"])
     music_file = pick_random(MUSIC_DIR,  [".mp3", ".wav", ".aac", ".m4a"])
 
     print(f"[Video] Using video: {video_file}")
     print(f"[Music] Using music: {music_file}")
+
+    # Get actual video duration
+    duration = get_video_duration(video_file)
+    print(f"[Video] Duration: {duration:.2f}s")
 
     wrapped = wrap_text(overlay_text)
 
@@ -159,40 +176,33 @@ def build_video(overlay_text: str, output_path: Path) -> None:
 
     escaped_text = esc(wrapped)
 
-    # drawtext filter — shadow trick: draw black text slightly offset, then white on top
-    drawtext_shadow = (
-        f"drawtext=fontfile='{FONT_PATH}':"
-        f"text='{escaped_text}':"
-        f"fontcolor={SHADOW_COLOR}:fontsize={FONT_SIZE}:"
-        f"x=(w-text_w)/2+2:y={PADDING_TOP + 2}:"
-        f"line_spacing=10"
-    )
+    # drawtext filter — black text, left-aligned, on white background zone
     drawtext_main = (
         f"drawtext=fontfile='{FONT_PATH}':"
         f"text='{escaped_text}':"
         f"fontcolor={TEXT_COLOR}:fontsize={FONT_SIZE}:"
-        f"x=(w-text_w)/2:y={PADDING_TOP}:"
-        f"line_spacing=10"
+        f"x={PADDING_X}:y={PADDING_TOP}:"
+        f"line_spacing=14"
     )
 
-    # Layout: 1920px tall = 480px black text zone on top + 1440px video below
+    # Layout: 1920px tall = 480px WHITE text zone on top + 1440px video below
     TEXT_ZONE_H = 480
     VIDEO_H     = 1920 - TEXT_ZONE_H   # 1440
 
-    # scale+pad the video to fill the bottom zone exactly, then composite onto
-    # a black 1080x1920 canvas — text is always in the clear black area at top
+    # Scale+pad the video to fill the bottom zone exactly, then composite onto
+    # a white 1080x1920 canvas — text is always in the clear white area at top
     filter_complex = (
         # 1. Scale video to fill the bottom video zone (letterbox if needed)
         "[0:v]"
         f"scale=1080:{VIDEO_H}:force_original_aspect_ratio=decrease,"
-        f"pad=1080:{VIDEO_H}:(ow-iw)/2:(oh-ih)/2"
+        f"pad=1080:{VIDEO_H}:(ow-iw)/2:(oh-ih)/2:color=white"
         "[vid];"
-        # 2. Black full-frame canvas
-        f"color=black:s=1080x1920:r=30[bg];"
+        # 2. White full-frame canvas
+        f"color=white:s=1080x1920:r=30[bg];"
         # 3. Overlay video at y=TEXT_ZONE_H
         f"[bg][vid]overlay=0:{TEXT_ZONE_H}[composed];"
-        # 4. Draw shadow + main text in the black zone at top
-        f"[composed]{drawtext_shadow},{drawtext_main}[vout];"
+        # 4. Draw black text left-aligned in the white zone at top
+        f"[composed]{drawtext_main}[vout];"
         # 5. Mix original audio with background music at 15% volume
         "[0:a][1:a]amix=inputs=2:duration=shortest:weights=1 0.15[aout]"
     )
@@ -204,7 +214,7 @@ def build_video(overlay_text: str, output_path: Path) -> None:
         "-filter_complex", filter_complex,
         "-map", "[vout]",
         "-map", "[aout]",
-        "-t", "59",                    # max 59 s for Reels
+        "-t", str(duration),           # match actual source video length
         "-c:v", "libx264",
         "-preset", "fast",
         "-crf", "23",
