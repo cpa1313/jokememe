@@ -60,12 +60,28 @@ MEME_FORMATS = [
 ]
 
 # ── Text styling constants ──────────────────────────────────────────────────
-FONT_PATH   = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-FONT_SIZE   = 52          # px — big enough for mobile
+def _find_font() -> str:
+    """Return first existing bold font path, or a bare name as last resort."""
+    candidates = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+        "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+        "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            print(f"[Font] Using: {p}")
+            return p
+    print("[Font] WARNING: no font found in known paths — using bare name")
+    return "DejaVuSans-Bold"
+
+FONT_PATH   = _find_font()
+FONT_SIZE   = 55          # px — big enough for mobile
 TEXT_COLOR  = "black"
-TEXT_WRAP   = 28          # chars per line
+TEXT_WRAP   = 26          # chars per line
 PADDING_X   = 40          # px from left edge
-PADDING_TOP = 60          # px from top of text zone
+PADDING_TOP = 260         # push text toward bottom of the white zone
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -214,7 +230,8 @@ def build_video(overlay_text: str, output_path: Path) -> None:
         f"text='{escaped_text}':"
         f"fontcolor={TEXT_COLOR}:fontsize={FONT_SIZE}:"
         f"x={PADDING_X}:y={PADDING_TOP}:"
-        f"line_spacing=14"
+        f"line_spacing=16:"
+        f"shadowcolor=gray@0.4:shadowx=2:shadowy=2"
     )
 
     # Layout: 1920px tall = 480px WHITE text zone on top + 1440px video below
