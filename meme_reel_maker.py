@@ -9,9 +9,20 @@ import os
 import sys
 import random
 import textwrap
-import requests
 import subprocess
 from pathlib import Path
+
+# ── Auto-install missing packages ──────────────────────────────────────────
+def _ensure_packages(*packages):
+    import importlib
+    missing = [p for p in packages if not importlib.util.find_spec(p)]
+    if missing:
+        print(f"[Setup] Installing missing packages: {missing}")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--quiet", *missing])
+
+_ensure_packages("Pillow", "requests", "groq")
+
+import requests
 from groq import Groq
 
 def _require_env(name: str) -> str:
@@ -72,7 +83,7 @@ def render_text_zone(text: str, output_png: Path) -> None:
     Far more reliable than FFmpeg drawtext — font loading is predictable
     and we get pixel-perfect control over position.
     """
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw, ImageFont  # guaranteed by _ensure_packages above
 
     W, H = 1080, 480
     img  = Image.new("RGB", (W, H), "white")
