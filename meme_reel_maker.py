@@ -14,10 +14,18 @@ import subprocess
 from pathlib import Path
 from groq import Groq
 
-# ── Config ─────────────────────────────────────────────────────────────────
-GROQ_API_KEY    = os.environ["GROQ_API_KEY"]
-FB_ACCESS_TOKEN = os.environ["FB_ACCESS_TOKEN"]
-FB_PAGE_ID      = os.environ["FB_PAGE_ID"]
+def _require_env(name: str) -> str:
+    val = os.environ.get(name, "").strip()
+    if not val:
+        print(f"\n❌ ERROR: Environment variable '{name}' is missing or empty!")
+        print(f"   → Go to your GitHub repo → Settings → Secrets and variables → Actions")
+        print(f"   → Add a secret named: {name}\n")
+        import sys; sys.exit(1)
+    return val
+
+GROQ_API_KEY    = _require_env("GROQ_API_KEY")
+FB_ACCESS_TOKEN = _require_env("FB_ACCESS_TOKEN")
+FB_PAGE_ID      = _require_env("FB_PAGE_ID")
 
 VIDEOS_DIR  = Path("assets/videos")
 MUSIC_DIR   = Path("assets/music")
@@ -155,12 +163,15 @@ def build_video(overlay_text: str, output_path: Path) -> None:
         f"line_spacing=10"
     )
 
+    # scale+pad to 9:16 portrait, THEN draw text — all inside filter_complex
     filter_complex = (
         "[0:v]"
+        "scale=1080:1920:force_original_aspect_ratio=decrease,"
+        "pad=1080:1920:(ow-iw)/2:(oh-ih)/2,"
         f"{drawtext_shadow},"
         f"{drawtext_main}"
         "[vout];"
-        # Mix original audio (if any) with background music at 15 % volume
+        # Mix original audio with background music at 15% volume
         "[0:a][1:a]amix=inputs=2:duration=shortest:weights=1 0.15[aout]"
     )
 
@@ -178,8 +189,6 @@ def build_video(overlay_text: str, output_path: Path) -> None:
         "-c:a", "aac",
         "-b:a", "128k",
         "-movflags", "+faststart",
-        "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,"
-               "pad=1080:1920:(ow-iw)/2:(oh-ih)/2",   # 9:16 portrait
         str(output_path),
     ]
 
