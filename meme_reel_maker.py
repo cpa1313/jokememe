@@ -60,28 +60,63 @@ MEME_FORMATS = [
 ]
 
 # ── Text styling constants ──────────────────────────────────────────────────
-def _find_font() -> str:
-    """Return first existing bold font path, or a bare name as last resort."""
+FONT_SIZE   = 58          # px — big enough for mobile
+TEXT_WRAP   = 24          # chars per line
+PADDING_X   = 50          # px from left edge of white zone
+PADDING_TOP = 220         # px from top of white zone (lower half)
+
+
+def render_text_zone(text: str, output_png: Path) -> None:
+    """
+    Use Pillow to render text onto a 1080x480 white PNG.
+    Far more reliable than FFmpeg drawtext — font loading is predictable
+    and we get pixel-perfect control over position.
+    """
+    from PIL import Image, ImageDraw, ImageFont
+
+    W, H = 1080, 480
+    img  = Image.new("RGB", (W, H), "white")
+    draw = ImageDraw.Draw(img)
+
+    # ── Find a usable bold font ──────────────────────────────────────────
+    font = None
     candidates = [
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
         "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
         "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
+        "/usr/share/fonts/truetype/noto/NotoSans-Bold.ttf",
     ]
     for p in candidates:
         if os.path.exists(p):
-            print(f"[Font] Using: {p}")
-            return p
-    print("[Font] WARNING: no font found in known paths — using bare name")
-    return "DejaVuSans-Bold"
+            print(f"[Font/PIL] {p}")
+            font = ImageFont.truetype(p, FONT_SIZE)
+            break
 
-FONT_PATH   = _find_font()
-FONT_SIZE   = 55          # px — big enough for mobile
-TEXT_COLOR  = "black"
-TEXT_WRAP   = 26          # chars per line
-PADDING_X   = 40          # px from left edge
-PADDING_TOP = 260         # push text toward bottom of the white zone
+    if font is None:
+        # Last resort: download Roboto Bold
+        import urllib.request
+        fallback = Path("/tmp/meme_font.ttf")
+        if not fallback.exists():
+            print("[Font/PIL] Downloading fallback font…")
+            urllib.request.urlretrieve(
+                "https://github.com/google/fonts/raw/main/apache/roboto/static/Roboto-Bold.ttf",
+                str(fallback),
+            )
+        font = ImageFont.truetype(str(fallback), FONT_SIZE)
+
+    # ── Wrap and draw ────────────────────────────────────────────────────
+    wrapped = wrap_text(text, TEXT_WRAP)
+    draw.multiline_text(
+        (PADDING_X, PADDING_TOP),
+        wrapped,
+        fill="black",
+        font=font,
+        spacing=18,
+    )
+    img.save(str(output_png))
+    print(f"[Text Zone] Saved → {output_png}")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -212,36 +247,17 @@ def build_video(overlay_text: str, output_path: Path) -> None:
     video_has_audio = has_audio_stream(video_file)
     print(f"[Video] Has audio stream: {video_has_audio}")
 
-    wrapped = wrap_text(overlay_text)
-
-    # Escape special FFmpeg drawtext characters
-    def esc(s: str) -> str:
-        return (s.replace("\\", "\\\\")
-                  .replace("'",  "\u2019")   # curly apostrophe — safe in drawtext
-                  .replace(":",  "\\:")
-                  .replace(",",  "\\,")
-                  .replace("\n", "\\n"))     # literal \n required by drawtext
-
-    escaped_text = esc(wrapped)
-
-    # drawtext filter — black text, left-aligned, on white background zone
-    drawtext_main = (
-        f"drawtext=fontfile='{FONT_PATH}':"
-        f"text='{escaped_text}':"
-        f"fontcolor={TEXT_COLOR}:fontsize={FONT_SIZE}:"
-        f"x={PADDING_X}:y={PADDING_TOP}:"
-        f"line_spacing=16:"
-        f"shadowcolor=gray@0.4:shadowx=2:shadowy=2"
-    )
+    # ── Render text zone as PNG via Pillow (reliable cross-platform) ─────
+    text_png = OUTPUT_DIR / "text_zone.png"
+    render_text_zone(overlay_text, text_png)
 
     # Layout: 1920px tall = 480px WHITE text zone on top + 1440px video below
     TEXT_ZONE_H = 480
     VIDEO_H     = 1920 - TEXT_ZONE_H   # 1440
 
-    # Scale+pad the video to fill the bottom zone exactly, then composite onto
-    # a white 1080x1920 canvas — text is always in the clear white area at top
+    # Filter graph — no drawtext, just overlay the pre-rendered PNG
     video_filters = (
-        # 1. Scale video to FILL the bottom video zone (crop to avoid black bars)
+        # 1. Scale video to fill the bottom zone (crop to avoid black bars)
         "[0:v]"
         f"scale=1080:{VIDEO_H}:force_original_aspect_ratio=increase,"
         f"crop=1080:{VIDEO_H}"
@@ -250,8 +266,9 @@ def build_video(overlay_text: str, output_path: Path) -> None:
         f"color=white:s=1080x1920:r=30[bg];"
         # 3. Overlay video at y=TEXT_ZONE_H
         f"[bg][vid]overlay=0:{TEXT_ZONE_H}[composed];"
-        # 4. Draw black text left-aligned in the white zone at top
-        f"[composed]{drawtext_main}[vout]"
+        # 4. Overlay the Pillow-rendered text PNG at the top (y=0)
+        f"[2:v]scale=1080:{TEXT_ZONE_H}[txt];"
+        f"[composed][txt]overlay=0:0[vout]"
     )
 
     # 5. Audio: mix video audio + music if video has audio, else use music only
@@ -264,12 +281,13 @@ def build_video(overlay_text: str, output_path: Path) -> None:
 
     cmd = [
         "ffmpeg", "-y",
-        "-i", str(video_file),
-        "-i", str(music_file),
+        "-i", str(video_file),   # input 0 — video
+        "-i", str(music_file),   # input 1 — music
+        "-i", str(text_png),     # input 2 — text zone PNG
         "-filter_complex", filter_complex,
         "-map", "[vout]",
         "-map", "[aout]",
-        "-t", str(duration),           # match actual source video length
+        "-t", str(duration),     # match actual source video length
         "-c:v", "libx264",
         "-preset", "fast",
         "-crf", "23",
