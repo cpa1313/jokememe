@@ -167,6 +167,17 @@ def get_video_duration(video_file: Path) -> float:
         return 59.0  # fallback if ffprobe fails
 
 
+def has_audio_stream(video_file: Path) -> bool:
+    """Returns True if the video file contains at least one audio stream."""
+    result = subprocess.run(
+        ["ffprobe", "-v", "error", "-select_streams", "a:0",
+         "-show_entries", "stream=index",
+         "-of", "default=noprint_wrappers=1:nokey=1", str(video_file)],
+        capture_output=True, text=True
+    )
+    return bool(result.stdout.strip())
+
+
 def build_video(overlay_text: str, output_path: Path) -> None:
     """
     Picks a random video + music, overlays text at the top (white bg, black text,
@@ -181,6 +192,9 @@ def build_video(overlay_text: str, output_path: Path) -> None:
     # Get actual video duration
     duration = get_video_duration(video_file)
     print(f"[Video] Duration: {duration:.2f}s")
+
+    video_has_audio = has_audio_stream(video_file)
+    print(f"[Video] Has audio stream: {video_has_audio}")
 
     wrapped = wrap_text(overlay_text)
 
@@ -208,7 +222,7 @@ def build_video(overlay_text: str, output_path: Path) -> None:
 
     # Scale+pad the video to fill the bottom zone exactly, then composite onto
     # a white 1080x1920 canvas — text is always in the clear white area at top
-    filter_complex = (
+    video_filters = (
         # 1. Scale video to FILL the bottom video zone (crop to avoid black bars)
         "[0:v]"
         f"scale=1080:{VIDEO_H}:force_original_aspect_ratio=increase,"
@@ -219,10 +233,16 @@ def build_video(overlay_text: str, output_path: Path) -> None:
         # 3. Overlay video at y=TEXT_ZONE_H
         f"[bg][vid]overlay=0:{TEXT_ZONE_H}[composed];"
         # 4. Draw black text left-aligned in the white zone at top
-        f"[composed]{drawtext_main}[vout];"
-        # 5. Mix original audio with background music at 15% volume
-        "[0:a][1:a]amix=inputs=2:duration=shortest:weights=1 0.15[aout]"
+        f"[composed]{drawtext_main}[vout]"
     )
+
+    # 5. Audio: mix video audio + music if video has audio, else use music only
+    if video_has_audio:
+        audio_filters = ";[0:a][1:a]amix=inputs=2:duration=shortest:weights=1 0.15[aout]"
+    else:
+        audio_filters = f";[1:a]atrim=duration={duration},asetpts=PTS-STARTPTS[aout]"
+
+    filter_complex = video_filters + audio_filters
 
     cmd = [
         "ffmpeg", "-y",
