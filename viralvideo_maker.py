@@ -140,9 +140,9 @@ JOKE_THEMES = [
 
 
 # ── Text styling ───────────────────────────────────────────────────────────────
-FONT_SIZE_HEADER    = 58     # BIG BOLD ALL CAPS header
+FONT_SIZE_HEADER    = 38     # BIG BOLD ALL CAPS header
 FONT_SIZE_BODY      = 38     # smaller italic body
-STROKE_WIDTH_HEADER = 7      # thick stroke for header
+STROKE_WIDTH_HEADER = 5      # thick stroke for header
 STROKE_WIDTH_BODY   = 5      # slightly thinner for body
 
 
@@ -304,11 +304,11 @@ def render_text_png(header: str, body: str, width: int, height: int, output_png:
             ox  = int(math.cos(rad) * stroke_w)
             oy  = int(math.sin(rad) * stroke_w)
             draw.multiline_text((x + ox, y + oy), text, font=font,
-                                fill=stroke_col, spacing=spacing, align='center')
+                                fill=stroke_col, spacing=spacing, align='right')
         draw.multiline_text((x, y), text, font=font,
-                            fill=fill, spacing=spacing, align='center')
+                            fill=fill, spacing=spacing, align='right')
 
-    pad   = int(width * 0.08)
+    pad   = int(width * 0.06)          # right-side padding
     max_w = width - pad * 2
 
     wrapped_header = wrap_px(header.upper(), font_header, max_w)
@@ -320,9 +320,12 @@ def render_text_png(header: str, body: str, width: int, height: int, output_png:
     b_w, b_h = bb[2] - bb[0], bb[3] - bb[1]
     gap      = int(FONT_SIZE_HEADER * 0.5)
     total_h  = h_h + gap + b_h
-    start_y  = (height - total_h) // 2 - int(height * 0.03)
-    hx = (width - h_w) // 2
-    bx = (width - b_w) // 2
+
+    # Top-right: anchor to top with padding, right-align x positions
+    top_pad = int(height * 0.06)       # distance from top of video
+    start_y = top_pad
+    hx = width - h_w - pad             # right-align header
+    bx = width - b_w - pad             # right-align body
     by = start_y + h_h + gap
 
     draw_stroked((hx, start_y), wrapped_header, font_header,
