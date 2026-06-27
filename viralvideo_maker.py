@@ -58,82 +58,86 @@ OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
 
 JOKE_THEMES = [
 
-    # ── Format A: "X says / Me:" reaction style ───────────────────────────────
+    # ── Format A: Taglish reaction style ─────────────────────────────────────
     {
         "style": "reaction",
         "prompt": (
-            "You write viral meme captions for a relationship humor page on Facebook Reels.\n\n"
+            "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
+            "Write in TAGLISH — natural mix of Tagalog and English, the way Filipinos actually text.\n\n"
             "Write a SHORT reaction meme about relationships, dating, or single life.\n"
-            "The joke must be instantly relatable — someone should read it and say 'omg that's me'.\n\n"
+            "The joke must be instantly relatable — someone should read it and say 'same bes'.\n\n"
             "EXACT FORMAT — output ONLY these 3 lines, nothing else, no intro, no markdown:\n"
-            "SPEAKER: [one person, e.g. Her, Him, My boyfriend, My girlfriend, My situationship, My ex]\n"
-            "SETUP: [what they say or do — short, max 10 words, must be specific and funny]\n"
-            "REACTOR: [who reacts — e.g. Me, My anxiety, My wallet, My pillow, My single friends]\n\n"
+            "SPEAKER: [one person, e.g. Siya, Boyfriend ko, Girlfriend ko, Yung ex ko, Yung jowa ko]\n"
+            "SETUP: [what they say or do — short, max 10 words, specific and funny, taglish]\n"
+            "REACTOR: [who reacts — e.g. Ako, Yung puso ko, Yung self respect ko, Yung utak ko]\n\n"
             "GOOD EXAMPLES:\n"
-            "SPEAKER: Her\nSETUP: We need to talk\nREACTOR: My heart rate:\n\n"
-            "SPEAKER: Him\nSETUP: I'm not mad, I'm just disappointed\nREACTOR: Me knowing it's worse:\n\n"
-            "SPEAKER: My girlfriend\nSETUP: I'm fine\nREACTOR: The next 3 hours:\n\n"
-            "SPEAKER: My ex\nSETUP: Texts at 2am: you up?\nREACTOR: My self respect:\n\n"
-            "Now write a NEW one. Must be funny and make sense. ONLY output the 3 lines."
+            "SPEAKER: Siya\nSETUP: Kailangan nating mag-usap\nREACTOR: Yung heart rate ko:\n\n"
+            "SPEAKER: Boyfriend ko\nSETUP: Hindi ako galit, disappointed lang\nREACTOR: Ako na alam na mas malala yun:\n\n"
+            "SPEAKER: Yung jowa ko\nSETUP: Okay lang ako\nREACTOR: Yung susunod na 3 oras:\n\n"
+            "SPEAKER: Yung ex ko\nSETUP: Nag-text ng 2am: gising ka?\nREACTOR: Yung self respect ko:\n\n"
+            "Now write a NEW one in taglish. Must be funny and relatable. ONLY output the 3 lines."
         ),
     },
 
-    # ── Format B: Relatable observation ───────────────────────────────────────
+    # ── Format B: Taglish observation ────────────────────────────────────────
     {
         "style": "observation",
         "prompt": (
-            "You write viral meme captions for a relationship humor page on Facebook Reels.\n\n"
+            "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
+            "Write in TAGLISH — natural mix of Tagalog and English, the way Filipinos actually talk.\n\n"
             "Write ONE short funny observation about relationships, dating, or being single.\n"
-            "It must describe a very specific, relatable situation — not vague or generic.\n\n"
+            "Must be very specific and relatable — not generic or vague.\n\n"
             "GOOD EXAMPLES (copy this style exactly):\n"
-            "- In a relationship, 'what's wrong?' becomes 'nothing' for 10 mins then 3 hours of explaining.\n"
-            "- Nobody talks about how loud your apartment is after a breakup.\n"
-            "- Dating in 2024: 3 months of talking, 0 labels, full situationship.\n"
-            "- Couples be having the same argument with different toppings every week.\n"
-            "- Being in love is great until you have to decide where to eat.\n\n"
-            "BAD EXAMPLES (do NOT write like this — too vague):\n"
-            "- Relationships are complicated.\n"
-            "- Being single has its perks.\n\n"
-            "Write ONE new funny observation. Max 30 words. Output ONLY the text, no quotes, no intro."
+            "- Sa relationship, yung 'okay lang' na sagot niya ay hindi talaga okay. Hindi talaga.\n"
+            "- Nobody talks about how peaceful ang kain mo pag wala kang iniisip na jowa.\n"
+            "- Mag-2025 na, nag-aaway pa rin kayo kung saan kakain.\n"
+            "- Yung feeling na in-left on read ka niya pero online siya. Classic.\n"
+            "- Sa relationship, ang 'anong gusto mong mangyari?' ay trap question. Lagi.\n\n"
+            "BAD EXAMPLES (too vague — do NOT write like this):\n"
+            "- Mahirap ang relasyon.\n"
+            "- Masaya ang maging single.\n\n"
+            "Write ONE new taglish observation. Max 30 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 
-    # ── Format C: Single life perk ────────────────────────────────────────────
+    # ── Format C: Taglish single life perk ───────────────────────────────────
     {
         "style": "singleperk",
         "prompt": (
-            "You write viral meme captions for a relationship humor page on Facebook Reels.\n\n"
+            "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
+            "Write in TAGLISH — natural mix of Tagalog and English, the way Filipinos actually talk.\n\n"
             "Write ONE funny perk of being single — specific, relatable, and a little petty.\n\n"
             "GOOD EXAMPLES (copy this style exactly):\n"
-            "- Being single means the fries you ordered are ALL yours. Every single one.\n"
-            "- Single perk: your phone never blows up at 11pm asking where you are.\n"
-            "- No relationship means no one is eating the last slice you were saving since morning.\n"
-            "- Being single is waking up on a Saturday with zero obligations and zero guilt.\n"
-            "- Single life means the blanket stays on your side. Forever.\n\n"
+            "- Perk ng single: yung fries mo, sa'yo lahat. Walang makikihingi.\n"
+            "- Wala kang jowa? Ibig sabihin walang mag-che-check kung nasaan ka ng 11pm.\n"
+            "- Single ka? Yung blanket mo, sa'yo lang. Habambuhay.\n"
+            "- Benefit ng single life: walang nagtatanong ng 'kailan ka uuwi?' tuwing Sabado.\n"
+            "- Pag single ka, ikaw lang ang nagde-decide kung anong ulam. No arguments. Peaceful.\n\n"
             "BAD EXAMPLES (too generic — do NOT write like this):\n"
-            "- Being single means freedom.\n"
-            "- You can do what you want when single.\n\n"
-            "Write ONE new single perk. Max 28 words. Output ONLY the text, no quotes, no intro."
+            "- Masaya ang maging single.\n"
+            "- May kalayaan ka pag single.\n\n"
+            "Write ONE new taglish single perk. Max 28 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 
-    # ── Format D: Relationship truth ──────────────────────────────────────────
+    # ── Format D: Taglish relationship truth ─────────────────────────────────
     {
         "style": "truth",
         "prompt": (
-            "You write viral meme captions for a relationship humor page on Facebook Reels.\n\n"
+            "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
+            "Write in TAGLISH — natural mix of Tagalog and English, the way Filipinos actually talk.\n\n"
             "Write ONE funny but painfully true fact about being in a relationship.\n"
-            "It must be specific — describe an exact moment or pattern couples experience.\n\n"
+            "Must describe a very specific moment couples will immediately recognize.\n\n"
             "GOOD EXAMPLES (copy this style exactly):\n"
-            "- Relationship level unlocked: you stop saying 'I love you' and start saying 'did you eat?'\n"
-            "- In a relationship you don't argue about big things. You argue about how someone chews.\n"
-            "- Real intimacy is telling your partner the WiFi password on the first night they stay over.\n"
-            "- The moment you're officially a couple is when they start sending you memes at 7am.\n"
-            "- You know it's serious when you start arguing about how to load the dishwasher.\n\n"
+            "- Alam mong seryoso na kayo pag yung 'I love you' naging 'kumain ka na?'\n"
+            "- Sa relationship, hindi kayo nag-aaway sa malalaking bagay. Nag-aaway kayo kung sino mag-aayos ng unan.\n"
+            "- Officially couple na kayo pag okay na siyang makita kang walang makeup sa umaga.\n"
+            "- Yung pinaka-romantic na bagay sa relationship? Yung 'ingat ka' bago ka umalis.\n"
+            "- Seryoso na kayo pag nagagawa mo nang kumain ng malaki sa harap niya. No filter.\n\n"
             "BAD EXAMPLES (too vague — do NOT write like this):\n"
-            "- Relationships need communication.\n"
-            "- Being with someone takes work.\n\n"
-            "Write ONE new relationship truth. Max 30 words. Output ONLY the text, no quotes, no intro."
+            "- Kailangan ng communication sa relationship.\n"
+            "- Mahalaga ang tiwala sa isa't isa.\n\n"
+            "Write ONE new taglish relationship truth. Max 30 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 ]
@@ -304,14 +308,14 @@ def render_text_png(header: str, body: str, width: int, height: int, output_png:
             ox  = int(math.cos(rad) * stroke_w)
             oy  = int(math.sin(rad) * stroke_w)
             draw.multiline_text((x + ox, y + oy), text, font=font,
-                                fill=stroke_col, spacing=spacing, align='right')
+                                fill=stroke_col, spacing=spacing, align='center')
         draw.multiline_text((x, y), text, font=font,
-                            fill=fill, spacing=spacing, align='right')
+                            fill=fill, spacing=spacing, align='center')
 
     pad   = int(width * 0.06)          # right-side padding
     max_w = width - pad * 2
 
-    wrapped_header = wrap_px(header.upper(), font_header, max_w)
+    wrapped_header = wrap_px(header, font_header, max_w)
     wrapped_body   = wrap_px(body,           font_body,   max_w)
 
     hb = draw.multiline_textbbox((0, 0), wrapped_header, font=font_header, spacing=10)
@@ -321,11 +325,11 @@ def render_text_png(header: str, body: str, width: int, height: int, output_png:
     gap      = int(FONT_SIZE_HEADER * 0.5)
     total_h  = h_h + gap + b_h
 
-    # Top-right: anchor to top with padding, right-align x positions
+    # Top-center: anchor to top with padding, center x positions
     top_pad = int(height * 0.06)       # distance from top of video
     start_y = top_pad
-    hx = width - h_w - pad             # right-align header
-    bx = width - b_w - pad             # right-align body
+    hx = (width - h_w) // 2           # center header
+    bx = (width - b_w) // 2           # center body
     by = start_y + h_h + gap
 
     draw_stroked((hx, start_y), wrapped_header, font_header,
