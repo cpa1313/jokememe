@@ -140,19 +140,22 @@ JOKE_THEMES = [
 
 
 # ── Text styling ───────────────────────────────────────────────────────────────
-FONT_SIZE      = 68
-TEXT_WRAP      = 20
-TEXT_COLOR     = (255, 255, 255, 255)
-STROKE_COLOR   = (0, 0, 0, 255)
-STROKE_WIDTH   = 8           # thick outline — TikTok/Reels style
+FONT_SIZE_HEADER    = 80     # BIG BOLD ALL CAPS header
+FONT_SIZE_BODY      = 52     # smaller italic body
+STROKE_WIDTH_HEADER = 9      # thick stroke for header
+STROKE_WIDTH_BODY   = 6      # slightly thinner for body
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 2. JOKE GENERATION
 # ══════════════════════════════════════════════════════════════════════════════
 
-def generate_joke() -> tuple[str, str]:
-    """Returns (overlay_text, fb_caption)."""
+def generate_joke() -> tuple[str, str, str]:
+    """
+    Returns (header_text, body_text, fb_caption).
+    header_text -> BIG BOLD ALL CAPS (top)
+    body_text   -> smaller italic-style (bottom)
+    """
     fmt    = random.choice(JOKE_THEMES)
     client = Groq(api_key=GROQ_API_KEY)
 
@@ -195,12 +198,23 @@ def generate_joke() -> tuple[str, str]:
         setup    = setup    or "..."
         reactor  = reactor  or "Me"
 
-        overlay = f"{speaker}: {setup}\n\n{reactor}:"
+        header  = f"{speaker.upper()} SAID:"
+        body    = f"{setup}\n\n{reactor}:"
         caption = f"{speaker}: {setup}\n{reactor}: 💀😂\n\n#relationshiphumor #datinglife #singlelife #memes #funny"
 
-    # ── All other formats: plain text ─────────────────────────────────────────
+    # ── Observation / singleperk / truth — split into header + body ──────────
     else:
-        overlay = raw
+        import re as _re
+        parts = _re.split(r'(?<=[.,:!?])\s+', raw, maxsplit=1)
+        if len(parts) == 2 and len(parts[0]) >= 8:
+            header = parts[0].upper()
+            body   = parts[1]
+        else:
+            words  = raw.split()
+            mid    = max(2, len(words) // 2)
+            header = " ".join(words[:mid]).upper()
+            body   = " ".join(words[mid:])
+
         tags = {
             "observation": "#relationshipmemes #datinghumor #couplegoals #funny",
             "singleperk":  "#singlelife #singleandthriving #singlehumor #memes",
@@ -208,26 +222,29 @@ def generate_joke() -> tuple[str, str]:
         }.get(fmt["style"], "#memes #funny")
         caption = f"{raw}\n\n{tags}"
 
-    return overlay, caption
+    print(f"[Text] Header: {header!r}")
+    print(f"[Text] Body:   {body!r}")
+    return header, body, caption
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 3. RENDER TEXT PNG  (Pillow — reliable cross-platform)
 # ══════════════════════════════════════════════════════════════════════════════
 
-def render_text_png(text: str, width: int, height: int, output_png: Path) -> None:
+def render_text_png(header: str, body: str, width: int, height: int, output_png: Path) -> None:
     """
-    Renders white text with a black drop-shadow on a TRANSPARENT background.
-    This PNG is then overlaid on the video via FFmpeg.
+    Two-layer text style (like the Brock Lesnar meme):
+      - Header: BIG, BOLD, ALL CAPS, white with thick black stroke
+      - Body:   Medium, italic, white with stroke, centered below header
+    Rendered on a fully transparent PNG overlaid on the video.
     """
+    import math
     from PIL import Image, ImageDraw, ImageFont
 
-    img  = Image.new("RGBA", (width, height), (0, 0, 0, 0))  # fully transparent
+    img  = Image.new('RGBA', (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
 
-    # ── Font candidates ────────────────────────────────────────────────────────
-    font = None
-    candidates = [
+    bold_candidates = [
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
@@ -235,60 +252,86 @@ def render_text_png(text: str, width: int, height: int, output_png: Path) -> Non
         "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
         "/usr/share/fonts/truetype/noto/NotoSans-Bold.ttf",
     ]
-    for p in candidates:
-        if os.path.exists(p):
-            print(f"[Font] Using: {p}")
-            font = ImageFont.truetype(p, FONT_SIZE)
-            break
+    italic_candidates = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-BoldItalic.ttf",
+        "/usr/share/fonts/truetype/freefont/FreeSansOblique.ttf",
+        "/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf",
+        "/usr/share/fonts/truetype/noto/NotoSans-Italic.ttf",
+    ]
 
-    if font is None:
+    def load_font(candidates, size):
+        for p in candidates:
+            if os.path.exists(p):
+                print(f'[Font] {p}')
+                return ImageFont.truetype(p, size)
         import urllib.request
-        fallback = Path("/tmp/meme_font.ttf")
+        fallback = Path('/tmp/meme_font.ttf')
         if not fallback.exists():
-            print("[Font] Downloading Roboto Bold fallback…")
+            print('[Font] Downloading Roboto Bold fallback...')
             urllib.request.urlretrieve(
-                "https://github.com/google/fonts/raw/main/apache/roboto/static/Roboto-Bold.ttf",
+                'https://github.com/google/fonts/raw/main/apache/roboto/static/Roboto-Bold.ttf',
                 str(fallback),
             )
-        font = ImageFont.truetype(str(fallback), FONT_SIZE)
+        return ImageFont.truetype(str(fallback), size)
 
-    # ── Wrap text ──────────────────────────────────────────────────────────────
-    wrapped_lines = []
-    for para in text.split("\n"):
-        if para.strip() == "":
-            wrapped_lines.append("")
-        else:
-            wrapped_lines.extend(textwrap.wrap(para, width=TEXT_WRAP) or [""])
-    wrapped = "\n".join(wrapped_lines)
+    font_header = load_font(bold_candidates,   FONT_SIZE_HEADER)
+    font_body   = load_font(italic_candidates, FONT_SIZE_BODY)
 
-    # ── Measure total text block size to center it ─────────────────────────────
-    bbox   = draw.multiline_textbbox((0, 0), wrapped, font=font, spacing=18)
-    txt_w  = bbox[2] - bbox[0]
-    txt_h  = bbox[3] - bbox[1]
-    x      = (width  - txt_w) // 2   # horizontally centered
-    y      = (height - txt_h) // 2   # vertically centered
+    WHITE = (255, 255, 255, 255)
+    BLACK = (0,   0,   0,   255)
 
-    # ── Draw thick stroke outline first, then white text on top ──────────────
-    # Stroke = draw black text offset in a circle of STROKE_WIDTH radius
-    for angle_step in range(0, 360, 15):
-        import math
-        rad = math.radians(angle_step)
-        ox  = int(math.cos(rad) * STROKE_WIDTH)
-        oy  = int(math.sin(rad) * STROKE_WIDTH)
-        draw.multiline_text((x + ox, y + oy), wrapped, font=font,
-                            fill=STROKE_COLOR, spacing=18, align="center")
+    def wrap_px(text, font, max_width):
+        words = text.split()
+        lines, current = [], ''
+        for word in words:
+            test = (current + ' ' + word).strip()
+            w = draw.textlength(test, font=font)
+            if w <= max_width:
+                current = test
+            else:
+                if current:
+                    lines.append(current)
+                current = word
+        if current:
+            lines.append(current)
+        return '\n'.join(lines)
 
-    # White text on top
-    draw.multiline_text((x, y), wrapped, font=font,
-                        fill=TEXT_COLOR, spacing=18, align="center")
+    def draw_stroked(pos, text, font, fill, stroke_col, stroke_w, spacing=14):
+        x, y = pos
+        for angle in range(0, 360, 12):
+            rad = math.radians(angle)
+            ox  = int(math.cos(rad) * stroke_w)
+            oy  = int(math.sin(rad) * stroke_w)
+            draw.multiline_text((x + ox, y + oy), text, font=font,
+                                fill=stroke_col, spacing=spacing, align='center')
+        draw.multiline_text((x, y), text, font=font,
+                            fill=fill, spacing=spacing, align='center')
+
+    pad   = int(width * 0.08)
+    max_w = width - pad * 2
+
+    wrapped_header = wrap_px(header.upper(), font_header, max_w)
+    wrapped_body   = wrap_px(body,           font_body,   max_w)
+
+    hb = draw.multiline_textbbox((0, 0), wrapped_header, font=font_header, spacing=10)
+    bb = draw.multiline_textbbox((0, 0), wrapped_body,   font=font_body,   spacing=14)
+    h_w, h_h = hb[2] - hb[0], hb[3] - hb[1]
+    b_w, b_h = bb[2] - bb[0], bb[3] - bb[1]
+    gap      = int(FONT_SIZE_HEADER * 0.5)
+    total_h  = h_h + gap + b_h
+    start_y  = (height - total_h) // 2 - int(height * 0.03)
+    hx = (width - h_w) // 2
+    bx = (width - b_w) // 2
+    by = start_y + h_h + gap
+
+    draw_stroked((hx, start_y), wrapped_header, font_header,
+                 WHITE, BLACK, STROKE_WIDTH_HEADER, spacing=10)
+    draw_stroked((bx, by), wrapped_body, font_body,
+                 WHITE, BLACK, STROKE_WIDTH_BODY, spacing=14)
 
     img.save(str(output_png))
-    print(f"[Text PNG] Saved → {output_png}")
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# 4. VIDEO ASSEMBLY  (pure FFmpeg)
-# ══════════════════════════════════════════════════════════════════════════════
+    print(f'[Text PNG] Saved -> {output_png}')
 
 def pick_random_video() -> Path:
     exts  = {".mp4", ".mov", ".webm", ".avi"}
@@ -335,7 +378,7 @@ def has_audio(video: Path) -> bool:
     return bool(r.stdout.strip())
 
 
-def build_video(overlay_text: str, output_path: Path) -> None:
+def build_video(header: str, body: str, output_path: Path) -> None:
     """
     Overlays bold centered text directly on the user-provided video.
     No white bar. No music mixing. Text floats on top of the clip.
@@ -348,7 +391,7 @@ def build_video(overlay_text: str, output_path: Path) -> None:
 
     # ── Render text as transparent PNG matching video dimensions ──────────────
     text_png = OUTPUT_DIR / "text_overlay.png"
-    render_text_png(overlay_text, vid_w, vid_h, text_png)
+    render_text_png(header, body, vid_w, vid_h, text_png)
 
     # ── FFmpeg: overlay transparent PNG on video ───────────────────────────────
     # [0:v] = source video
@@ -465,12 +508,12 @@ def main():
     print("=" * 60)
 
     print("\n[Step 1] Generating joke with Groq…")
-    overlay_text, caption = generate_joke()
-    print(f"[Joke]\n{overlay_text}\n")
+    header, body, caption = generate_joke()
+    print(f"[Header]\n{header}\n[Body]\n{body}\n")
     print(f"[Caption]\n{caption}\n")
 
     print("[Step 2] Building video with FFmpeg…")
-    build_video(overlay_text, OUTPUT_VIDEO)
+    build_video(header, body, OUTPUT_VIDEO)
 
     print("[Step 3] Posting to Facebook Reels…")
     post_id = post_to_facebook_reel(OUTPUT_VIDEO, caption)
