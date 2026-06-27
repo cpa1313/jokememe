@@ -140,10 +140,10 @@ JOKE_THEMES = [
 
 
 # ── Text styling ───────────────────────────────────────────────────────────────
-FONT_SIZE_HEADER    = 80     # BIG BOLD ALL CAPS header
-FONT_SIZE_BODY      = 52     # smaller italic body
-STROKE_WIDTH_HEADER = 9      # thick stroke for header
-STROKE_WIDTH_BODY   = 6      # slightly thinner for body
+FONT_SIZE_HEADER    = 58     # BIG BOLD ALL CAPS header
+FONT_SIZE_BODY      = 38     # smaller italic body
+STROKE_WIDTH_HEADER = 7      # thick stroke for header
+STROKE_WIDTH_BODY   = 5      # slightly thinner for body
 
 
 # ══════════════════════════════════════════════════════════════════════════════
