@@ -62,65 +62,89 @@ JOKE_THEMES = [
     {
         "style": "reaction",
         "prompt": (
-            "You are a cheeky adult humor meme page. Write a funny relatable meme about "
-            "relationships, dating, or being single — the kind that makes people say 'lol same'. "
-            "Topics can include: couples arguing over dumb stuff, being in a relationship vs being single, "
-            "dating red flags, love language fails, situationships, late-night texting, etc. "
-            "Keep it cheeky and fun — NOT explicit or vulgar.\n\n"
-            "Reply with EXACTLY 3 lines, no intro, no markdown, no explanation:\n"
-            "Line 1: SPEAKER: [who speaks, e.g. 'My partner', 'Him', 'Her', 'My single friends']\n"
-            "Line 2: SETUP: [what they say or do, max 12 words]\n"
-            "Line 3: REACTOR: [who reacts, e.g. 'Me', 'My bank account', 'My pillow']\n"
-            "ONLY output those 3 lines."
+            "You write viral meme captions for a relationship humor page on Facebook Reels.\n\n"
+            "Write a SHORT reaction meme about relationships, dating, or single life.\n"
+            "The joke must be instantly relatable — someone should read it and say 'omg that's me'.\n\n"
+            "EXACT FORMAT — output ONLY these 3 lines, nothing else, no intro, no markdown:\n"
+            "SPEAKER: [one person, e.g. Her, Him, My boyfriend, My girlfriend, My situationship, My ex]\n"
+            "SETUP: [what they say or do — short, max 10 words, must be specific and funny]\n"
+            "REACTOR: [who reacts — e.g. Me, My anxiety, My wallet, My pillow, My single friends]\n\n"
+            "GOOD EXAMPLES:\n"
+            "SPEAKER: Her\nSETUP: We need to talk\nREACTOR: My heart rate:\n\n"
+            "SPEAKER: Him\nSETUP: I'm not mad, I'm just disappointed\nREACTOR: Me knowing it's worse:\n\n"
+            "SPEAKER: My girlfriend\nSETUP: I'm fine\nREACTOR: The next 3 hours:\n\n"
+            "SPEAKER: My ex\nSETUP: Texts at 2am: you up?\nREACTOR: My self respect:\n\n"
+            "Now write a NEW one. Must be funny and make sense. ONLY output the 3 lines."
         ),
     },
 
-    # ── Format B: Observation / fun fact headline ─────────────────────────────
+    # ── Format B: Relatable observation ───────────────────────────────────────
     {
-        "style": "headline",
+        "style": "observation",
         "prompt": (
-            "You are a cheeky adult humor meme page. Write ONE funny observation or 'fun fact' "
-            "about relationships, dating, or single life. "
-            "Style examples: 'Fun fact: being single means you never have to argue about the thermostat', "
-            "'Nobody talks about how peaceful it is eating your food without someone asking for a bite', "
-            "'Relationship milestone: having your own blanket'. "
-            "Keep it witty, relatable, slightly cheeky — NOT vulgar or explicit. "
-            "Max 25 words. Output ONLY the text, nothing else."
+            "You write viral meme captions for a relationship humor page on Facebook Reels.\n\n"
+            "Write ONE short funny observation about relationships, dating, or being single.\n"
+            "It must describe a very specific, relatable situation — not vague or generic.\n\n"
+            "GOOD EXAMPLES (copy this style exactly):\n"
+            "- In a relationship, 'what's wrong?' becomes 'nothing' for 10 mins then 3 hours of explaining.\n"
+            "- Nobody talks about how loud your apartment is after a breakup.\n"
+            "- Dating in 2024: 3 months of talking, 0 labels, full situationship.\n"
+            "- Couples be having the same argument with different toppings every week.\n"
+            "- Being in love is great until you have to decide where to eat.\n\n"
+            "BAD EXAMPLES (do NOT write like this — too vague):\n"
+            "- Relationships are complicated.\n"
+            "- Being single has its perks.\n\n"
+            "Write ONE new funny observation. Max 30 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 
-    # ── Format C: Single life benefit fact ───────────────────────────────────
+    # ── Format C: Single life perk ────────────────────────────────────────────
     {
-        "style": "benefit",
+        "style": "singleperk",
         "prompt": (
-            "You are a cheeky meme page celebrating single life. Write ONE short funny "
-            "'benefit of being single' statement. "
-            "Examples: 'Benefit of being single: the whole bed is yours', "
-            "'Being single means zero unsolicited opinions about your food choices'. "
-            "Keep it funny and relatable, NOT explicit. Max 20 words. Output ONLY the text."
+            "You write viral meme captions for a relationship humor page on Facebook Reels.\n\n"
+            "Write ONE funny perk of being single — specific, relatable, and a little petty.\n\n"
+            "GOOD EXAMPLES (copy this style exactly):\n"
+            "- Being single means the fries you ordered are ALL yours. Every single one.\n"
+            "- Single perk: your phone never blows up at 11pm asking where you are.\n"
+            "- No relationship means no one is eating the last slice you were saving since morning.\n"
+            "- Being single is waking up on a Saturday with zero obligations and zero guilt.\n"
+            "- Single life means the blanket stays on your side. Forever.\n\n"
+            "BAD EXAMPLES (too generic — do NOT write like this):\n"
+            "- Being single means freedom.\n"
+            "- You can do what you want when single.\n\n"
+            "Write ONE new single perk. Max 28 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 
-    # ── Format D: Relationship struggle truth ─────────────────────────────────
+    # ── Format D: Relationship truth ──────────────────────────────────────────
     {
         "style": "truth",
         "prompt": (
-            "You are a cheeky relationship humor meme page. Write ONE short funny truth "
-            "about being in a relationship that couples will immediately recognize. "
-            "Examples: 'In a relationship you stop asking where to eat and start arguing about it instead', "
-            "'Couples therapy but make it: debating what to watch for 45 mins then falling asleep'. "
-            "Keep it funny and real, NOT explicit. Max 25 words. Output ONLY the text."
+            "You write viral meme captions for a relationship humor page on Facebook Reels.\n\n"
+            "Write ONE funny but painfully true fact about being in a relationship.\n"
+            "It must be specific — describe an exact moment or pattern couples experience.\n\n"
+            "GOOD EXAMPLES (copy this style exactly):\n"
+            "- Relationship level unlocked: you stop saying 'I love you' and start saying 'did you eat?'\n"
+            "- In a relationship you don't argue about big things. You argue about how someone chews.\n"
+            "- Real intimacy is telling your partner the WiFi password on the first night they stay over.\n"
+            "- The moment you're officially a couple is when they start sending you memes at 7am.\n"
+            "- You know it's serious when you start arguing about how to load the dishwasher.\n\n"
+            "BAD EXAMPLES (too vague — do NOT write like this):\n"
+            "- Relationships need communication.\n"
+            "- Being with someone takes work.\n\n"
+            "Write ONE new relationship truth. Max 30 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 ]
 
 
 # ── Text styling ───────────────────────────────────────────────────────────────
-FONT_SIZE     = 62
-TEXT_WRAP     = 22
-TEXT_COLOR    = "white"
-SHADOW_COLOR  = "black"
-SHADOW_OFFSET = 3       # px shadow for readability on any background
+FONT_SIZE      = 68
+TEXT_WRAP      = 20
+TEXT_COLOR     = (255, 255, 255, 255)
+STROKE_COLOR   = (0, 0, 0, 255)
+STROKE_WIDTH   = 8           # thick outline — TikTok/Reels style
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -178,9 +202,9 @@ def generate_joke() -> tuple[str, str]:
     else:
         overlay = raw
         tags = {
-            "headline": "#relationshipmemes #datinghumor #couplegoals #funny",
-            "benefit":  "#singlelife #singleandthriving #singlehumor #memes",
-            "truth":    "#couplehumor #relationshiptruth #married #relatable",
+            "observation": "#relationshipmemes #datinghumor #couplegoals #funny",
+            "singleperk":  "#singlelife #singleandthriving #singlehumor #memes",
+            "truth":       "#couplehumor #relationshiptruth #married #relatable",
         }.get(fmt["style"], "#memes #funny")
         caption = f"{raw}\n\n{tags}"
 
@@ -238,21 +262,25 @@ def render_text_png(text: str, width: int, height: int, output_png: Path) -> Non
     wrapped = "\n".join(wrapped_lines)
 
     # ── Measure total text block size to center it ─────────────────────────────
-    bbox   = draw.multiline_textbbox((0, 0), wrapped, font=font, spacing=16)
+    bbox   = draw.multiline_textbbox((0, 0), wrapped, font=font, spacing=18)
     txt_w  = bbox[2] - bbox[0]
     txt_h  = bbox[3] - bbox[1]
     x      = (width  - txt_w) // 2   # horizontally centered
     y      = (height - txt_h) // 2   # vertically centered
 
-    # ── Draw shadow then main text ─────────────────────────────────────────────
-    off = SHADOW_OFFSET
-    for dx, dy in [(-off, -off), (off, -off), (-off, off), (off, off),
-                   (0, off),     (0, -off),   (off, 0),    (-off, 0)]:
-        draw.multiline_text((x + dx, y + dy), wrapped, font=font,
-                            fill=SHADOW_COLOR, spacing=16, align="center")
+    # ── Draw thick stroke outline first, then white text on top ──────────────
+    # Stroke = draw black text offset in a circle of STROKE_WIDTH radius
+    for angle_step in range(0, 360, 15):
+        import math
+        rad = math.radians(angle_step)
+        ox  = int(math.cos(rad) * STROKE_WIDTH)
+        oy  = int(math.sin(rad) * STROKE_WIDTH)
+        draw.multiline_text((x + ox, y + oy), wrapped, font=font,
+                            fill=STROKE_COLOR, spacing=18, align="center")
 
+    # White text on top
     draw.multiline_text((x, y), wrapped, font=font,
-                        fill=TEXT_COLOR, spacing=16, align="center")
+                        fill=TEXT_COLOR, spacing=18, align="center")
 
     img.save(str(output_png))
     print(f"[Text PNG] Saved → {output_png}")
