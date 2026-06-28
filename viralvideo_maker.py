@@ -58,90 +58,72 @@ OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
 
 JOKE_THEMES = [
 
-    # ── Format A: Taglish reaction style ─────────────────────────────────────
+    # Format A: Red Flag Detector
     {
-        "style": "reaction",
+        "style": "redflag",
         "prompt": (
-            "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
-            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text each other.\n"
-            "IMPORTANT: Use only simple, everyday Tagalog words. If a Tagalog word is deep or formal, say it in English instead.\n"
-            "Examples of words to AVOID: makikisalimuot, nangangamba, nagtataglay, sumasalamin — just use English for these.\n\n"
-            "Write a SHORT reaction meme about relationships, dating, or single life.\n\n"
-            "EXACT FORMAT — output ONLY these 3 lines, nothing else, no intro, no markdown:\n"
-            "SPEAKER: [one person, e.g. Siya, Boyfriend ko, Girlfriend ko, Yung ex ko, Yung jowa ko]\n"
-            "SETUP: [what they say or do — short, max 10 words, specific and funny]\n"
-            "REACTOR: [who reacts — e.g. Ako, Yung puso ko, Yung self respect ko, Yung utak ko]\n\n"
+            "You write viral meme captions for a Filipino humor page on Facebook Reels.\n"
+            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text.\n"
+            "IMPORTANT: Use only simple everyday words. If Tagalog is deep or uncommon, use English instead.\n\n"
+            "Write ONE funny Red Flag joke about relationships or dating.\n"
+            "Call out a specific red flag behavior in a funny relatable way.\n\n"
             "GOOD EXAMPLES:\n"
-            "SPEAKER: Siya\nSETUP: Kailangan nating mag-usap\nREACTOR: Yung heart rate ko:\n\n"
-            "SPEAKER: Boyfriend ko\nSETUP: Hindi ako galit, disappointed lang\nREACTOR: Ako na alam na mas malala yun:\n\n"
-            "SPEAKER: Yung jowa ko\nSETUP: Okay lang ako\nREACTOR: Yung next 3 hours:\n\n"
-            "SPEAKER: Yung ex ko\nSETUP: Nag-text ng 2am: gising ka?\nREACTOR: Yung self respect ko:\n\n"
-            "Now write a NEW one. Simple words lang. ONLY output the 3 lines."
+            "- Red flag: nag-react siya ng heart sa lahat ng posts mo pero hindi sumasagot sa texts mo.\n"
+            "- Red flag: yung 'I don't do labels' pero jealous pag may kausap kang iba.\n"
+            "- Red flag: nag-follow sa lahat ng social media mo pero ayaw mag-introduce sa friends niya.\n"
+            "- Red flag: sabi niya 'past is past' pero kinikwento pa rin yung ex niya sa bawat date niyo.\n"
+            "- Red flag: okay lang daw siya. Nag-post ng sad song after 5 minutes.\n\n"
+            "BAD EXAMPLES (avoid):\n"
+            "- Red flag siya. (too vague)\n"
+            "- Red flag: hindi siya maganda. (too mean)\n\n"
+            "Write ONE new red flag joke. Simple words lang. Max 30 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 
-    # ── Format B: Taglish observation ────────────────────────────────────────
+    # Format B: Hugot
     {
-        "style": "observation",
+        "style": "hugot",
         "prompt": (
-            "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
-            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text each other.\n"
-            "IMPORTANT: Use only simple everyday Tagalog. If a word is deep or hard to understand, use English instead.\n"
-            "Avoid deep Tagalog like: makikisalimuot, nangangamba, nagtataglay — just switch to English for those.\n\n"
-            "Write ONE short funny observation about relationships, dating, or being single.\n\n"
-            "GOOD EXAMPLES (copy this style exactly):\n"
-            "- Sa relationship, yung 'okay lang' na sagot niya ay hindi talaga okay. Hindi talaga.\n"
-            "- Nobody talks about how peaceful ang kain mo pag wala kang jowa na inaalala.\n"
-            "- Mag-2025 na, nag-aaway pa rin kayo kung saan kakain.\n"
-            "- Yung feeling na in-left on read ka niya pero online siya. Classic.\n"
-            "- Sa relationship, ang 'anong gusto mo?' ay trap question. Palagi.\n\n"
-            "BAD EXAMPLES (too deep or vague — do NOT write like this):\n"
-            "- Mahirap ang relasyon. (too vague)\n"
-            "- Nangangamba ang puso ko. (too deep)\n\n"
-            "Write ONE new observation. Simple words lang. Max 30 words. Output ONLY the text, no quotes, no intro."
+            "You write viral meme captions for a Filipino humor page on Facebook Reels.\n"
+            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text.\n"
+            "IMPORTANT: Use only simple everyday words. If Tagalog is deep or uncommon, use English instead.\n\n"
+            "Write ONE hugot line — funny but may tamang sama ng loob or kilig feeling.\n"
+            "Sounds like a joke but may halong totoo. Natawa ka pero may tinamaan ka.\n\n"
+            "GOOD EXAMPLES:\n"
+            "- Sana all may kasama sa kain ng 3am. Yung fridge ko lang ang lagi kong kasama.\n"
+            "- Ang hirap mag-move on pag yung playlist mo puro 'our songs'.\n"
+            "- Minsan okay na okay na ako. Tapos nakita ko yung lumang chat namin. Balik uli sa zero.\n"
+            "- Ang saya sana ng Sabado kung hindi ako nag-iisa sa bahay na nag-iisip ng 'what if'.\n\n"
+            "BAD EXAMPLES (avoid):\n"
+            "- Ang sakit ng puso ko. (too plain)\n"
+            "- Nangangamba ang aking kalooban. (too deep Tagalog)\n\n"
+            "Write ONE new hugot line. Simple words lang. Max 30 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 
-    # ── Format C: Taglish single life perk ───────────────────────────────────
+    # Format C: Kinky/Flirty
     {
-        "style": "singleperk",
+        "style": "kinky",
         "prompt": (
-            "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
-            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text each other.\n"
-            "IMPORTANT: Use only simple everyday Tagalog. If a word is deep or hard to understand, use English instead.\n\n"
-            "Write ONE funny perk of being single — specific, relatable, and a little petty.\n\n"
-            "GOOD EXAMPLES (copy this style exactly):\n"
-            "- Perk ng single: yung fries mo, sa'yo lahat. Walang makikihingi.\n"
-            "- Wala kang jowa? Walang mag-te-text ng 11pm na nasaan ka na.\n"
-            "- Single ka? Yung blanket mo, sa'yo lang. Forever.\n"
-            "- Benefit ng single: walang nagtatanong ng 'kailan ka uuwi?' tuwing Sabado.\n"
-            "- Pag single ka, ikaw lang ang nagde-decide kung anong ulam. No drama. Peaceful.\n\n"
-            "BAD EXAMPLES (too generic or deep — do NOT write like this):\n"
-            "- Masaya ang maging single.\n"
-            "- May kalayaan ka pag single.\n\n"
-            "Write ONE new single perk. Simple words lang. Max 28 words. Output ONLY the text, no quotes, no intro."
-        ),
-    },
-
-    # ── Format D: Taglish relationship truth ─────────────────────────────────
-    {
-        "style": "truth",
-        "prompt": (
-            "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
-            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text each other.\n"
-            "IMPORTANT: Use only simple everyday Tagalog. If a word is deep or hard to understand, use English instead.\n\n"
-            "Write ONE funny but painfully true fact about being in a relationship.\n"
-            "Must describe a very specific moment couples will immediately recognize.\n\n"
-            "GOOD EXAMPLES (copy this style exactly):\n"
-            "- Alam mong seryoso na kayo pag yung 'I love you' naging 'kumain ka na?'\n"
-            "- Sa relationship, hindi kayo nag-aaway sa big things. Nag-aaway kayo kung sino mag-aayos ng unan.\n"
-            "- Officially couple na kayo pag okay na siyang makita kang walang makeup sa umaga.\n"
-            "- Yung pinaka-sweet na bagay sa relationship? Yung 'ingat ka' bago ka umalis.\n"
-            "- Seryoso na kayo pag kaya mo nang kumain ng malaki sa harap niya. No filter needed.\n\n"
-            "BAD EXAMPLES (too deep or vague — do NOT write like this):\n"
-            "- Kailangan ng communication. (too vague)\n"
-            "- Nangangamba ang aking puso. (too deep Tagalog)\n\n"
-            "Write ONE new relationship truth. Simple words lang. Max 30 words. Output ONLY the text, no quotes, no intro."
+            "You write viral meme captions for a Filipino humor page on Facebook Reels.\n"
+            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text.\n"
+            "IMPORTANT: Use only simple everyday words. If Tagalog is deep or uncommon, use English instead.\n\n"
+            "Write ONE flirty-kinky joke. Sounds innocent on the surface but everyone knows the real meaning.\n"
+            "The punchline must be IMPLIED, never stated directly. Lahat gets it pero hindi mo sinabi.\n"
+            "Setup = innocent activity. Ending = hints at something more without saying it.\n\n"
+            "PERFECT EXAMPLE to copy the style from:\n"
+            "Gusto ko sumama sa night swimming tas mawawala tayong dalawa sa eksena.\n\n"
+            "Why it works: night swimming sounds innocent. Mawawala sa eksena = everyone knows. Hindi mo sinabi pero alam ng lahat.\n\n"
+            "MORE GOOD EXAMPLES:\n"
+            "- Gusto ko yung date natin sa beach tas malayo tayo sa lahat. Para focused tayo sa isa't isa.\n"
+            "- Sana mag-camp tayo. Wala signal, wala ibang tao, kami-kami lang.\n"
+            "- Gusto ko manood ng movie sa bahay mo. Yung walang magandang mapanood para may distraction tayo.\n"
+            "- Late night drive tayo. Walang destination. Basta ikaw at ako lang.\n\n"
+            "BAD EXAMPLES (avoid):\n"
+            "- Gusto kitang [any explicit act]. (too direct)\n"
+            "- Magdate tayo. (too boring, no double meaning)\n\n"
+            "Write ONE new flirty-kinky joke. Keep it clean on the surface, let the reader figure out the rest.\n"
+            "Max 25 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 ]
