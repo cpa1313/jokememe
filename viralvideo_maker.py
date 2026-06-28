@@ -58,29 +58,7 @@ OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
 
 JOKE_THEMES = [
 
-    # Format A: Hugot
-    {
-        "style": "hugot",
-        "prompt": (
-            "You write viral meme captions for a Filipino humor page on Facebook Reels.\n"
-            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text.\n"
-            "IMPORTANT: Use only simple everyday words. If Tagalog is deep or uncommon, use English instead.\n\n"
-            "Write ONE hugot line — funny but may tamang sama ng loob or kilig feeling.\n"
-            "Sounds like a joke but may halong totoo. Natawa ka pero may tinamaan ka.\n\n"
-            "GOOD EXAMPLES:\n"
-            "- Sana all may kasama sa kain ng 3am. Yung fridge ko lang ang lagi kong kasama.\n"
-            "- Ang hirap mag-move on pag yung playlist mo puro 'our songs'.\n"
-            "- Minsan okay na okay na ako. Tapos nakita ko yung lumang chat namin. Balik uli sa zero.\n"
-            "- Ang saya sana ng Sabado kung hindi ako nag-iisa sa bahay na nag-iisip ng 'what if'.\n"
-            "- Gusto ko lang ng someone na mag-text ng good morning. Hindi naman kailangang love of my life. Basta consistent.\n\n"
-            "BAD EXAMPLES (avoid):\n"
-            "- Ang sakit ng puso ko. (too plain, no punchline)\n"
-            "- Nangangamba ang aking kalooban. (too deep Tagalog)\n\n"
-            "Write ONE new hugot line. Simple words lang. Max 30 words. Output ONLY the text, no quotes, no intro."
-        ),
-    },
-
-    # Format B: Kinky/Flirty
+    # Format A: Kinky/Flirty
     {
         "style": "kinky",
         "prompt": (
