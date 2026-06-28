@@ -58,29 +58,7 @@ OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
 
 JOKE_THEMES = [
 
-    # Format A: Red Flag Detector
-    {
-        "style": "redflag",
-        "prompt": (
-            "You write viral meme captions for a Filipino humor page on Facebook Reels.\n"
-            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text.\n"
-            "IMPORTANT: Use only simple everyday words. If Tagalog is deep or uncommon, use English instead.\n\n"
-            "Write ONE funny Red Flag joke about relationships or dating.\n"
-            "Call out a specific red flag behavior in a funny relatable way.\n\n"
-            "GOOD EXAMPLES:\n"
-            "- Red flag: nag-react siya ng heart sa lahat ng posts mo pero hindi sumasagot sa texts mo.\n"
-            "- Red flag: yung 'I don't do labels' pero jealous pag may kausap kang iba.\n"
-            "- Red flag: nag-follow sa lahat ng social media mo pero ayaw mag-introduce sa friends niya.\n"
-            "- Red flag: sabi niya 'past is past' pero kinikwento pa rin yung ex niya sa bawat date niyo.\n"
-            "- Red flag: okay lang daw siya. Nag-post ng sad song after 5 minutes.\n\n"
-            "BAD EXAMPLES (avoid):\n"
-            "- Red flag siya. (too vague)\n"
-            "- Red flag: hindi siya maganda. (too mean)\n\n"
-            "Write ONE new red flag joke. Simple words lang. Max 30 words. Output ONLY the text, no quotes, no intro."
-        ),
-    },
-
-    # Format B: Hugot
+    # Format A: Hugot
     {
         "style": "hugot",
         "prompt": (
@@ -93,15 +71,16 @@ JOKE_THEMES = [
             "- Sana all may kasama sa kain ng 3am. Yung fridge ko lang ang lagi kong kasama.\n"
             "- Ang hirap mag-move on pag yung playlist mo puro 'our songs'.\n"
             "- Minsan okay na okay na ako. Tapos nakita ko yung lumang chat namin. Balik uli sa zero.\n"
-            "- Ang saya sana ng Sabado kung hindi ako nag-iisa sa bahay na nag-iisip ng 'what if'.\n\n"
+            "- Ang saya sana ng Sabado kung hindi ako nag-iisa sa bahay na nag-iisip ng 'what if'.\n"
+            "- Gusto ko lang ng someone na mag-text ng good morning. Hindi naman kailangang love of my life. Basta consistent.\n\n"
             "BAD EXAMPLES (avoid):\n"
-            "- Ang sakit ng puso ko. (too plain)\n"
+            "- Ang sakit ng puso ko. (too plain, no punchline)\n"
             "- Nangangamba ang aking kalooban. (too deep Tagalog)\n\n"
             "Write ONE new hugot line. Simple words lang. Max 30 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 
-    # Format C: Kinky/Flirty
+    # Format B: Kinky/Flirty
     {
         "style": "kinky",
         "prompt": (
@@ -118,9 +97,10 @@ JOKE_THEMES = [
             "- Gusto ko yung date natin sa beach tas malayo tayo sa lahat. Para focused tayo sa isa't isa.\n"
             "- Sana mag-camp tayo. Wala signal, wala ibang tao, kami-kami lang.\n"
             "- Gusto ko manood ng movie sa bahay mo. Yung walang magandang mapanood para may distraction tayo.\n"
-            "- Late night drive tayo. Walang destination. Basta ikaw at ako lang.\n\n"
+            "- Late night drive tayo. Walang destination. Basta ikaw at ako lang.\n"
+            "- Sabi ko gusto ko matuto magluto. Sabi niya turuan daw niya ako. Sa bahay niya. Gabi. Kami lang.\n\n"
             "BAD EXAMPLES (avoid):\n"
-            "- Gusto kitang [any explicit act]. (too direct)\n"
+            "- Gusto kitang [any explicit act]. (too direct, not funny)\n"
             "- Magdate tayo. (too boring, no double meaning)\n\n"
             "Write ONE new flirty-kinky joke. Keep it clean on the surface, let the reader figure out the rest.\n"
             "Max 25 words. Output ONLY the text, no quotes, no intro."
