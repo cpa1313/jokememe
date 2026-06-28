@@ -63,19 +63,20 @@ JOKE_THEMES = [
         "style": "reaction",
         "prompt": (
             "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
-            "Write in TAGLISH — natural mix of Tagalog and English, the way Filipinos actually text.\n\n"
-            "Write a SHORT reaction meme about relationships, dating, or single life.\n"
-            "The joke must be instantly relatable — someone should read it and say 'same bes'.\n\n"
+            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text each other.\n"
+            "IMPORTANT: Use only simple, everyday Tagalog words. If a Tagalog word is deep or formal, say it in English instead.\n"
+            "Examples of words to AVOID: makikisalimuot, nangangamba, nagtataglay, sumasalamin — just use English for these.\n\n"
+            "Write a SHORT reaction meme about relationships, dating, or single life.\n\n"
             "EXACT FORMAT — output ONLY these 3 lines, nothing else, no intro, no markdown:\n"
             "SPEAKER: [one person, e.g. Siya, Boyfriend ko, Girlfriend ko, Yung ex ko, Yung jowa ko]\n"
-            "SETUP: [what they say or do — short, max 10 words, specific and funny, taglish]\n"
+            "SETUP: [what they say or do — short, max 10 words, specific and funny]\n"
             "REACTOR: [who reacts — e.g. Ako, Yung puso ko, Yung self respect ko, Yung utak ko]\n\n"
             "GOOD EXAMPLES:\n"
             "SPEAKER: Siya\nSETUP: Kailangan nating mag-usap\nREACTOR: Yung heart rate ko:\n\n"
             "SPEAKER: Boyfriend ko\nSETUP: Hindi ako galit, disappointed lang\nREACTOR: Ako na alam na mas malala yun:\n\n"
-            "SPEAKER: Yung jowa ko\nSETUP: Okay lang ako\nREACTOR: Yung susunod na 3 oras:\n\n"
+            "SPEAKER: Yung jowa ko\nSETUP: Okay lang ako\nREACTOR: Yung next 3 hours:\n\n"
             "SPEAKER: Yung ex ko\nSETUP: Nag-text ng 2am: gising ka?\nREACTOR: Yung self respect ko:\n\n"
-            "Now write a NEW one in taglish. Must be funny and relatable. ONLY output the 3 lines."
+            "Now write a NEW one. Simple words lang. ONLY output the 3 lines."
         ),
     },
 
@@ -84,19 +85,20 @@ JOKE_THEMES = [
         "style": "observation",
         "prompt": (
             "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
-            "Write in TAGLISH — natural mix of Tagalog and English, the way Filipinos actually talk.\n\n"
-            "Write ONE short funny observation about relationships, dating, or being single.\n"
-            "Must be very specific and relatable — not generic or vague.\n\n"
+            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text each other.\n"
+            "IMPORTANT: Use only simple everyday Tagalog. If a word is deep or hard to understand, use English instead.\n"
+            "Avoid deep Tagalog like: makikisalimuot, nangangamba, nagtataglay — just switch to English for those.\n\n"
+            "Write ONE short funny observation about relationships, dating, or being single.\n\n"
             "GOOD EXAMPLES (copy this style exactly):\n"
             "- Sa relationship, yung 'okay lang' na sagot niya ay hindi talaga okay. Hindi talaga.\n"
-            "- Nobody talks about how peaceful ang kain mo pag wala kang iniisip na jowa.\n"
+            "- Nobody talks about how peaceful ang kain mo pag wala kang jowa na inaalala.\n"
             "- Mag-2025 na, nag-aaway pa rin kayo kung saan kakain.\n"
             "- Yung feeling na in-left on read ka niya pero online siya. Classic.\n"
-            "- Sa relationship, ang 'anong gusto mong mangyari?' ay trap question. Lagi.\n\n"
-            "BAD EXAMPLES (too vague — do NOT write like this):\n"
-            "- Mahirap ang relasyon.\n"
-            "- Masaya ang maging single.\n\n"
-            "Write ONE new taglish observation. Max 30 words. Output ONLY the text, no quotes, no intro."
+            "- Sa relationship, ang 'anong gusto mo?' ay trap question. Palagi.\n\n"
+            "BAD EXAMPLES (too deep or vague — do NOT write like this):\n"
+            "- Mahirap ang relasyon. (too vague)\n"
+            "- Nangangamba ang puso ko. (too deep)\n\n"
+            "Write ONE new observation. Simple words lang. Max 30 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 
@@ -105,18 +107,19 @@ JOKE_THEMES = [
         "style": "singleperk",
         "prompt": (
             "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
-            "Write in TAGLISH — natural mix of Tagalog and English, the way Filipinos actually talk.\n\n"
+            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text each other.\n"
+            "IMPORTANT: Use only simple everyday Tagalog. If a word is deep or hard to understand, use English instead.\n\n"
             "Write ONE funny perk of being single — specific, relatable, and a little petty.\n\n"
             "GOOD EXAMPLES (copy this style exactly):\n"
             "- Perk ng single: yung fries mo, sa'yo lahat. Walang makikihingi.\n"
-            "- Wala kang jowa? Ibig sabihin walang mag-che-check kung nasaan ka ng 11pm.\n"
-            "- Single ka? Yung blanket mo, sa'yo lang. Habambuhay.\n"
-            "- Benefit ng single life: walang nagtatanong ng 'kailan ka uuwi?' tuwing Sabado.\n"
-            "- Pag single ka, ikaw lang ang nagde-decide kung anong ulam. No arguments. Peaceful.\n\n"
-            "BAD EXAMPLES (too generic — do NOT write like this):\n"
+            "- Wala kang jowa? Walang mag-te-text ng 11pm na nasaan ka na.\n"
+            "- Single ka? Yung blanket mo, sa'yo lang. Forever.\n"
+            "- Benefit ng single: walang nagtatanong ng 'kailan ka uuwi?' tuwing Sabado.\n"
+            "- Pag single ka, ikaw lang ang nagde-decide kung anong ulam. No drama. Peaceful.\n\n"
+            "BAD EXAMPLES (too generic or deep — do NOT write like this):\n"
             "- Masaya ang maging single.\n"
             "- May kalayaan ka pag single.\n\n"
-            "Write ONE new taglish single perk. Max 28 words. Output ONLY the text, no quotes, no intro."
+            "Write ONE new single perk. Simple words lang. Max 28 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 
@@ -125,19 +128,20 @@ JOKE_THEMES = [
         "style": "truth",
         "prompt": (
             "You write viral meme captions for a Filipino relationship humor page on Facebook Reels.\n"
-            "Write in TAGLISH — natural mix of Tagalog and English, the way Filipinos actually talk.\n\n"
+            "Write in TAGLISH — casual mix of simple Tagalog and English, like how Filipinos text each other.\n"
+            "IMPORTANT: Use only simple everyday Tagalog. If a word is deep or hard to understand, use English instead.\n\n"
             "Write ONE funny but painfully true fact about being in a relationship.\n"
             "Must describe a very specific moment couples will immediately recognize.\n\n"
             "GOOD EXAMPLES (copy this style exactly):\n"
             "- Alam mong seryoso na kayo pag yung 'I love you' naging 'kumain ka na?'\n"
-            "- Sa relationship, hindi kayo nag-aaway sa malalaking bagay. Nag-aaway kayo kung sino mag-aayos ng unan.\n"
+            "- Sa relationship, hindi kayo nag-aaway sa big things. Nag-aaway kayo kung sino mag-aayos ng unan.\n"
             "- Officially couple na kayo pag okay na siyang makita kang walang makeup sa umaga.\n"
-            "- Yung pinaka-romantic na bagay sa relationship? Yung 'ingat ka' bago ka umalis.\n"
-            "- Seryoso na kayo pag nagagawa mo nang kumain ng malaki sa harap niya. No filter.\n\n"
-            "BAD EXAMPLES (too vague — do NOT write like this):\n"
-            "- Kailangan ng communication sa relationship.\n"
-            "- Mahalaga ang tiwala sa isa't isa.\n\n"
-            "Write ONE new taglish relationship truth. Max 30 words. Output ONLY the text, no quotes, no intro."
+            "- Yung pinaka-sweet na bagay sa relationship? Yung 'ingat ka' bago ka umalis.\n"
+            "- Seryoso na kayo pag kaya mo nang kumain ng malaki sa harap niya. No filter needed.\n\n"
+            "BAD EXAMPLES (too deep or vague — do NOT write like this):\n"
+            "- Kailangan ng communication. (too vague)\n"
+            "- Nangangamba ang aking puso. (too deep Tagalog)\n\n"
+            "Write ONE new relationship truth. Simple words lang. Max 30 words. Output ONLY the text, no quotes, no intro."
         ),
     },
 ]
