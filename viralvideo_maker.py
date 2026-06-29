@@ -48,6 +48,10 @@ VIDEOS_DIR    = Path("assets/prettyaivideos")
 OUTPUT_DIR    = Path("output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 OUTPUT_VIDEO  = OUTPUT_DIR / "reel.mp4"
+
+# ── Target resolution: 9:16 portrait for mobile Reels/Shorts ──────────────
+TARGET_W = 1080
+TARGET_H = 1920
 PROGRESS_FILE = Path("jokes_progress.json")
 
 
@@ -2332,14 +2336,16 @@ def build_video(header: str, body: str, output_path: Path) -> None:
     print(f"[Video] {vid_w}x{vid_h} | {duration:.1f}s | audio={video_has_audio}")
 
     text_png = OUTPUT_DIR / "text_overlay.png"
-    render_text_png(header, body, vid_w, vid_h, text_png)
+    render_text_png(header, body, TARGET_W, TARGET_H, text_png)
 
+    # Scale source video to fill 9:16 portrait (zoom-to-fill, crop excess)
+    # This prevents black bars on mobile Reels/Shorts
     filter_complex = (
-        "[0:v]scale={w}:{h}:force_original_aspect_ratio=decrease,"
-        "pad={w}:{h}:(ow-iw)/2:(oh-ih)/2[vid];"
+        "[0:v]scale={w}:{h}:force_original_aspect_ratio=increase,"
+        "crop={w}:{h}[vid];"
         "[1:v]scale={w}:{h}[txt];"
         "[vid][txt]overlay=0:0[vout]"
-    ).format(w=vid_w, h=vid_h)
+    ).format(w=TARGET_W, h=TARGET_H)
 
     audio_args = ["-map", "[vout]"]
     if video_has_audio:
