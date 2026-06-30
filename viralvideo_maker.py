@@ -2182,8 +2182,8 @@ def get_next_joke() -> dict:
 # 3. RENDER TEXT PNG
 # ══════════════════════════════════════════════════════════════════════════════
 
-FONT_SIZE_HEADER    = 38
-FONT_SIZE_BODY      = 38
+FONT_SIZE_HEADER    = 48
+FONT_SIZE_BODY      = 48
 STROKE_WIDTH_HEADER = 5
 STROKE_WIDTH_BODY   = 5
 
