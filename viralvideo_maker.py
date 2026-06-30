@@ -2153,26 +2153,29 @@ JOKES = [
 # 2. JOKE PICKER — gets next joke in order, saves progress
 # ══════════════════════════════════════════════════════════════════════════════
 
-def get_next_joke() -> dict:
-    """Returns the next joke in order. Loops back to start when list ends."""
-    # Load progress
+def _load_progress() -> dict:
+    """Load the shared progress JSON (or return empty dict on failure)."""
     if PROGRESS_FILE.exists():
         try:
-            data      = json.loads(PROGRESS_FILE.read_text())
-            last_index = int(data.get("last_index", -1))
+            return json.loads(PROGRESS_FILE.read_text())
         except Exception:
-            last_index = -1
-    else:
-        last_index = -1
+            pass
+    return {}
 
+def _save_progress(data: dict) -> None:
+    """Persist the shared progress JSON."""
+    PROGRESS_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2))
+
+def get_next_joke() -> dict:
+    """Returns the next joke in order. Loops back to start when list ends."""
+    data       = _load_progress()
+    last_index = int(data.get("last_index", -1))
     next_index = (last_index + 1) % len(JOKES)
     joke       = JOKES[next_index]
 
-    # Save progress
-    PROGRESS_FILE.write_text(json.dumps({
-        "last_index": next_index,
-        "last_header": joke["header"],
-    }, ensure_ascii=False, indent=2))
+    data["last_index"]  = next_index
+    data["last_header"] = joke["header"]
+    _save_progress(data)
 
     print(f"[Joke] Index {next_index + 1}/{len(JOKES)}: {joke['header']}")
     return joke
@@ -2288,13 +2291,27 @@ def render_text_png(header: str, body: str, width: int, height: int, output_png:
 # 4. VIDEO ASSEMBLY
 # ══════════════════════════════════════════════════════════════════════════════
 
-def pick_random_video() -> Path:
+def pick_next_video() -> Path:
+    """Returns videos in ascending filename order, looping back after the last.
+    Tracks the last-played filename so adding new videos never breaks the sequence."""
     exts  = {".mp4", ".mov", ".webm", ".avi"}
-    files = [f for f in VIDEOS_DIR.iterdir() if f.suffix.lower() in exts]
+    files = sorted(f for f in VIDEOS_DIR.iterdir() if f.suffix.lower() in exts)
     if not files:
         raise FileNotFoundError(f"No video files found in {VIDEOS_DIR}")
-    chosen = random.choice(files)
-    print(f"[Video] Picked: {chosen}")
+
+    data            = _load_progress()
+    last_video_name = data.get("last_video_name", "")
+
+    # Find where we left off by filename; default to -1 (start from first) if not found
+    names = [f.name for f in files]
+    last_pos = names.index(last_video_name) if last_video_name in names else -1
+    next_pos = (last_pos + 1) % len(files)
+    chosen   = files[next_pos]
+
+    data["last_video_name"] = chosen.name
+    _save_progress(data)
+
+    print(f"[Video] Picked ({next_pos + 1}/{len(files)}): {chosen.name}")
     return chosen
 
 
@@ -2329,7 +2346,7 @@ def has_audio(video: Path) -> bool:
 
 
 def build_video(header: str, body: str, output_path: Path) -> None:
-    video_file           = pick_random_video()
+    video_file           = pick_next_video()
     duration, vid_w, vid_h = get_video_info(video_file)
     video_has_audio      = has_audio(video_file)
 
