@@ -2185,8 +2185,8 @@ def get_next_joke() -> dict:
 # 3. RENDER TEXT PNG
 # ══════════════════════════════════════════════════════════════════════════════
 
-FONT_SIZE_HEADER    = 48
-FONT_SIZE_BODY      = 48
+FONT_SIZE_HEADER    = 55
+FONT_SIZE_BODY      = 55
 STROKE_WIDTH_HEADER = 5
 STROKE_WIDTH_BODY   = 5
 
@@ -2272,7 +2272,7 @@ def render_text_png(header: str, body: str, width: int, height: int, output_png:
     gap      = int(FONT_SIZE_HEADER * 0.5)
     total_h  = h_h + gap + b_h
 
-    top_pad = int(height * 0.06)
+    top_pad = 200
     start_y = top_pad
     hx = (width - h_w) // 2
     bx = (width - b_w) // 2
