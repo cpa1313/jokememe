@@ -32,7 +32,8 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
 PROGRESS_FILE = Path("benefits_progress.json")
 TARGET_W, TARGET_H = 1080, 1920
-SLIDE_SECONDS = 3.0  # Heading and each benefit stay visible for this many seconds.
+HEADING_SECONDS = 4.0  # The all-caps heading stays on screen longer for emphasis.
+SLIDE_SECONDS = 3.0    # Each benefit stays visible for this many seconds.
 # 0 = invisible; 255 = solid yellow. 150 shows the video through the box.
 YELLOW_BOX_ALPHA = 150
 
@@ -41,12 +42,29 @@ POSTS = [
     {
         "heading": "Benepisyo sa pagtulog nang walang pantyyy",
         "benefits": [
-            "Nakakatulong iwasan ang Fungal at bacterial growth",
-            "Nakakabawas ng Skin irritation at Chafing",
+            "Nakakatulong iwasan ang Fungal at Bacterial Growth",
+            "Nakakabawas ng Skin Irritation at Chafing",
+            "Mas magandang quality ng tulog",
+            "Nakakatulong sa Temperature Regulation ng katawan",
+            "Mas maayos na ventilation sa intimate area",
+            "Nakakatulong sa relaxation at preskong pakiramdam",
         ],
         "caption": (
             "Benepisyo sa pagtulog nang walang pantyyy\n\n"
-            "#healthtips #tips #reels"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "Iwasan para hindi lumaki ang tiyan",
+        "benefits": [
+            "Sugary drinks, juices, milktea",
+            "Refined carbohydrates (tinapay, pasta, pastries, cookies, biscuits)",
+            "Saturated fats (fried chicken, burger, fries, delata, sausages, junkfoods)",
+            "Alcoholic beverages",
+        ],
+        "caption": (
+            "Iwasan para hindi lumaki ang tiyan\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
         ),
     },
     # {
@@ -160,8 +178,10 @@ def build_video(post: dict, output_path: Path) -> None:
     video = pick_next_video()
     duration = video_duration(video)
     slides = [post["heading"]] + [f"{i}. {benefit}" for i, benefit in enumerate(post["benefits"], 1)]
-    # Fit all slides into short clips; leave the video clean after the final slide on longer clips.
-    seconds_each = min(SLIDE_SECONDS, duration / len(slides))
+    # Heading gets 4 seconds; each benefit gets 3. Scale every slide only when a source clip is too short.
+    planned_times = [HEADING_SECONDS] + [SLIDE_SECONDS] * len(post["benefits"])
+    timing_scale = min(1.0, duration / sum(planned_times))
+    slide_times = [seconds * timing_scale for seconds in planned_times]
     pngs = []
     for i, slide in enumerate(slides):
         png = OUTPUT_DIR / f"text_overlay_{i}.png"
@@ -173,11 +193,13 @@ def build_video(post: dict, output_path: Path) -> None:
         f"crop={TARGET_W}:{TARGET_H}[v0]"
     ]
     previous = "v0"
-    for i in range(len(pngs)):
-        start, end = i * seconds_each, (i + 1) * seconds_each
+    start = 0.0
+    for i, slide_time in enumerate(slide_times):
+        end = start + slide_time
         filters.append(f"[{i + 1}:v]scale={TARGET_W}:{TARGET_H}[t{i}]")
         filters.append(f"[{previous}][t{i}]overlay=0:0:enable='between(t,{start:.3f},{end:.3f})'[v{i + 1}]")
         previous = f"v{i + 1}"
+        start = end
 
     command = ["ffmpeg", "-y", "-i", str(video)]
     for png in pngs:
