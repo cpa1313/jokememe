@@ -33,6 +33,8 @@ OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
 PROGRESS_FILE = Path("benefits_progress.json")
 TARGET_W, TARGET_H = 1080, 1920
 SLIDE_SECONDS = 3.0  # Heading and each benefit stay visible for this many seconds.
+# 0 = invisible; 255 = solid yellow. 150 shows the video through the box.
+YELLOW_BOX_ALPHA = 150
 
 # Add new topics ONLY at the bottom. Each topic is: heading first, then benefits.
 POSTS = [
@@ -144,7 +146,7 @@ def render_slide(text: str, output_png: Path) -> None:
         text_w = bound[2] - bound[0]
         x1 = (TARGET_W - text_w) // 2 - box_pad_x
         x2 = (TARGET_W + text_w) // 2 + box_pad_x
-        draw.rounded_rectangle((x1, y, x2, y + box_h), radius=24, fill=(255, 244, 165, 245))
+        draw.rounded_rectangle((x1, y, x2, y + box_h), radius=24, fill=(255, 244, 165, YELLOW_BOX_ALPHA))
         text_y = y + box_pad_y - bound[1]
         draw.text(((TARGET_W - text_w) // 2, text_y), line, font=font, fill=(0, 0, 0, 255))
         y += box_h + box_gap
