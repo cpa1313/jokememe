@@ -106,8 +106,10 @@ def has_audio(path: Path) -> bool:
     return bool(result.stdout.strip())
 
 
-def render_slide(text: str, output_png: Path) -> None:
+def render_slide(text: str, output_png: Path, is_heading: bool = False) -> None:
     """Make one yellow rounded-text slide, placed high enough for Reel controls."""
+    if is_heading:
+        text = text.upper()
     from PIL import Image, ImageDraw, ImageFont
 
     image = Image.new("RGBA", (TARGET_W, TARGET_H), (0, 0, 0, 0))
@@ -118,9 +120,10 @@ def render_slide(text: str, output_png: Path) -> None:
     ]
     font_path = next((p for p in font_paths if Path(p).exists()), font_paths[0])
 
-    # Reduce size until text needs no more than four lines.
+    # Make the all-caps heading larger and emphatic; benefits remain easy to read.
     max_width = 900
-    for size in range(72, 34, -2):
+    starting_size = 88 if is_heading else 72
+    for size in range(starting_size, 34, -2):
         font = ImageFont.truetype(font_path, size)
         words, lines, line = text.split(), [], ""
         for word in words:
@@ -162,7 +165,7 @@ def build_video(post: dict, output_path: Path) -> None:
     pngs = []
     for i, slide in enumerate(slides):
         png = OUTPUT_DIR / f"text_overlay_{i}.png"
-        render_slide(slide, png)
+        render_slide(slide, png, is_heading=(i == 0))
         pngs.append(png)
 
     filters = [
