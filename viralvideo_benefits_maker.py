@@ -266,6 +266,363 @@ POSTS = [
             "#MikaNurseDaily #healthtips #tips #reels"
         ),
     },
+    {
+        "heading": "DAHILAN NG MAITIM NA SINGIT OR KIFFY",
+        "benefits": [
+            "Pag-aahit at pagkakaron ng dry skin.",
+            "Pagsusuot ng masisikip na damit pambaba.",
+            "Side effects ng mga gamot na pang-regulate ng hormones, kolesterol at steroids.",
+            "Katabaan at mataas ang sugar level.",
+            "Genetics at hormonal imbalance.",
+            "Pagkakaroon ng mga sakit “sakit sa pituitary ng thyroid gland, kanser, diabetes, sakit sa pituitary at thyroid gland).",
+        ],
+        "caption": (
+            "DAHILAN NG MAITIM NA SINGIT OR KIFFY\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "BAWAL GAWIN PAGKATAPOS KUMAIN",
+        "benefits": [
+            "HUMIGA (can cause acid reflux).",
+            "Magbuhat ng mabibigat (pwedeng sumakit ang tiyan)",
+            "Matulog (hindi matutunawan pwedeng bangungutin)",
+            "Bum3mbang (pwede maduwal sa sobrang kabusugan)",
+        ],
+        "caption": (
+            "BAWAL GAWIN PAGKATAPOS KUMAIN\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "BENEPISYO NG F***INK?",
+        "benefits": [
+            "Nakakatulong ito para mabawasan ang TIMBANG.",
+            "Nakakatulong ito sa pag-improve ng health ng heart at brain natin.",
+            "Napapababa nito ang Risk na magkaroon ng Diabetes.",
+            "Yang ang benepisyo ng F-A-S-T-I-N-G.",
+        ],
+        "caption": (
+            "BENEPISYO NG F***INK?\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "MAAARING DAHILAN NG PAGLIIT NG ARI NG LALAKI",
+        "benefits": [
+            "Obesity (sobrang katabaan) tumatago ang ari dahil sa laki ng tiyan.",
+            "Pagkaka-edad at Erectile Dysfunction.",
+            "Prostate surgery.",
+            "Peyronie's disease kondisyon kung saan nagkakaroon ng abnormal na (plague) sa loob ng ari, na nagiging sanhi ng pananakit, pagkurba, at nito.",
+            "Malamig na Klima (umuurong ang ari).",
+        ],
+        "caption": (
+            "MAAARING DAHILAN NG PAGLIIT NG ARI NG LALAKI\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "MGA KAILANGANG IPATEST BAGO MAKIPAGB3MBANG",
+        "benefits": [
+            "HIV.",
+            "Pap smear (babae).",
+            "Chlamydia Test.",
+            "Herpes.",
+            "Sp3rm count sa lalaki (baka baog).",
+            "Psychological exam (As needed, baka may saltik)",
+        ],
+        "caption": (
+            "MGA KAILANGANG IPATEST BAGO MAKIPAGB3MBANG\n\n"
+            "Note: Bago makipagb3mbang, siguraduhing malinis, para safe na safe at stress free.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "BAKIT NAGSASARILI ANG MGA IBANG BABAE",
+        "benefits": [
+            "Hindi na niyayaya ng partner.",
+            "LDR or malayo ang partner.",
+            "Bitin sa partner.",
+            "Hindi magaling ang partner.",
+            "Mga walang partner (Hindilahat).",
+            "Sariling kagustuhan.",
+            "Maliit ang partner.",
+            "Kapag wala sa mood ang lalaki pero in heat sya.",
+            "Kapag sobrang lasing ang lalaki pero ikaw gusto.",
+        ],
+        "caption": (
+            "BAKIT NAGSASARILI ANG MGA IBANG BABAE\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "BAKIT TINOTOPAK ANG MGA BABAE",
+        "benefits": [
+            "Masyadong sensitive.",
+            "walang pera.",
+            "Baka malapit na magmenopause.",
+            "Mood swings or hormonal changes.",
+            "Kulang sa B3MBANG.",
+        ],
+        "caption": (
+            "BAKIT TINOTOPAK ANG MGA BABAE\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "DAHILAN BAKIT NAG-OOVERTHINK ANG LALAKI",
+        "benefits": [
+            "Kasi takot sila sa sarili nilang multo.",
+            "Kaunti lang sa mga lalaki ang ganyan.",
+            "Meron silang trust issue.",
+            "Walang tiwala sa sarili nya mismo.",
+            "Mahina ang self confidence kaya nag iisip.",
+            "Pangit ang tingin nya sa sarili nya.",
+            "Kasi ayaw nila mangyari sa kanila yung ginagawa din nila.",
+        ],
+        "caption": (
+            "DAHILAN BAKIT NAG-OOVERTHINK ANG LALAKI\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "BAKIT AYAW KANA KAB3MBANG NG PARTNER MO?",
+        "benefits": [
+            "Bad breath ka.",
+            "Mabaho ang katawan.",
+            "Sira-sira ang ngipin.",
+            "Madumi ang kuko.",
+            "Malaki ang tivan.",
+            "Hindi magaling sa k@ma.",
+            "Boring or walang thrill.",
+            "Mabaho ang singit at kili2.",
+        ],
+        "caption": (
+            "BAKIT AYAW KANA KAB3MBANG NG PARTNER MO?\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "NAGSESELOS ANG BABAE KAPAG...",
+        "benefits": [
+            "May kausap kang ibang babae.",
+            "May nagchat sayong chix.",
+            "May kainuman kang girl.",
+            "Bestfriend mo ay babae.",
+            "Puso ka ng puso sa post ngiba.",
+            "tinitigasan ka sa ibang babae.",
+        ],
+        "caption": (
+            "NAGSESELOS ANG BABAE KAPAG...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "EXERCISE PARA SA KIFFY",
+        "benefits": [
+            "Gawin ang KEGEL EXERCISE (ang pelvic muscles na nagsusuporta sa kiffy ng babae).",
+            "Paano gawin KEGEL EXERCISE: Yung feeling na nagpipigil kayo ng ihi (close open)",
+            "Recommended din ito para sa mga nakakaranas ng balisawsaw or hirap sa pag-ihi.",
+        ],
+        "caption": (
+            "EXERCISE PARA SA KIFFY\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA SWERTE ANG BABAE SA PARTNER NYA",
+        "benefits": [
+            "Hindi ka minumura.",
+            "Walang bisyo.",
+            "Nirerespeto at ginagalang ka.",
+            "Good provider.",
+            "Mas magaling magluto.",
+            "Kakampi mo maintindihin.",
+            "Sinusuportahan ka sa gusto mo.",
+            "Magaling sa lahat especially sa k@ma.",
+        ],
+        "caption": (
+            "SENYALES NA SWERTE ANG BABAE SA PARTNER NYA\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "DAPAT GAWIN NG MGA BABAE PARA MAKAIWAS SA UTI",
+        "benefits": [
+            "Umihi pagkatapos makipagb3mbang.",
+            "Tamang paglilinis ng kiffy.",
+            "Regular Pag-inom ng tubig.",
+            "Huwag pigilin ang ihi.",
+            "Magsuot ng cotton napanty at iwasan ang sobrang masisikip.",
+            "uminom ng fresh pagkatapos makipag b3mbang.",
+        ],
+        "caption": (
+            "DAPAT GAWIN NG MGA BABAE PARA MAKAIWAS SA UTI\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "PABORITO NG MGA BABAE",
+        "benefits": [
+            "Kumain",
+            "Manlambing",
+            "Magbunganga",
+            "Bumukaka.",
+        ],
+        "caption": (
+            "PABORITO NG MGA BABAE\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "KAILAN DAPAT MAGPATEST NG HIV",
+        "benefits": [
+            "Active sa bmbang (lalo na kung iba-iba ang partner).",
+            "Hindi gumagamit ng proteksyon kapag nakipagb3mbang sa iba or bagong kakilala.",
+            "Gumagamit ng tinuturok na bawal na gamot at naghihiraman ng karayom.",
+            "Kapag ang partner mo ay nalaman mong nakipagb3mbang sa iba.",
+            "Buntis (bahagi ng regular na prenatal screening).",
+            "Natusok ng karayom ng pasyenteng may HIV.",
+        ],
+        "caption": (
+            "KAILAN DAPAT MAGPATEST NG HIV\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SAAN MAGALING ANG BABAE",
+        "benefits": [
+            "Magaling mag-alaga, gagawin kang baby.",
+            "Maasikaso sa lahat ng bagay.",
+            "Masipag lalo na pag nadiligan.",
+            "Magaling magluto.",
+            "At syempre magaling sa ano.",
+        ],
+        "caption": (
+            "SAAN MAGALING ANG BABAE\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SAAN MAGALING ANG LALAKI",
+        "benefits": [
+            "Magaling mambola (hindi lahat).",
+            "Magaling mambabae pero juts naman (hindi lahat).",
+            "Feeling strong pero one round lang naman kaya.",
+            "Feeling magaling pero seconds lang tapos na.",
+            "Puro salita, kulang sa gawa.",
+            "Magaling mangGhost after makatikim.",
+        ],
+        "caption": (
+            "SAAN MAGALING ANG LALAKI\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SECRET NG MGA LALAKI NA AYAW NILANG MALAMAN NG IBA",
+        "benefits": [
+            "hindi pa sya tuli.",
+            "Maliit ang ano nya.",
+            "paminta.",
+            "Chickboy (Pwede sa boy or girl).",
+            "v1rgin pa sya.",
+        ],
+        "caption": (
+            "SECRET NG MGA LALAKI NA AYAW NILANG MALAMAN NG IBA\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "ILANG CALORIES BA ANG NABUBURN DURING B3MBANG",
+        "benefits": [
+            "LALAKI: approx 100 calories sa loob ng 30 minuto ng intense na b3mbang.",
+            "BABAE: Approx 69 calories.",
+            "Based sa research, humigit kumulang 3 to 5 to calories per minute ng pakikipagb3mbng",
+            "Pero, ang bilang ng mga calorie na nabuburn mo ay nakadepende sa intensity ng session, tagal, at mga posisyon.",
+        ],
+        "caption": (
+            "ILANG CALORIES BA ANG NABUBURN DURING B3MBANG\n\n"
+            "Note: Ang b3mbng ay hindi nagbuburn ng kasing dami ng calories gaya ng moderate intensity exercise, pero meron pa din talagang nabuburn.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA HEALTHY ANG SEMILYA NG LALAKI",
+        "benefits": [
+            "kulay gatas hanggang sa mapusyaw na dilaw.",
+            "malapot at malagkit kapag inilabas, ngunit nagiging likido pagkatapos ng 15-30 mins.",
+            "Dami: Mayroon 1 to 5ml (halos isang kutsarita) bawat labas.",
+            "Amoy bahagyaw tulad ng chlorine o bleach dahil sa mga protina at mineral nito.",
+        ],
+        "caption": (
+            "SENYALES NA HEALTHY ANG SEMILYA NG LALAKI\n\n"
+            "NOTE: Upang makasiguro sa kalidad ng semilya pagdating sa bilang, galaw (motility), at hugis (morphology)ng sp3rm, isang propesyunal na pagsusuri ang kailangan.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "BA LUNUKIN ANG SMLYA NG LALAKI?",
+        "benefits": [
+            "Oo kung....",
+            "Kung sa iisang partner, na malusog at walang uri ng sakit.",
+            "Kung walang HIV, Chlamydia, Gonorrhea, Syphilis, at Hepatitis B ang partner.",
+            "Kung ikaw ay walang singaw, dumudugong gilagid, o bukas na sugat ng bibig.",
+            "Kung walang Allergy sa protina ng smlya (Bagamat bihira, may mga taong may human seminal plasma hypersensitivity. Maaari itong magdulot ng pangangati, pamumula, pamamaga).",
+            "Ang semilya ay binubuo (fructose) at iba pang bitamina mineral na natural na natutunaw ng tiyan kaya safe.",
+        ],
+        "caption": (
+            "BA LUNUKIN ANG SMLYA NG LALAKI?\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "MANGYAYARI SA BABAE KAPAG WALANG BMBANG",
+        "benefits": [
+            "Nagdudulot ng vaginal dryness.",
+            "Nagiging prone sa mood swings at pagiging irritable.",
+            "Hirap matulog, kulang sa physical release.",
+            "Bumababa ang confidence.",
+            "Dumadami ang stress at pimples; hirap mag-relax.",
+            "Mahina ang energy, at madali magkasakit.",
+            "Nanunuyot ang balat, at mabilis makatanda.",
+            "Nawawala ang bonding at excitement sa mag-partner.",
+        ],
+        "caption": (
+            "MANGYAYARI SA BABAE KAPAG WALANG BMBANG\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "MATAGAL LABASAN ANG BABAE KAPAG",
+        "benefits": [
+            "maliit yong saging.",
+            "Kulang sa rom@nsa.",
+            "Sobrang lasing.",
+            "Pag napipilitan lang.",
+            "Stressed at may iniisip.",
+            "Wala sa mood.",
+            "Hindi magaling ang partner.",
+        ],
+        "caption": (
+            "MATAGAL LABASAN ANG BABAE KAPAG\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "MATAGAL LABASAN ANG LALAKI KAPAG",
+        "benefits": [
+            "Sobrang lasing.",
+            "Naiinitan.",
+            "Paiba iba ang posisyon.",
+            "Pag hindi na kaya ng 2nd round at pinipilit na lang.",
+            "Gusto nya tagalan, kapag pinipigilan nya para sulitin ang isang round.",
+            "hindi sya nalil! bug@n sa partner nya.",
+        ],
+        "caption": (
+            "MATAGAL LABASAN ANG LALAKI KAPAG\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
     # {
     #     "heading": "Ilagay ang heading dito",
     #     "benefits": ["Unang benepisyo", "Pangalawang benepisyo"],
