@@ -661,20 +661,33 @@ def clean_narration_text(text: str) -> str:
     return text
 
 
+# Neural narrator supplied by Microsoft Edge's online text-to-speech service.
+# Change this to another Edge neural voice if desired; see the edge-tts voice list.
+NEURAL_VOICE = os.environ.get("REEL_VOICE", "en-US-AvaMultilingualNeural")
+
+
 def make_narration(text: str, output_wav: Path) -> float:
-    """Create one clear voice clip per slide, followed by a short intentional pause."""
+    """Create natural neural speech for one slide, then add a short breathing pause."""
     spoken = clean_narration_text(text)
-    raw_wav = output_wav.with_name(output_wav.stem + "_raw.wav")
-    subprocess.run([
-        "espeak-ng", "-v", "en-us", "-s", "155", "-p", "45", "-w", str(raw_wav), spoken,
-    ], check=True)
-    duration = video_duration(raw_wav) + 0.35
+    raw_mp3 = output_wav.with_name(output_wav.stem + "_raw.mp3")
+    try:
+        # edge-tts produces a natural neural voice rather than a local synthetic voice.
+        subprocess.run([
+            sys.executable, "-m", "edge_tts", "--voice", NEURAL_VOICE,
+            "--rate", "+0%", "--text", spoken, "--write-media", str(raw_mp3),
+        ], check=True)
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError(
+            "Neural narration could not be generated. Check internet access and the REEL_VOICE setting."
+        ) from exc
+
+    duration = video_duration(raw_mp3) + 0.35
     # The pause is baked into the clip, keeping captions, slide timing, and audio aligned.
     subprocess.run([
-        "ffmpeg", "-y", "-i", str(raw_wav), "-af", "apad=pad_dur=0.35", "-t", f"{duration:.3f}",
+        "ffmpeg", "-y", "-i", str(raw_mp3), "-af", "apad=pad_dur=0.35", "-t", f"{duration:.3f}",
         "-c:a", "pcm_s16le", str(output_wav),
     ], check=True)
-    raw_wav.unlink(missing_ok=True)
+    raw_mp3.unlink(missing_ok=True)
     return duration
 
 
