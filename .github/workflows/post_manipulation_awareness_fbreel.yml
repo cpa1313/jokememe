@@ -21,15 +21,16 @@ jobs:
       - name: Install FFmpeg
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y ffmpeg espeak-ng
+          sudo apt-get install -y ffmpeg
       - name: Install dependencies
-        run: pip install requests Pillow
+        run: pip install requests Pillow edge-tts
       - name: Prepare output folder
         run: mkdir -p output
       - name: Generate and post manipulation-awareness reel
         env:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          REEL_VOICE: ${{ vars.REEL_VOICE || 'en-US-AvaMultilingualNeural' }}
         run: python manipulation_awareness_reel_maker_no_numbers.py
       - name: Upload rendered video
         if: always()
