@@ -603,55 +603,96 @@ def has_audio(path: Path) -> bool:
     return bool(result.stdout.strip())
 
 
-def render_slide(text: str, output_png: Path, is_heading: bool = False) -> None:
-    """Make one yellow rounded-text slide, placed high enough for Reel controls."""
-    if is_heading:
-        text = text.upper()
+def visual_heading(heading: str) -> tuple[str, str]:
+    """Create compact, poster-style title text from a post heading."""
+    import re
+    plain = re.sub(r"[^A-Za-z0-9\s:'’-]", " ", heading).strip()
+    topic = plain.rsplit(":", 1)[-1].strip() if ":" in plain else plain
+    topic = re.sub(r"^(STOP|WARNING|RED FLAG|WAKE UP|DO NOT IGNORE THIS)\s*[-—]*\s*", "", topic, flags=re.I)
+    return "SPOT THE PATTERN", topic.upper()[:58]
+
+
+def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
+    words, lines, line = text.split(), [], ""
+    for word in words:
+        trial = f"{line} {word}".strip()
+        if draw.textlength(trial, font=font) <= max_width:
+            line = trial
+        else:
+            if line:
+                lines.append(line)
+            line = word
+    if line:
+        lines.append(line)
+    return lines
+
+
+def render_slide(post: dict, active_index: int, output_png: Path) -> None:
+    """Render a dark, red-and-white editorial card; active spoken point is highlighted."""
     from PIL import Image, ImageDraw, ImageFont
 
     image = Image.new("RGBA", (TARGET_W, TARGET_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
     font_paths = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf",
     ]
-    font_path = next((p for p in font_paths if Path(p).exists()), font_paths[0])
+    font_path = next((fp for fp in font_paths if Path(fp).exists()), font_paths[0])
+    regular_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+    if not Path(regular_path).exists():
+        regular_path = font_path
+    title_font = ImageFont.truetype(font_path, 72)
+    eyebrow_font = ImageFont.truetype(font_path, 30)
+    body_font = ImageFont.truetype(regular_path, 38)
+    num_font = ImageFont.truetype(font_path, 35)
 
-    # Make the all-caps heading larger and emphatic; benefits remain easy to read.
-    max_width = 900
-    starting_size = 88 if is_heading else 72
-    for size in range(starting_size, 34, -2):
-        font = ImageFont.truetype(font_path, size)
-        words, lines, line = text.split(), [], ""
-        for word in words:
-            trial = f"{line} {word}".strip()
-            if draw.textlength(trial, font=font) <= max_width:
-                line = trial
-            else:
-                if line:
-                    lines.append(line)
-                line = word
-        if line:
-            lines.append(line)
-        if len(lines) <= 4:
-            break
+    # Dark translucent board keeps the visual readable over any background footage.
+    panel = (70, 135, 1010, 1645)
+    draw.rounded_rectangle(panel, radius=26, fill=(3, 3, 4, 236), outline=(155, 8, 14, 255), width=4)
+    # Small red "signal" mark at top, inspired by the reference without copying its artwork.
+    draw.ellipse((505, 72, 575, 142), fill=(80, 0, 5, 230), outline=(255, 30, 36, 255), width=3)
+    draw.polygon([(540, 84), (518, 126), (562, 126)], fill=(225, 15, 22, 255))
+    draw.line((180, 180, 900, 180), fill=(207, 14, 22, 255), width=4)
 
-    line_gap, box_pad_x, box_pad_y, box_gap = 10, 34, 18, 4
-    bounds = [draw.textbbox((0, 0), line, font=font) for line in lines]
-    heights = [b[3] - b[1] + box_pad_y * 2 for b in bounds]
-    total_height = sum(heights) + box_gap * (len(lines) - 1)
-    y = max(210, (TARGET_H - total_height) // 5)
+    eyebrow, topic = visual_heading(post["heading"])
+    ebox = draw.textbbox((0, 0), eyebrow, font=eyebrow_font)
+    draw.text(((TARGET_W - (ebox[2]-ebox[0]))//2, 205), eyebrow, font=eyebrow_font, fill=(235, 235, 235, 255))
+    title_lines = wrap_text(draw, topic, title_font, 800)
+    y = 250
+    for line in title_lines[:2]:
+        box = draw.textbbox((0, 0), line, font=title_font)
+        draw.text(((TARGET_W-(box[2]-box[0]))//2, y), line, font=title_font, fill=(255, 35, 42, 255))
+        y += (box[3]-box[1]) + 4
+    y += 35
+    draw.line((135, y, 945, y), fill=(110, 12, 18, 255), width=2)
+    y += 35
 
-    for line, bound, box_h in zip(lines, bounds, heights):
-        text_w = bound[2] - bound[0]
-        x1 = (TARGET_W - text_w) // 2 - box_pad_x
-        x2 = (TARGET_W + text_w) // 2 + box_pad_x
-        draw.rounded_rectangle((x1, y, x2, y + box_h), radius=24, fill=(255, 244, 165, YELLOW_BOX_ALPHA))
-        text_y = y + box_pad_y - bound[1]
-        draw.text(((TARGET_W - text_w) // 2, text_y), line, font=font, fill=(0, 0, 0, 255))
-        y += box_h + box_gap
+    benefits = post["benefits"][:5]
+    available = 1510 - y
+    block_h = max(175, min(255, available // max(1, len(benefits))))
+    for i, benefit in enumerate(benefits, 1):
+        active = active_index == i
+        x1, x2 = 128, 952
+        fill = (25, 4, 6, 245) if active else (7, 7, 8, 220)
+        border = (245, 25, 33, 255) if active else (104, 14, 20, 255)
+        draw.rounded_rectangle((x1, y, x2, y + block_h - 16), radius=16, fill=fill, outline=border, width=4 if active else 2)
+        # Numbered red marker acts as a clean information-card icon.
+        marker_fill = (235, 20, 28, 255) if active else (35, 5, 8, 255)
+        draw.ellipse((x1+18, y+24, x1+82, y+88), fill=marker_fill, outline=(255, 55, 60, 255), width=2)
+        nbox = draw.textbbox((0, 0), str(i), font=num_font)
+        draw.text((x1+50-(nbox[2]-nbox[0])//2, y+54-(nbox[3]-nbox[1])//2), str(i), font=num_font, fill=(255,255,255,255))
+        lines = wrap_text(draw, benefit, body_font, 670)
+        text_color = (255, 255, 255, 255) if active else (184, 184, 184, 255)
+        ty = y + 22
+        for line in lines[:4]:
+            draw.text((x1+105, ty), line, font=body_font, fill=text_color)
+            ty += 45
+        y += block_h
+
+    # Bottom line makes the safety/education framing clear.
+    draw.text((135, 1565), "NOTICE THE PATTERN. KEEP YOUR BOUNDARIES.", font=eyebrow_font, fill=(235, 235, 235, 255))
     image.save(output_png)
-
 
 def clean_narration_text(text: str) -> str:
     """Keep spoken narration natural; remove visual-only icons and punctuation noise."""
@@ -734,7 +775,7 @@ def make_karaoke_ass(slides: list[str], durations: list[float], output_ass: Path
             chunks.append(r"{\kf" + str(cs) + "}" + ass_escape(word))
         caption = " ".join(chunks)
         lines.append(
-            f"Dialogue: 0,{ass_timestamp(cursor)},{ass_timestamp(cursor + duration)},Karaoke,,0,0,0,,{{\\an2\\pos(540,1450)}}{caption}"
+            f"Dialogue: 0,{ass_timestamp(cursor)},{ass_timestamp(cursor + duration)},Karaoke,,0,0,0,,{{\\an2\\pos(540,1770)}}{caption}"
         )
         cursor += duration
     output_ass.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -756,7 +797,7 @@ def build_video(post: dict, output_path: Path) -> None:
     for i, slide in enumerate(slides):
         png = OUTPUT_DIR / f"text_overlay_{i}.png"
         wav = OUTPUT_DIR / f"narration_{i}.wav"
-        render_slide(slide, png, is_heading=(i == 0))
+        render_slide(post, i, png)
         slide_duration = make_narration(slide, wav)
         pngs.append(png)
         wavs.append(wav)
