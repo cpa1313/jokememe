@@ -568,12 +568,50 @@ def save_progress(data: dict) -> None:
     PROGRESS_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+SEQUENCE_VERSION = "first-to-last-v1"
+
+
 def next_post() -> dict:
+    """Choose posts in fixed order: 1, 2, 3 … 350, then start at 1 again.
+
+    The first run of this version deliberately starts at post 1, even if an
+    older progress file was created by a previous random-post version.
+    """
     data = load_progress()
-    index = (int(data.get("last_index", -1)) + 1) % len(POSTS)
-    post = POSTS[index]
-    data.update(last_index=index, last_heading=post["heading"])
+
+    if data.get("sequence_version") != SEQUENCE_VERSION:
+        # New sequential system: discard only the old picker position and begin
+        # this series cleanly with technique 1.
+        index = 0
+        completed_cycles = 0
+    else:
+        try:
+            next_number = int(data.get("next_post_number", 1))
+        except (TypeError, ValueError):
+            next_number = 1
+        # Guard against a manually edited or broken progress file.
+        index = max(0, min(next_number - 1, len(POSTS) - 1))
+        completed_cycles = int(data.get("completed_cycles", 0))
+
+    post = dict(POSTS[index])
+    post["series_number"] = index + 1
+
+    # Save the following post *after* selecting this one, so the next run gets
+    # exactly the next technique and none are skipped or chosen at random.
+    following_number = index + 2
+    if following_number > len(POSTS):
+        following_number = 1
+        completed_cycles += 1
+    data.update(
+        sequence_version=SEQUENCE_VERSION,
+        last_index=index,
+        last_post_number=index + 1,
+        next_post_number=following_number,
+        completed_cycles=completed_cycles,
+        last_heading=post["heading"],
+    )
     save_progress(data)
+    print(f"Selected post {index + 1} of {len(POSTS)}. Next: {following_number}.")
     return post
 
 
@@ -613,13 +651,13 @@ def video_duration(path: Path) -> float:
     return float(result.stdout.strip())
 
 
-def visual_heading(heading: str) -> tuple[str, str]:
-    """Create compact, poster-style title text from a post heading."""
+def visual_heading(heading: str) -> str:
+    """Extract the short, high-impact danger word for the three-part headline."""
     import re
     plain = re.sub(r"[^A-Za-z0-9\s:'’-]", " ", heading).strip()
     topic = plain.rsplit(":", 1)[-1].strip() if ":" in plain else plain
     topic = re.sub(r"^(STOP|WARNING|RED FLAG|WAKE UP|DO NOT IGNORE THIS)\s*[-—]*\s*", "", topic, flags=re.I)
-    return "SPOT THE PATTERN", topic.upper()[:58]
+    return topic.upper()[:58]
 
 
 def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
@@ -657,30 +695,50 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     body_font = ImageFont.truetype(regular_path, 38)
     num_font = ImageFont.truetype(font_path, 35)
 
-    # Dark translucent board keeps the visual readable over any background footage.
-    panel = (70, 135, 1010, 1645)
+    # Dark editorial board, with a strong headline modeled on the reference's hierarchy:
+    # white lead-in → oversized red pattern name → white closing word.
+    panel = (70, 105, 1010, 1715)
     draw.rounded_rectangle(panel, radius=26, fill=(3, 3, 4, 236), outline=(155, 8, 14, 255), width=4)
-    # Small red "signal" mark at top, inspired by the reference without copying its artwork.
-    draw.ellipse((505, 72, 575, 142), fill=(80, 0, 5, 230), outline=(255, 30, 36, 255), width=3)
-    draw.polygon([(540, 84), (518, 126), (562, 126)], fill=(225, 15, 22, 255))
-    draw.line((180, 180, 900, 180), fill=(207, 14, 22, 255), width=4)
+    # A small original alert mark: visual mood only, not copied artwork.
+    draw.ellipse((505, 125, 575, 195), fill=(80, 0, 5, 230), outline=(255, 30, 36, 255), width=3)
+    draw.polygon([(540, 137), (518, 179), (562, 179)], fill=(225, 15, 22, 255))
 
-    eyebrow, topic = visual_heading(post["heading"])
-    ebox = draw.textbbox((0, 0), eyebrow, font=eyebrow_font)
-    draw.text(((TARGET_W - (ebox[2]-ebox[0]))//2, 205), eyebrow, font=eyebrow_font, fill=(235, 235, 235, 255))
-    title_lines = wrap_text(draw, topic, title_font, 800)
-    y = 250
-    for line in title_lines[:2]:
-        box = draw.textbbox((0, 0), line, font=title_font)
-        draw.text(((TARGET_W-(box[2]-box[0]))//2, y), line, font=title_font, fill=(255, 35, 42, 255))
-        y += (box[3]-box[1]) + 4
-    y += 35
-    draw.line((135, y, 945, y), fill=(110, 12, 18, 255), width=2)
-    y += 35
+    topic = visual_heading(post["heading"])
+    lead_font = ImageFont.truetype(font_path, 92)
+    # Long subjects shrink only as much as needed, so every post keeps the same bold style.
+    topic_size = 118 if len(topic) <= 22 else (100 if len(topic) <= 36 else 82)
+    topic_font = ImageFont.truetype(font_path, topic_size)
+    close_font = ImageFont.truetype(font_path, 108)
+
+    def centered(text, y_pos, font, color):
+        box = draw.textbbox((0, 0), text, font=font)
+        draw.text(((TARGET_W - (box[2] - box[0])) // 2, y_pos), text, font=font, fill=color)
+        return y_pos + (box[3] - box[1]) + 10
+
+    # Every Reel gets its own technique number: 1 DARK TRICKS through 350 DARK TRICKS.
+    # Use a fallback of 1 so individual slide previews also render cleanly.
+    series_number = int(post.get("series_number", 1))
+    series_label = f"{series_number} DARK TRICKS"
+    label_box = draw.textbbox((0, 0), series_label, font=eyebrow_font)
+    label_w = label_box[2] - label_box[0]
+    label_x = (TARGET_W - label_w) // 2
+    draw.rounded_rectangle((label_x - 18, 202, label_x + label_w + 18, 246),
+                           radius=18, fill=(83, 0, 6, 255), outline=(235, 20, 28, 255), width=2)
+    draw.text((label_x, 207), series_label, font=eyebrow_font, fill=(255, 75, 80, 255))
+
+    y = 252
+    y = centered("THEY'RE", y, lead_font, (250, 250, 250, 255))
+    # The red word is the focal point, just like the supplied reference.
+    for line in wrap_text(draw, topic, topic_font, 830)[:3]:
+        y = centered(line, y, topic_font, (232, 18, 25, 255))
+    y = centered("YOU", y, close_font, (250, 250, 250, 255))
+    y += 22
+    draw.line((135, y, 945, y), fill=(145, 15, 22, 255), width=3)
+    y += 26
 
     benefits = post["benefits"][:5]
-    available = 1510 - y
-    block_h = max(175, min(255, available // max(1, len(benefits))))
+    available = 1625 - y
+    block_h = max(160, min(220, available // max(1, len(benefits))))
     for i, benefit in enumerate(benefits, 1):
         active = active_index == i
         x1, x2 = 128, 952
@@ -700,8 +758,8 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
             ty += 45
         y += block_h
 
-    # Bottom line makes the safety/education framing clear.
-    draw.text((135, 1565), "NOTICE THE PATTERN. KEEP YOUR BOUNDARIES.", font=eyebrow_font, fill=(235, 235, 235, 255))
+    # Bottom line stays clear of the Facebook caption overlay area.
+    draw.text((135, 1650), "NOTICE THE PATTERN. KEEP YOUR BOUNDARIES.", font=eyebrow_font, fill=(235, 235, 235, 255))
     image.save(output_png)
 
 def clean_narration_text(text: str) -> str:
