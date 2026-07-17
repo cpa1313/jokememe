@@ -26,7 +26,7 @@ def require_env(name: str) -> str:
 
 FB_ACCESS_TOKEN = require_env("FB_ACCESS_TOKEN")
 FB_PAGE_ID = require_env("FB_PAGE_ID")
-VIDEOS_DIR = Path("assets/prettyaivideos")
+MUSIC_DIR = Path("assets/music")
 OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
@@ -574,33 +574,29 @@ def next_post() -> dict:
     return post
 
 
-def pick_next_video() -> Path:
-    files = sorted(p for p in VIDEOS_DIR.iterdir() if p.suffix.lower() in {".mp4", ".mov", ".webm", ".avi"})
+def pick_next_music() -> Path | None:
+    """Use a local background track, rotating through assets/music between Reels."""
+    if not MUSIC_DIR.exists():
+        return None
+    extensions = {".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac"}
+    files = sorted(p for p in MUSIC_DIR.iterdir() if p.is_file() and p.suffix.lower() in extensions)
     if not files:
-        raise FileNotFoundError(f"No video found in {VIDEOS_DIR}")
+        return None
     data = load_progress()
     names = [p.name for p in files]
-    previous = data.get("last_video_name", "")
+    previous = data.get("last_music_name", "")
     index = (names.index(previous) + 1) % len(files) if previous in names else 0
-    data["last_video_name"] = files[index].name
+    data["last_music_name"] = files[index].name
     save_progress(data)
     return files[index]
 
-
 def video_duration(path: Path) -> float:
+    """Return duration for a narrated clip or local music file."""
     result = subprocess.run([
         "ffprobe", "-v", "error", "-show_entries", "format=duration",
         "-of", "default=noprint_wrappers=1:nokey=1", str(path),
     ], capture_output=True, text=True, check=True)
     return float(result.stdout.strip())
-
-
-def has_audio(path: Path) -> bool:
-    result = subprocess.run([
-        "ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries", "stream=index",
-        "-of", "default=noprint_wrappers=1:nokey=1", str(path),
-    ], capture_output=True, text=True)
-    return bool(result.stdout.strip())
 
 
 def visual_heading(heading: str) -> tuple[str, str]:
@@ -704,7 +700,7 @@ def clean_narration_text(text: str) -> str:
 
 # Neural narrator supplied by Microsoft Edge's online text-to-speech service.
 # Change this to another Edge neural voice if desired; see the edge-tts voice list.
-NEURAL_VOICE = os.environ.get("REEL_VOICE", "en-US-AvaMultilingualNeural")
+NEURAL_VOICE = os.environ.get("REEL_VOICE", "en-US-AndrewMultilingualNeural")
 
 
 def make_narration(text: str, output_wav: Path) -> float:
@@ -791,7 +787,7 @@ def concat_narration(wavs: list[Path], output_wav: Path) -> None:
 
 
 def build_video(post: dict, output_path: Path) -> None:
-    video = pick_next_video()
+    """Create a black editorial Reel with impact shakes, narration, karaoke, and local music."""
     slides = [post["heading"]] + post["benefits"]
     pngs, wavs, slide_times = [], [], []
     for i, slide in enumerate(slides):
@@ -808,29 +804,57 @@ def build_video(post: dict, output_path: Path) -> None:
     concat_narration(wavs, narration)
     make_karaoke_ass(slides, slide_times, karaoke_ass)
     total_duration = sum(slide_times)
+    music = pick_next_music()
 
-    filters = [
-        f"[0:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,"
-        f"crop={TARGET_W}:{TARGET_H}[v0]"
-    ]
-    previous, start = "v0", 0.0
+    # Pure black base matches the supplied dark editorial reference. Each new spoken card
+    # gets a brief, restrained impact shake; it is visual emphasis, not nonstop motion.
+    filters = ["[0:v]format=rgba[base]"]
+    previous, start_time = "base", 0.0
     for i, slide_time in enumerate(slide_times):
-        end = start + slide_time
-        filters.append(f"[{i + 1}:v]scale={TARGET_W}:{TARGET_H}[t{i}]")
-        filters.append(f"[{previous}][t{i}]overlay=0:0:enable='between(t,{start:.3f},{end:.3f})'[v{i + 1}]")
-        previous = f"v{i + 1}"
-        start = end
-    # libass renders the word-by-word yellow karaoke progression over the spoken audio.
+        end_time = start_time + slide_time
+        shake_end = min(end_time, start_time + 0.24)
+        # Escaped commas are required inside FFmpeg expressions embedded in a filter graph.
+        x = rf"10*sin(170*(t-{start_time:.3f}))*between(t\,{start_time:.3f}\,{shake_end:.3f})"
+        y = rf"7*cos(205*(t-{start_time:.3f}))*between(t\,{start_time:.3f}\,{shake_end:.3f})"
+        filters.append(
+            f"[{i + 1}:v]scale={TARGET_W}:{TARGET_H}[card{i}];"
+            rf"[{previous}][card{i}]overlay=x='{x}':y='{y}':enable='between(t\,{start_time:.3f}\,{end_time:.3f})'[v{i}]"
+        )
+        previous = f"v{i}"
+        start_time = end_time
+
     escaped_ass = str(karaoke_ass.resolve()).replace("\\", "\\\\").replace(":", r"\:")
     filters.append(f"[{previous}]subtitles='{escaped_ass}'[outv]")
 
-    command = ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(video)]
+    # Narration stays dominant; the selected local music track runs quietly underneath.
+    narration_input = len(pngs) + 1
+    command = [
+        "ffmpeg", "-y", "-f", "lavfi", "-i",
+        f"color=c=black:s={TARGET_W}x{TARGET_H}:r=30:d={total_duration:.3f}",
+    ]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
-    command += ["-i", str(narration), "-filter_complex", ";".join(filters), "-map", "[outv]", "-map", f"{len(pngs) + 1}:a:0"]
-    command += ["-t", f"{total_duration:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(output_path)]
-    subprocess.run(command, check=True)
+    command += ["-i", str(narration)]
+    if music:
+        command += ["-stream_loop", "-1", "-i", str(music)]
+        music_input = narration_input + 1
+        filters.append(
+            f"[{narration_input}:a]volume=1.15[narration];"
+            f"[{music_input}:a]volume=0.075,afade=t=in:st=0:d=0.5,afade=t=out:st={max(0, total_duration - 0.7):.3f}:d=0.7[music];"
+            "[narration][music]amix=inputs=2:duration=first:dropout_transition=0[aout]"
+        )
+        audio_map = "[aout]"
+    else:
+        print("No music file found in assets/music; rendering narration only.")
+        filters.append(f"[{narration_input}:a]volume=1.15[aout]")
+        audio_map = "[aout]"
 
+    command += ["-filter_complex", ";".join(filters), "-map", "[outv]", "-map", audio_map]
+    command += [
+        "-t", f"{total_duration:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23",
+        "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(output_path),
+    ]
+    subprocess.run(command, check=True)
 
 def post_to_facebook_reel(video_path: Path, caption: str) -> str:
     base_url = f"https://graph.facebook.com/v25.0/{FB_PAGE_ID}/video_reels"
