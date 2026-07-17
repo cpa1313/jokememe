@@ -24,13 +24,13 @@ jobs:
           sudo apt-get install -y ffmpeg
       - name: Install dependencies
         run: pip install requests Pillow edge-tts
-      - name: Prepare output folder
-        run: mkdir -p output
+      - name: Prepare output and music folders
+        run: mkdir -p output assets/music
       - name: Generate and post manipulation-awareness reel
         env:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
-          REEL_VOICE: ${{ vars.REEL_VOICE || 'en-US-AvaMultilingualNeural' }}
+          REEL_VOICE: ${{ vars.REEL_VOICE || 'en-US-AndrewMultilingualNeural' }}
         run: python manipulation_awareness_reel_maker_no_numbers.py
       - name: Upload rendered video
         if: always()
