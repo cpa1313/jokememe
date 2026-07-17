@@ -882,11 +882,18 @@ def heading_narration(post: dict) -> str:
     return f"4 Red Flags. {clean_narration_text(post['heading'])}"
 
 
+def ending_narration(post: dict) -> str:
+    """Give each topic a clear, spoken closing reminder."""
+    topic = visual_heading(post["heading"]).title()
+    return f"Final red flag: {topic}. Notice the pattern, trust yourself, and protect your peace."
+
+
 def build_video(post: dict, output_path: Path) -> None:
     """Create a black editorial Reel with impact shakes, narration, karaoke, and local music."""
     # The first line intentionally includes the visible heading label, so the narrator
     # says “4 Red Flags” rather than skipping the label that appears on screen.
-    slides = [heading_narration(post)] + post["benefits"]
+    # The last line is a topic-specific spoken close. It also appears as a karaoke caption.
+    slides = [heading_narration(post)] + post["benefits"] + [ending_narration(post)]
     pngs, wavs, slide_times = [], [], []
     for i, slide in enumerate(slides):
         png = OUTPUT_DIR / f"text_overlay_{i}.png"
