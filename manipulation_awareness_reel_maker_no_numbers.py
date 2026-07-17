@@ -43,7 +43,7 @@ YELLOW_BOX_ALPHA = 150
 # Add new topics ONLY at the bottom. Each topic is: heading first, then benefits.
 # 50 original, education-first manipulation-awareness Reel posts.
 # Each entry is shown as a heading followed by unnumbered slides.
-POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPING",
+POSTS = [{'heading': "4 Red Flags You Are Being Manipulated By Guilt-Tripping",
   'benefits': ['It uses guilt to pressure a decision.',
                'It may sound like: ‘After all I did for you.’',
                'Care does not erase your right to say no.',
@@ -51,7 +51,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Guilt-Tripping: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 STOP — THEY'RE ALREADY DOING THIS TO YOU: GASLIGHTING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Gaslighting",
   'benefits': ['It repeatedly challenges your memory or feelings.',
                'One disagreement is not automatically gaslighting.',
                'Look for a pattern of denial and confusion.',
@@ -59,7 +59,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Gaslighting: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ RED FLAG: DO NOT IGNORE THIS ANY LONGER: LOVE-BOMBING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Love-Bombing",
   'benefits': ['It can feel like intense affection very fast.',
                'The concern is when warmth becomes pressure or control.',
                'Healthy interest respects your pace.',
@@ -67,7 +67,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Love-Bombing: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ IF THIS FEELS FAMILIAR, YOU'RE IN DANGER: SILENT TREATMENT",
+ {'heading': "4 Red Flags You Are Being Manipulated By Silent Treatment",
   'benefits': ['Space can be healthy when it is communicated.',
                'Silent treatment uses withdrawal as punishment.',
                'It leaves you anxious and chasing answers.',
@@ -75,7 +75,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Silent Treatment: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 WAKE UP — THIS IS HAPPENING RIGHT NOW: BLAME SHIFTING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Blame Shifting",
   'benefits': ['The focus moves from their action to your reaction.',
                'You raise a concern, then end up apologizing.',
                'Both people can own their part.',
@@ -83,7 +83,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Blame Shifting: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ BEFORE IT'S TOO LATE — READ THIS: MOVING GOALPOSTS",
+ {'heading': "4 Red Flags You Are Being Manipulated By Moving Goalposts",
   'benefits': ['You meet the request, then the rule changes.',
                'Nothing you do ever seems enough.',
                'This can keep you working for approval.',
@@ -91,7 +91,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Moving Goalposts: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ THEY ARE HIDING THIS FROM YOU: FALSE URGENCY",
+ {'heading': "4 Red Flags You Are Being Manipulated By False Urgency",
   'benefits': ['Pressure says: decide right now.',
                'Respect gives you time to think.',
                'Urgency can hide a weak argument.',
@@ -99,7 +99,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'False Urgency: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 YOU ARE NOT CRAZY — THIS IS REAL: BOUNDARY TESTING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Boundary Testing",
   'benefits': ['Small disrespect can test what you will tolerate.',
                'It may start as a joke or tiny favor.',
                'Your discomfort is useful information.',
@@ -107,7 +107,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Boundary Testing: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: TRIANGULATION",
+ {'heading': "4 Red Flags You Are Being Manipulated By Triangulation",
   'benefits': ['A third person gets pulled into your conflict.',
                'It can create jealousy, comparison, or pressure.',
                'Direct conversation reduces the drama.',
@@ -115,7 +115,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Triangulation: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 STOP — THEY'RE ALREADY DOING THIS TO YOU: ISOLATION",
+ {'heading': "4 Red Flags You Are Being Manipulated By Isolation",
   'benefits': ['Control can make outside support feel unsafe.',
                'They may criticize every friend or family member.',
                'Healthy relationships make room for your people.',
@@ -123,7 +123,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Isolation: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ RED FLAG: DO NOT IGNORE THIS ANY LONGER: FUTURE FAKING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Future Faking",
   'benefits': ['Big future promises can create fast attachment.',
                'Words matter less than steady actions.',
                'Plans should not be used as a leash.',
@@ -131,7 +131,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Future Faking: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ IF THIS FEELS FAMILIAR, YOU'RE IN DANGER: PLAYING THE VICTIM",
+ {'heading': "4 Red Flags You Are Being Manipulated By Playing The Victim",
   'benefits': ['Pain deserves compassion, but it is not a free pass.',
                'The story may erase the harm they caused.',
                'Empathy and accountability can exist together.',
@@ -139,7 +139,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Playing the Victim: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 WAKE UP — THIS IS HAPPENING RIGHT NOW: DARVO PATTERN",
+ {'heading': "4 Red Flags You Are Being Manipulated By Darvo Pattern",
   'benefits': ['It can mean deny, attack, then reverse victim and offender.',
                'A concern becomes an attack on your character.',
                'The original issue disappears.',
@@ -147,7 +147,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'DARVO Pattern: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ BEFORE IT'S TOO LATE — READ THIS: WITHHOLDING AFFECTION",
+ {'heading': "4 Red Flags You Are Being Manipulated By Withholding Affection",
   'benefits': ['Affection should not be a reward for obedience.',
                'A healthy partner can need space respectfully.',
                'Control uses warmth and coldness to train behavior.',
@@ -155,7 +155,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Withholding Affection: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ THEY ARE HIDING THIS FROM YOU: PASSIVE-AGGRESSIVE PRESSURE",
+ {'heading': "4 Red Flags You Are Being Manipulated By Passive-Aggressive Pressure",
   'benefits': ['The message is hidden behind sarcasm or sighs.',
                'It makes you guess instead of discuss.',
                'Clear needs create healthier conflict.',
@@ -163,7 +163,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Passive-Aggressive Pressure: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 YOU ARE NOT CRAZY — THIS IS REAL: NEGGING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Negging",
   'benefits': ['A backhanded compliment can chip away at confidence.',
                'It may be framed as teasing or honesty.',
                'Respect does not need to make you smaller.',
@@ -171,7 +171,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Negging: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: INTERMITTENT REINFORCEMENT",
+ {'heading': "4 Red Flags You Are Being Manipulated By Intermittent Reinforcement",
   'benefits': ['Kindness and coldness alternate without warning.',
                'The unpredictability can make you chase the good moments.',
                'Consistency is more valuable than intensity.',
@@ -179,7 +179,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Intermittent Reinforcement: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 STOP — THEY'RE ALREADY DOING THIS TO YOU: INFORMATION OVERLOAD",
+ {'heading': "4 Red Flags You Are Being Manipulated By Information Overload",
   'benefits': ['Too many claims can make a simple issue feel confusing.',
                'Confusion can stop you from asking questions.',
                'You do not need to solve everything at once.',
@@ -187,7 +187,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Information Overload: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ RED FLAG: DO NOT IGNORE THIS ANY LONGER: SELECTIVE MEMORY",
+ {'heading': "4 Red Flags You Are Being Manipulated By Selective Memory",
   'benefits': ['They remember your mistakes but forget their promises.',
                'This can create an unfair story about you.',
                'Everyone makes mistakes; standards should be mutual.',
@@ -195,7 +195,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Selective Memory: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ IF THIS FEELS FAMILIAR, YOU'RE IN DANGER: DOUBLE STANDARDS",
+ {'heading': "4 Red Flags You Are Being Manipulated By Double Standards",
   'benefits': ['Rules apply to you but not to them.',
                'They demand privacy but inspect your phone.',
                'Fairness needs the same rule for both people.',
@@ -203,7 +203,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Double Standards: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 WAKE UP — THIS IS HAPPENING RIGHT NOW: JEALOUSY AS PROOF",
+ {'heading': "4 Red Flags You Are Being Manipulated By Jealousy As Proof",
   'benefits': ['Jealousy is a feeling, not proof of love.',
                'Control can be disguised as protection.',
                'Trust allows friendships, privacy, and choices.',
@@ -211,7 +211,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Jealousy as Proof: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ BEFORE IT'S TOO LATE — READ THIS: WEAPONIZED INSECURITY",
+ {'heading': "4 Red Flags You Are Being Manipulated By Weaponized Insecurity",
   'benefits': ['A private fear gets used to win an argument.',
                'This can make you feel exposed and small.',
                'Vulnerability needs care, not ammunition.',
@@ -219,7 +219,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Weaponized Insecurity: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ THEY ARE HIDING THIS FROM YOU: SHAMING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Shaming",
   'benefits': ['Shame attacks who you are, not what happened.',
                'It sounds like: ‘You are selfish.’',
                'Healthy feedback names a behavior and a need.',
@@ -227,7 +227,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Shaming: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 YOU ARE NOT CRAZY — THIS IS REAL: THREATS AND ULTIMATUMS",
+ {'heading': "4 Red Flags You Are Being Manipulated By Threats And Ultimatums",
   'benefits': ['A boundary explains what you will do to protect yourself.',
                'A threat tries to force another person’s choice.',
                'Not every ultimatum is abusive; context matters.',
@@ -235,7 +235,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Threats and Ultimatums: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: MONITORING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Monitoring",
   'benefits': ['Checking your location or messages can be framed as care.',
                'Consent and privacy still matter in relationships.',
                'Safety plans are different from constant surveillance.',
@@ -243,7 +243,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Monitoring: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 STOP — THEY'RE ALREADY DOING THIS TO YOU: FINANCIAL CONTROL",
+ {'heading': "4 Red Flags You Are Being Manipulated By Financial Control",
   'benefits': ['Money can be used to limit someone’s choices.',
                'It may include hiding accounts or blocking work.',
                'Shared finances need transparency and agreement.',
@@ -251,7 +251,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Financial Control: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ RED FLAG: DO NOT IGNORE THIS ANY LONGER: PUBLIC HUMILIATION",
+ {'heading': "4 Red Flags You Are Being Manipulated By Public Humiliation",
   'benefits': ['Embarrassing you can create fear of speaking up.',
                'It may be called a joke after you react.',
                'A joke is not funny if it repeatedly hurts.',
@@ -259,7 +259,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Public Humiliation: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ IF THIS FEELS FAMILIAR, YOU'RE IN DANGER: STONEWALLING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Stonewalling",
   'benefits': ['Stonewalling shuts down every attempt to resolve conflict.',
                'A pause is healthy when there is a return time.',
                'Permanent shutdown leaves one person carrying the issue.',
@@ -267,7 +267,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Stonewalling: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 WAKE UP — THIS IS HAPPENING RIGHT NOW: THREATENING TO LEAVE",
+ {'heading': "4 Red Flags You Are Being Manipulated By Threatening To Leave",
   'benefits': ['Breakup threats can be used to control small choices.',
                'They create fear instead of problem-solving.',
                'Real relationship concerns deserve a calm talk.',
@@ -275,7 +275,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Threatening to Leave: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ BEFORE IT'S TOO LATE — READ THIS: SCOREKEEPING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Scorekeeping",
   'benefits': ['Past favors become weapons in every argument.',
                'Support becomes a debt you can never repay.',
                'Healthy care is not a running invoice.',
@@ -283,7 +283,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Scorekeeping: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ THEY ARE HIDING THIS FROM YOU: MINIMIZING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Minimizing",
   'benefits': ['It sounds like: ‘You are too sensitive.’',
                'It shrinks the impact instead of hearing it.',
                'Feelings are data, even when views differ.',
@@ -291,7 +291,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Minimizing: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 YOU ARE NOT CRAZY — THIS IS REAL: DISMISSIVE HUMOR",
+ {'heading': "4 Red Flags You Are Being Manipulated By Dismissive Humor",
   'benefits': ['Serious concerns get turned into a joke.',
                'Humor can dodge accountability.',
                'You are allowed to bring a topic back.',
@@ -299,7 +299,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Dismissive Humor: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: FORCED CONFESSIONS",
+ {'heading': "4 Red Flags You Are Being Manipulated By Forced Confessions",
   'benefits': ['Pressure for constant proof can become control.',
                'You do not have to reveal every private thought.',
                'Trust grows from voluntary honesty, not interrogation.',
@@ -307,7 +307,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Forced Confessions: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 STOP — THEY'RE ALREADY DOING THIS TO YOU: COMPARISON",
+ {'heading': "4 Red Flags You Are Being Manipulated By Comparison",
   'benefits': ['Comparing you to others can trigger insecurity.',
                'It may push you to earn basic kindness.',
                'Healthy feedback does not use people as weapons.',
@@ -315,7 +315,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Comparison: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ RED FLAG: DO NOT IGNORE THIS ANY LONGER: CONDITIONAL RESPECT",
+ {'heading': "4 Red Flags You Are Being Manipulated By Conditional Respect",
   'benefits': ['Respect should not depend on perfect obedience.',
                'Disagreement is normal in close relationships.',
                'Control treats independence as betrayal.',
@@ -323,7 +323,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Conditional Respect: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ IF THIS FEELS FAMILIAR, YOU'RE IN DANGER: REWRITING HISTORY",
+ {'heading': "4 Red Flags You Are Being Manipulated By Rewriting History",
   'benefits': ['Past events get changed to fit their current story.',
                'You may leave talks doubting clear facts.',
                'Memory is imperfect, but patterns still matter.',
@@ -331,7 +331,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Rewriting History: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 WAKE UP — THIS IS HAPPENING RIGHT NOW: USING SECRETS",
+ {'heading': "4 Red Flags You Are Being Manipulated By Using Secrets",
   'benefits': ['A secret can be used to scare you into silence.',
                'That turns trust into leverage.',
                'You deserve support without blackmail.',
@@ -339,7 +339,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Using Secrets: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ BEFORE IT'S TOO LATE — READ THIS: WEAPONIZED HELPLESSNESS",
+ {'heading': "4 Red Flags You Are Being Manipulated By Weaponized Helplessness",
   'benefits': ['Someone acts unable so you carry all the work.',
                'A one-time need is different from a repeated pattern.',
                'Shared responsibility needs real effort.',
@@ -347,7 +347,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Weaponized Helplessness: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ THEY ARE HIDING THIS FROM YOU: OVEREXPLAINING PRESSURE",
+ {'heading': "4 Red Flags You Are Being Manipulated By Overexplaining Pressure",
   'benefits': ['You may be pushed to justify every no.',
                'More explanation can invite more debate.',
                'A short boundary is still a boundary.',
@@ -355,7 +355,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Overexplaining Pressure: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 YOU ARE NOT CRAZY — THIS IS REAL: BAITING",
+ {'heading': "4 Red Flags You Are Being Manipulated By Baiting",
   'benefits': ['A person provokes you, then focuses on your reaction.',
                'The goal may be to make you look unreasonable.',
                'Pause before replying when emotions spike.',
@@ -363,7 +363,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Baiting: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: SMEAR CAMPAIGNS",
+ {'heading': "4 Red Flags You Are Being Manipulated By Smear Campaigns",
   'benefits': ['Someone may tell others a distorted story about you.',
                'It can isolate you before you can speak.',
                'You do not need to fight every rumor.',
@@ -371,7 +371,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Smear Campaigns: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 STOP — THEY'RE ALREADY DOING THIS TO YOU: CONTROL DISGUISED AS ADVICE",
+ {'heading': "4 Red Flags You Are Being Manipulated By Control Disguised As Advice",
   'benefits': ['Advice becomes a problem when no is not accepted.',
                'Care offers options; control demands obedience.',
                'Your decisions can be different from theirs.',
@@ -379,7 +379,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Control Disguised as Advice: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ RED FLAG: DO NOT IGNORE THIS ANY LONGER: TESTING LOYALTY",
+ {'heading': "4 Red Flags You Are Being Manipulated By Testing Loyalty",
   'benefits': ['Unreasonable demands can be framed as proof of love.',
                'Love is not a test you must keep passing.',
                'Healthy loyalty includes respect for your limits.',
@@ -387,7 +387,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Testing Loyalty: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ IF THIS FEELS FAMILIAR, YOU'RE IN DANGER: CONFUSING MIXED MESSAGES",
+ {'heading': "4 Red Flags You Are Being Manipulated By Confusing Mixed Messages",
   'benefits': ['Warm words and harmful actions can coexist.',
                'Mixed signals keep you searching for clarity.',
                'Look at repeated behavior, not only apologies.',
@@ -395,7 +395,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Confusing Mixed Messages: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 WAKE UP — THIS IS HAPPENING RIGHT NOW: PRESSURE THROUGH FEAR",
+ {'heading': "4 Red Flags You Are Being Manipulated By Pressure Through Fear",
   'benefits': ['Fear can make a bad choice feel like the only choice.',
                'Threats, anger, and panic reduce clear thinking.',
                'Create distance before deciding if you can.',
@@ -403,7 +403,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Pressure Through Fear: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "‼️ BEFORE IT'S TOO LATE — READ THIS: PRESSURE THROUGH OBLIGATION",
+ {'heading': "4 Red Flags You Are Being Manipulated By Pressure Through Obligation",
   'benefits': ['A favor can be used to demand more than you agreed to.',
                'Gratitude does not erase consent.',
                'You can appreciate help and still have limits.',
@@ -411,7 +411,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Pressure Through Obligation: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ THEY ARE HIDING THIS FROM YOU: PRESSURE THROUGH FLATTERY",
+ {'heading': "4 Red Flags You Are Being Manipulated By Pressure Through Flattery",
   'benefits': ['Praise can be used to make refusal feel selfish.',
                'It may sound like: ‘You are the only one who can.’',
                'A compliment is not a contract.',
@@ -419,7 +419,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Pressure Through Flattery: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 YOU ARE NOT CRAZY — THIS IS REAL: HEALTHY CONFLICT CHECK",
+ {'heading': "4 Red Flags You Are Being Manipulated By Healthy Conflict Check",
   'benefits': ['Healthy conflict allows both people to speak.',
                'It uses specific behavior, not insults.',
                'It makes room for pauses and repair.',
@@ -427,7 +427,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Healthy Conflict Check: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: TRUST YOUR PATTERN NOTES",
+ {'heading': "4 Red Flags You Are Being Manipulated By Trust Your Pattern Notes",
   'benefits': ['One moment rarely tells the whole story.',
                'Repeated fear, guilt, or confusion deserves attention.',
                'Write down behavior, dates, and how you felt.',
@@ -435,7 +435,7 @@ POSTS = [{'heading': "⚠️ WARNING — YOU'RE BEING MANIPULATED: GUILT-TRIPPIN
   'caption': 'Trust Your Pattern Notes: learn the pattern, protect your peace.\n'
              '\n'
              '#Psychology #Boundaries #EmotionalHealth #RelationshipAdvice #Reels'},
- {'heading': "🚨 STOP — THEY'RE ALREADY DOING THIS TO YOU: WHEN TO GET SUPPORT",
+ {'heading': "4 Red Flags You Are Being Manipulated By When To Get Support",
   'benefits': ['Talk to someone trusted when control feels normal.',
                'Reach out sooner if you feel afraid or isolated.',
                'Support is not overreacting.',
@@ -539,7 +539,9 @@ def add_awareness_posts() -> None:
         readable = name.title()
         for heading_hook, line1, line2, line3, line4 in angles:
             POSTS.append({
-                "heading": f"{heading_hook}: {readable.upper()}",
+                "heading": f"4 Red Flags You Are Being Manipulated By {readable}",
+                # This is a plain-language definition used for the final spoken awareness message.
+                "definition": signal,
                 "benefits": [
                     line1.format(name=name), line2.format(signal=signal),
                     line3.format(truth=truth), line4.format(action=action),
@@ -553,6 +555,10 @@ def add_awareness_posts() -> None:
 
 
 add_awareness_posts()
+# Original posts use their first awareness point as the concise definition. Additional
+# posts carry a dedicated definition from their topic data above.
+for _post in POSTS:
+    _post.setdefault("definition", _post["benefits"][0])
 assert len(AWARENESS_TOPICS) == 75, "Keep 75 topics so this adds exactly 300 posts."
 assert len(POSTS) == 350, "Expected 50 original posts plus 300 new awareness posts."
 
@@ -652,28 +658,12 @@ def video_duration(path: Path) -> float:
 
 
 def visual_heading(heading: str) -> str:
-    """Extract the short, high-impact danger word for the three-part headline."""
+    """Return only the post topic from the complete visible heading."""
     import re
-    plain = re.sub(r"[^A-Za-z0-9\s:'’-]", " ", heading).strip()
-    topic = plain.rsplit(":", 1)[-1].strip() if ":" in plain else plain
-    topic = re.sub(r"^(STOP|WARNING|RED FLAG|WAKE UP|DO NOT IGNORE THIS)\s*[-—]*\s*", "", topic, flags=re.I)
+    plain = re.sub(r"[^\w\s:&'-]", " ", heading, flags=re.UNICODE)
+    match = re.search(r"4\s+red\s+flags\s+you\s+are\s+being\s+manipulated\s+by\s+(.+)$", plain, flags=re.I)
+    topic = match.group(1).strip() if match else plain.rsplit(":", 1)[-1].strip()
     return topic.upper()[:58]
-
-
-def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
-    words, lines, line = text.split(), [], ""
-    for word in words:
-        trial = f"{line} {word}".strip()
-        if draw.textlength(trial, font=font) <= max_width:
-            line = trial
-        else:
-            if line:
-                lines.append(line)
-            line = word
-    if line:
-        lines.append(line)
-    return lines
-
 
 def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     """Render a dark, red-and-white editorial card; active spoken point is highlighted."""
@@ -703,35 +693,21 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     draw.ellipse((505, 125, 575, 195), fill=(80, 0, 5, 230), outline=(255, 30, 36, 255), width=3)
     draw.polygon([(540, 137), (518, 179), (562, 179)], fill=(225, 15, 22, 255))
 
-    topic = visual_heading(post["heading"])
-    lead_font = ImageFont.truetype(font_path, 92)
-    # Long subjects shrink only as much as needed, so every post keeps the same bold style.
-    topic_size = 118 if len(topic) <= 22 else (100 if len(topic) <= 36 else 82)
-    topic_font = ImageFont.truetype(font_path, topic_size)
-    close_font = ImageFont.truetype(font_path, 108)
+    # The actual post heading is shown exactly as it is stored: “4 Red Flags: [topic]”.
+    # This removes the old separate label and fragmented “THEY'RE / [topic] / YOU” wording.
+    heading_text = post["heading"].upper()
+    heading_size = 98 if len(heading_text) <= 36 else (82 if len(heading_text) <= 52 else 70)
+    heading_font = ImageFont.truetype(font_path, heading_size)
 
     def centered(text, y_pos, font, color):
         box = draw.textbbox((0, 0), text, font=font)
         draw.text(((TARGET_W - (box[2] - box[0])) // 2, y_pos), text, font=font, fill=color)
-        return y_pos + (box[3] - box[1]) + 10
+        return y_pos + (box[3] - box[1]) + 12
 
-    # Keep the same series heading on every Reel.
-    # This exact label is also included in the first narration line below.
-    series_label = "4 RED FLAGS"
-    label_box = draw.textbbox((0, 0), series_label, font=eyebrow_font)
-    label_w = label_box[2] - label_box[0]
-    label_x = (TARGET_W - label_w) // 2
-    draw.rounded_rectangle((label_x - 18, 202, label_x + label_w + 18, 246),
-                           radius=18, fill=(83, 0, 6, 255), outline=(235, 20, 28, 255), width=2)
-    draw.text((label_x, 207), series_label, font=eyebrow_font, fill=(255, 75, 80, 255))
-
-    y = 252
-    y = centered("THEY'RE", y, lead_font, (250, 250, 250, 255))
-    # The red word is the focal point, just like the supplied reference.
-    for line in wrap_text(draw, topic, topic_font, 830)[:3]:
-        y = centered(line, y, topic_font, (232, 18, 25, 255))
-    y = centered("YOU", y, close_font, (250, 250, 250, 255))
-    y += 22
+    y = 255
+    for line in wrap_text(draw, heading_text, heading_font, 830)[:3]:
+        y = centered(line, y, heading_font, (232, 18, 25, 255))
+    y += 26
     draw.line((135, y, 945, y), fill=(145, 15, 22, 255), width=3)
     y += 26
 
@@ -878,15 +854,17 @@ def concat_narration(wavs: list[Path], output_wav: Path) -> None:
 
 
 def heading_narration(post: dict) -> str:
-    """Speak the visible series label as part of every Reel's opening heading."""
-    return f"4 Red Flags. {clean_narration_text(post['heading'])}"
+    """Read the on-screen heading as one clear, natural opening sentence."""
+    topic = visual_heading(post["heading"]).replace("-", " ").lower()
+    return f"Here are four red flags that you may be being manipulated by {topic}."
 
 
 def ending_narration(post: dict) -> str:
-    """Give each topic a clear, spoken closing reminder."""
-    topic = visual_heading(post["heading"]).title()
-    return f"Final red flag: {topic}. Notice the pattern, trust yourself, and protect your peace."
-
+    """Define the topic, then finish with a short practical awareness reminder."""
+    topic = visual_heading(post["heading"]).replace("-", " ").lower()
+    definition = clean_narration_text(post["definition"])
+    awareness = clean_narration_text(post["benefits"][-1])
+    return f"In dark psychology, {topic} means this: {definition} Awareness: {awareness}"
 
 def build_video(post: dict, output_path: Path) -> None:
     """Create a black editorial Reel with impact shakes, narration, karaoke, and local music."""
