@@ -3,6 +3,7 @@
 import json
 import os
 import subprocess
+import time
 import sys
 from pathlib import Path
 
@@ -701,22 +702,42 @@ def clean_narration_text(text: str) -> str:
 # Neural narrator supplied by Microsoft Edge's online text-to-speech service.
 # Change this to another Edge neural voice if desired; see the edge-tts voice list.
 NEURAL_VOICE = os.environ.get("REEL_VOICE", "en-US-AndrewMultilingualNeural")
+# The voice provider can briefly throttle several back-to-back requests from hosted runners.
+# Keep calls paced and retry transient failures rather than abandoning the entire Reel.
+TTS_REQUEST_GAP_SECONDS = 2.0
+TTS_MAX_ATTEMPTS = 4
+_last_tts_request_at = 0.0
 
 
 def make_narration(text: str, output_wav: Path) -> float:
     """Create natural neural speech for one slide, then add a short breathing pause."""
+    global _last_tts_request_at
     spoken = clean_narration_text(text)
     raw_mp3 = output_wav.with_name(output_wav.stem + "_raw.mp3")
-    try:
-        # edge-tts produces a natural neural voice rather than a local synthetic voice.
-        subprocess.run([
+    last_error = ""
+
+    for attempt in range(1, TTS_MAX_ATTEMPTS + 1):
+        # Space requests out. This avoids intermittent 429/service refusals on GitHub runners.
+        wait = TTS_REQUEST_GAP_SECONDS - (time.monotonic() - _last_tts_request_at)
+        if wait > 0:
+            time.sleep(wait)
+        raw_mp3.unlink(missing_ok=True)
+        result = subprocess.run([
             sys.executable, "-m", "edge_tts", "--voice", NEURAL_VOICE,
             "--rate", "+0%", "--text", spoken, "--write-media", str(raw_mp3),
-        ], check=True)
-    except subprocess.CalledProcessError as exc:
+        ], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        _last_tts_request_at = time.monotonic()
+        if result.returncode == 0 and raw_mp3.exists() and raw_mp3.stat().st_size > 0:
+            break
+        last_error = (result.stderr or result.stdout or "The voice service returned no details.").strip()
+        if attempt < TTS_MAX_ATTEMPTS:
+            # Back off progressively, giving the provider time to accept the next request.
+            time.sleep(2 ** attempt)
+    else:
         raise RuntimeError(
-            "Neural narration could not be generated. Check internet access and the REEL_VOICE setting."
-        ) from exc
+            f"Andrew neural narration failed after {TTS_MAX_ATTEMPTS} attempts. "
+            f"Service detail: {last_error[-700:]}"
+        )
 
     duration = video_duration(raw_mp3) + 0.35
     # The pause is baked into the clip, keeping captions, slide timing, and audio aligned.
