@@ -715,10 +715,9 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
         draw.text(((TARGET_W - (box[2] - box[0])) // 2, y_pos), text, font=font, fill=color)
         return y_pos + (box[3] - box[1]) + 10
 
-    # Every Reel gets its own technique number: 1 DARK TRICKS through 350 DARK TRICKS.
-    # Use a fallback of 1 so individual slide previews also render cleanly.
-    series_number = int(post.get("series_number", 1))
-    series_label = f"{series_number} DARK TRICKS"
+    # Keep the same series heading on every Reel.
+    # This exact label is also included in the first narration line below.
+    series_label = "4 RED FLAGS"
     label_box = draw.textbbox((0, 0), series_label, font=eyebrow_font)
     label_w = label_box[2] - label_box[0]
     label_x = (TARGET_W - label_w) // 2
@@ -878,9 +877,16 @@ def concat_narration(wavs: list[Path], output_wav: Path) -> None:
     ], check=True)
 
 
+def heading_narration(post: dict) -> str:
+    """Speak the visible series label as part of every Reel's opening heading."""
+    return f"4 Red Flags. {clean_narration_text(post['heading'])}"
+
+
 def build_video(post: dict, output_path: Path) -> None:
     """Create a black editorial Reel with impact shakes, narration, karaoke, and local music."""
-    slides = [post["heading"]] + post["benefits"]
+    # The first line intentionally includes the visible heading label, so the narrator
+    # says “4 Red Flags” rather than skipping the label that appears on screen.
+    slides = [heading_narration(post)] + post["benefits"]
     pngs, wavs, slide_times = [], [], []
     for i, slide in enumerate(slides):
         png = OUTPUT_DIR / f"text_overlay_{i}.png"
