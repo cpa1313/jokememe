@@ -27,7 +27,9 @@ def require_env(name: str) -> str:
 
 FB_ACCESS_TOKEN = require_env("FB_ACCESS_TOKEN")
 FB_PAGE_ID = require_env("FB_PAGE_ID")
-MUSIC_DIR = Path("assets/music")
+# Resolve music relative to this script, not whichever folder starts the workflow.
+# This prevents a working-directory change from silently removing the background track.
+MUSIC_DIR = Path(__file__).resolve().parent / "assets/music"
 OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
@@ -582,14 +584,25 @@ def pick_next_music() -> Path | None:
     extensions = {".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac"}
     files = sorted(p for p in MUSIC_DIR.iterdir() if p.is_file() and p.suffix.lower() in extensions)
     if not files:
+        print(f"No supported music files in {MUSIC_DIR.resolve()}; rendering narration only.")
         return None
     data = load_progress()
     names = [p.name for p in files]
     previous = data.get("last_music_name", "")
     index = (names.index(previous) + 1) % len(files) if previous in names else 0
-    data["last_music_name"] = files[index].name
+    selected = files[index]
+    # Validate the actual file before rendering. This makes a bad upload visible in Actions logs.
+    try:
+        duration = video_duration(selected)
+        if duration <= 0:
+            raise ValueError("duration is zero")
+    except (subprocess.CalledProcessError, ValueError) as error:
+        print(f"Cannot read background music {selected.name}: {error}; rendering narration only.")
+        return None
+    data["last_music_name"] = selected.name
     save_progress(data)
-    return files[index]
+    print(f"Background music selected: {selected.resolve()} ({duration:.1f}s)")
+    return selected
 
 def video_duration(path: Path) -> float:
     """Return duration for a narrated clip or local music file."""
@@ -847,7 +860,9 @@ def build_video(post: dict, output_path: Path) -> None:
     escaped_ass = str(karaoke_ass.resolve()).replace("\\", "\\\\").replace(":", r"\:")
     filters.append(f"[{previous}]subtitles='{escaped_ass}'[outv]")
 
-    # Narration stays dominant; the selected local music track runs quietly underneath.
+    # Narration stays clear while the music remains plainly audible underneath.
+    # The former 0.075 setting, combined with FFmpeg's default mix normalization,
+    # made the track effectively inaudible on phone speakers.
     narration_input = len(pngs) + 1
     command = [
         "ffmpeg", "-y", "-f", "lavfi", "-i",
@@ -860,9 +875,9 @@ def build_video(post: dict, output_path: Path) -> None:
         command += ["-stream_loop", "-1", "-i", str(music)]
         music_input = narration_input + 1
         filters.append(
-            f"[{narration_input}:a]volume=1.15[narration];"
-            f"[{music_input}:a]volume=0.075,afade=t=in:st=0:d=0.5,afade=t=out:st={max(0, total_duration - 0.7):.3f}:d=0.7[music];"
-            "[narration][music]amix=inputs=2:duration=first:dropout_transition=0[aout]"
+            f"[{narration_input}:a]volume=1.0[narration];"
+            f"[{music_input}:a]volume=0.18,afade=t=in:st=0:d=0.5,afade=t=out:st={max(0, total_duration - 0.7):.3f}:d=0.7[music];"
+            "[narration][music]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[aout]"
         )
         audio_map = "[aout]"
     else:
