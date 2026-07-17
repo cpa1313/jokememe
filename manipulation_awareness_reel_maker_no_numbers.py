@@ -665,6 +665,23 @@ def visual_heading(heading: str) -> str:
     topic = match.group(1).strip() if match else plain.rsplit(":", 1)[-1].strip()
     return topic.upper()[:58]
 
+
+def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
+    """Split text into lines that fit the supplied rendered width."""
+    words, lines, line = text.split(), [], ""
+    for word in words:
+        trial = f"{line} {word}".strip()
+        if draw.textlength(trial, font=font) <= max_width:
+            line = trial
+        else:
+            if line:
+                lines.append(line)
+            line = word
+    if line:
+        lines.append(line)
+    return lines
+
+
 def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     """Render a dark, red-and-white editorial card; active spoken point is highlighted."""
     from PIL import Image, ImageDraw, ImageFont
