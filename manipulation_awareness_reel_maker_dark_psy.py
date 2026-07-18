@@ -5,7 +5,7 @@ import os
 import subprocess
 import time
 import sys
-import random
+import re
 from pathlib import Path
 
 
@@ -31,7 +31,7 @@ FB_PAGE_ID = require_env("FB_PAGE_ID_DARK_PSY")
 # Resolve music relative to this script, not whichever folder starts the workflow.
 # This prevents a working-directory change from silently removing the background track.
 MUSIC_DIR = Path(__file__).resolve().parent / "assets/music"
-# Put your own dark-character/background clips here. One is chosen at random per Reel.
+# Put background clips here. Files are used in filename order, one per Reel.
 VIDEO_DIR = Path(__file__).resolve().parent / "assets/videos"
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v", ".webm"}
 OUTPUT_DIR = Path("output")
@@ -11816,21 +11816,23 @@ def next_post() -> dict:
     return post
 
 
-def pick_next_music() -> Path | None:
-    """Use a local background track, rotating through assets/music between Reels."""
+def natural_filename_key(path: Path) -> list:
+    """Sort 1, 2, 10 as people expect, not 1, 10, 2."""
+    return [int(part) if part.isdigit() else part.casefold()
+            for part in re.split(r"(\d+)", path.name)]
+
+
+def pick_next_music(sequence_number: int) -> Path | None:
+    """Use music in filename order: 1st Reel→1st track, 2nd→2nd, then repeat."""
     if not MUSIC_DIR.exists():
         return None
     extensions = {".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac"}
-    files = sorted(p for p in MUSIC_DIR.iterdir() if p.is_file() and p.suffix.lower() in extensions)
+    files = sorted((p for p in MUSIC_DIR.iterdir()
+                    if p.is_file() and p.suffix.lower() in extensions), key=natural_filename_key)
     if not files:
         print(f"No supported music files in {MUSIC_DIR.resolve()}; rendering narration only.")
         return None
-    data = load_progress()
-    names = [p.name for p in files]
-    previous = data.get("last_music_name", "")
-    index = (names.index(previous) + 1) % len(files) if previous in names else 0
-    selected = files[index]
-    # Validate the actual file before rendering. This makes a bad upload visible in Actions logs.
+    selected = files[(sequence_number - 1) % len(files)]
     try:
         duration = video_duration(selected)
         if duration <= 0:
@@ -11838,9 +11840,7 @@ def pick_next_music() -> Path | None:
     except (subprocess.CalledProcessError, ValueError) as error:
         print(f"Cannot read background music {selected.name}: {error}; rendering narration only.")
         return None
-    data["last_music_name"] = selected.name
-    save_progress(data)
-    print(f"Background music selected: {selected.resolve()} ({duration:.1f}s)")
+    print(f"Music #{((sequence_number - 1) % len(files)) + 1} in order: {selected.resolve()} ({duration:.1f}s)")
     return selected
 
 def video_duration(path: Path) -> float:
@@ -11915,14 +11915,17 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     eyebrow_font = ImageFont.truetype(font_path, 20)
     flag_count = post.get("flag_count", 4)
 
-    # Title hierarchy follows the supplied reference: white lead, large red impact, topic in white.
+    # Keep the topic heading at its existing y-position.  Put the two short
+    # label words on one clean row, preventing their glyphs from overlapping.
     x, y = 68, 88
     draw.text((x, y), f"{flag_count} RED FLAGS", font=lead_font, fill=(245, 245, 245, 255))
-    y += 34
-    draw.text((x, y), "DARK", font=dark_font, fill=(245, 245, 245, 255))
-    y += 34
-    draw.text((x, y), "MANIPULATION", font=impact_font, fill=(231, 17, 25, 255))
-    y += 43
+    label_y = 140
+    compact_dark_font = ImageFont.truetype(font_path, 48)
+    compact_impact_font = ImageFont.truetype(font_path, 48)
+    draw.text((x, label_y), "DARK", font=compact_dark_font, fill=(245, 245, 245, 255))
+    draw.text((x + 157, label_y), "MANIPULATION", font=compact_impact_font, fill=(231, 17, 25, 255))
+    # Do not move the main topic heading (e.g. GUILT-TRIPPING).
+    y = 199
     # The post heading alone uses the full video width. Its height grows only as needed.
     for line in wrap_text(draw, topic_text, topic_font, heading_width)[:2]:
         draw.text((heading_x, y), line, font=topic_font, fill=(242, 242, 242, 255))
@@ -11946,15 +11949,21 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
 
     for i, benefit in enumerate(benefits, 1):
         active = active_index == i
-        x1, x2 = 62, 666
+        # Keep the heading layout untouched. Widen only the benefit cards so they
+        # use the screen comfortably while retaining a clean left/right margin.
+        x1, x2 = 62, 990  # 85.9% of the 1080 px frame width
         fill = (37, 4, 7, 0) if active else (5, 5, 6, 0)
         border = (242, 26, 35, 255) if active else (99, 15, 21, 210)
         draw.rounded_rectangle((x1, y, x2, y + block_h - 10), radius=12, fill=fill, outline=border, width=3 if active else 1)
         marker_y = y + max(10, (block_h - marker_size) // 2)
         draw.ellipse((x1 + 14, marker_y, x1 + 14 + marker_size, marker_y + marker_size), fill=(220, 18, 27, 255), outline=(255, 70, 75, 255), width=1)
-        nbox = draw.textbbox((0, 0), str(i), font=num_font)
-        draw.text((x1 + 14 + marker_size // 2 - (nbox[2]-nbox[0]) // 2, marker_y + marker_size // 2 - (nbox[3]-nbox[1]) // 2), str(i), font=num_font, fill=(255, 255, 255, 255))
-        lines = wrap_text(draw, benefit, body_font, 510)[:max_lines]
+        # Anchor at the exact circle centre. This includes the font's vertical
+        # bearing, so every numeral sits inside its red circle rather than high/low.
+        draw.text((x1 + 14 + marker_size / 2, marker_y + marker_size / 2), str(i),
+                  font=num_font, fill=(255, 255, 255, 255), anchor="mm")
+        # Text width tracks the wider card; this avoids cramped, excessive wrapping.
+        text_width = x2 - (x1 + 70) - 26
+        lines = wrap_text(draw, benefit, body_font, text_width)[:max_lines]
         ty = y + max(9, (block_h - len(lines) * line_step) // 2)
         for line in lines:
             draw.text((x1 + 70, ty), line, font=body_font, fill=(255, 255, 255, 255) if active else (205, 205, 205, 255))
@@ -12133,22 +12142,22 @@ def make_red_flag_points(post: dict, count: int) -> list[str]:
     return (core + extra_points)[:count]
 
 
-def pick_background_video() -> Path:
-    """Choose one of the creator-supplied background clips from assets/videos."""
-    videos = sorted(path for path in VIDEO_DIR.glob("*") if path.is_file() and path.suffix.lower() in VIDEO_EXTENSIONS)
+def pick_background_video(sequence_number: int) -> Path:
+    """Use clips in filename order: 1st Reel→1st video, 2nd→2nd, then repeat."""
+    videos = sorted((path for path in VIDEO_DIR.glob("*")
+                     if path.is_file() and path.suffix.lower() in VIDEO_EXTENSIONS), key=natural_filename_key)
     if not videos:
-        raise RuntimeError(
+        raise FileNotFoundError(
             f"No background videos found in {VIDEO_DIR}. Add at least one .mp4, .mov, .m4v, or .webm file to assets/videos/."
         )
-    selected = random.choice(videos)
+    selected = videos[(sequence_number - 1) % len(videos)]
     try:
         if video_duration(selected) <= 0:
-            raise RuntimeError("duration is zero")
-    except Exception as error:
+            raise ValueError("duration is zero")
+    except (subprocess.CalledProcessError, ValueError) as error:
         raise RuntimeError(f"Cannot read background video {selected.name}: {error}") from error
-    print(f"Using background video: {selected.name}")
+    print(f"Video #{((sequence_number - 1) % len(videos)) + 1} in order: {selected.name}")
     return selected
-
 
 def build_video(post: dict, output_path: Path) -> None:
     """Create a black editorial Reel with impact shakes, narration, karaoke, and local music."""
@@ -12175,11 +12184,12 @@ def build_video(post: dict, output_path: Path) -> None:
     concat_narration(wavs, narration)
     make_karaoke_ass(slides, slide_times, karaoke_ass)
     total_duration = sum(slide_times)
-    music = pick_next_music()
+    sequence_number = int(post.get("series_number", 1))
+    music = pick_next_music(sequence_number)
 
     # Creator-supplied footage fills the frame. Crop vertically and darken it so the moving
     # character remains visible without competing with the red-and-white poster copy.
-    background_video = pick_background_video()
+    background_video = pick_background_video(sequence_number)
     filters = [
         f"[0:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,crop={TARGET_W}:{TARGET_H},eq=brightness=-0.24:saturation=0.58,format=rgba[base]"
     ]
