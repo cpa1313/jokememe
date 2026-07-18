@@ -11893,15 +11893,23 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     if not Path(regular_path).exists():
         regular_path = font_path
 
-    # A narrow, dark board keeps copy readable while leaving the right side open for the video subject.
-    board = (38, 48, 690, 1740)
-    draw.rounded_rectangle(board, radius=24, fill=(2, 2, 3, 220), outline=(137, 10, 18, 230), width=3)
-    draw.rectangle((690, 0, 810, TARGET_H), fill=(0, 0, 0, 90))  # soft fade into the moving background
+    # No panel or outer border: the source video remains fully visible behind the text.
 
     lead_font = ImageFont.truetype(font_path, 47)
     impact_font = ImageFont.truetype(font_path, 57)
     topic_text = visual_heading(post["heading"])
-    topic_font = ImageFont.truetype(font_path, 55 if len(topic_text) <= 22 else (45 if len(topic_text) <= 36 else 38))
+    # The main post heading fills the full video width; all other header text keeps its original size.
+    heading_x = 40
+    heading_width = TARGET_W - (heading_x * 2)
+    base_heading_size = 55 if len(topic_text) <= 22 else (45 if len(topic_text) <= 36 else 38)
+    topic_font = ImageFont.truetype(font_path, base_heading_size)
+    # Increase only the main-heading font until its longest rendered line nearly fills the width.
+    heading_lines_for_size = wrap_text(draw, topic_text, topic_font, heading_width)[:2]
+    longest_heading = max(heading_lines_for_size, key=lambda line: draw.textbbox((0, 0), line, font=topic_font)[2])
+    longest_width = draw.textbbox((0, 0), longest_heading, font=topic_font)[2]
+    if longest_width:
+        fitted_size = max(base_heading_size, int(base_heading_size * (heading_width / longest_width) * 0.96))
+        topic_font = ImageFont.truetype(font_path, min(fitted_size, 118))
     eyebrow_font = ImageFont.truetype(font_path, 20)
     flag_count = post.get("flag_count", 4)
 
@@ -11913,11 +11921,10 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     y += 61
     draw.text((x, y), "MANIPULATION", font=impact_font, fill=(231, 17, 25, 255))
     y += 71
-    for line in wrap_text(draw, topic_text, topic_font, 572)[:2]:
-        draw.text((x, y), line, font=topic_font, fill=(242, 242, 242, 255))
+    # The post heading alone uses the full video width. Its height grows only as needed.
+    for line in wrap_text(draw, topic_text, topic_font, heading_width)[:2]:
+        draw.text((heading_x, y), line, font=topic_font, fill=(242, 242, 242, 255))
         y += topic_font.size + 6
-    y += 15
-    draw.line((x, y, 658, y), fill=(190, 18, 25, 230), width=3)
     y += 24
 
     benefits = post["benefits"]
@@ -11937,7 +11944,7 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     for i, benefit in enumerate(benefits, 1):
         active = active_index == i
         x1, x2 = 62, 666
-        fill = (37, 4, 7, 234) if active else (5, 5, 6, 202)
+        fill = (37, 4, 7, 0) if active else (5, 5, 6, 0)
         border = (242, 26, 35, 255) if active else (99, 15, 21, 210)
         draw.rounded_rectangle((x1, y, x2, y + block_h - 10), radius=12, fill=fill, outline=border, width=3 if active else 1)
         marker_y = y + max(10, (block_h - marker_size) // 2)
