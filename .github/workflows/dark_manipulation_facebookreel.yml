@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: pip install requests Pillow edge-tts
       - name: Prepare output and music folders
-        run: mkdir -p output assets/music
+        run: mkdir -p output assets/music assets/videos
       - name: Generate and post manipulation-awareness reel
         env:
           FB_ACCESS_TOKEN_DARK_PSY: ${{ secrets.FB_ACCESS_TOKEN_DARK_PSY }}
