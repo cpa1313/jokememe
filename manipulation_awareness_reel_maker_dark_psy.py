@@ -31,6 +31,9 @@ FB_PAGE_ID = require_env("FB_PAGE_ID_DARK_PSY")
 # Resolve music relative to this script, not whichever folder starts the workflow.
 # This prevents a working-directory change from silently removing the background track.
 MUSIC_DIR = Path(__file__).resolve().parent / "assets/music"
+# Put your own dark-character/background clips here. One is chosen at random per Reel.
+VIDEO_DIR = Path(__file__).resolve().parent / "assets/videos"
+VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v", ".webm"}
 OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
@@ -11875,7 +11878,7 @@ def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
 
 
 def render_slide(post: dict, active_index: int, output_png: Path) -> None:
-    """Render a dark, red-and-white editorial card; active spoken point is highlighted."""
+    """Render a transparent poster overlay: copy on the left, moving character visible on the right."""
     from PIL import Image, ImageDraw, ImageFont
 
     image = Image.new("RGBA", (TARGET_W, TARGET_H), (0, 0, 0, 0))
@@ -11889,91 +11892,66 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     regular_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
     if not Path(regular_path).exists():
         regular_path = font_path
-    title_font = ImageFont.truetype(font_path, 72)
-    eyebrow_font = ImageFont.truetype(font_path, 30)
-    body_font = ImageFont.truetype(regular_path, 38)
-    num_font = ImageFont.truetype(font_path, 35)
 
-    # Dark editorial board, with a strong headline modeled on the reference's hierarchy:
-    # white lead-in → oversized red pattern name → white closing word.
-    panel = (70, 105, 1010, 1715)
-    draw.rounded_rectangle(panel, radius=26, fill=(3, 3, 4, 236), outline=(155, 8, 14, 255), width=4)
-    # Small red flag mark for the “red flags” theme.
-    # Pole, finial, and a waving pennant replace the former alert symbol.
-    flag_x, flag_y = 512, 123
-    draw.ellipse((flag_x - 5, flag_y, flag_x + 5, flag_y + 10), fill=(245, 35, 42, 255))
-    draw.line((flag_x, flag_y + 8, flag_x, flag_y + 76), fill=(245, 35, 42, 255), width=6)
-    draw.polygon([
-        (flag_x + 3, flag_y + 12), (flag_x + 63, flag_y + 20),
-        (flag_x + 43, flag_y + 43), (flag_x + 63, flag_y + 62),
-        (flag_x + 3, flag_y + 55)
-    ], fill=(225, 15, 22, 255), outline=(255, 72, 78, 255), width=2)
-    draw.line((flag_x - 12, flag_y + 77, flag_x + 16, flag_y + 77), fill=(245, 35, 42, 255), width=5)
+    # A narrow, dark board keeps copy readable while leaving the right side open for the video subject.
+    board = (38, 48, 690, 1740)
+    draw.rounded_rectangle(board, radius=24, fill=(2, 2, 3, 220), outline=(137, 10, 18, 230), width=3)
+    draw.rectangle((690, 0, 810, TARGET_H), fill=(0, 0, 0, 90))  # soft fade into the moving background
 
-    # Headline uses the reference layout: a bold white lead line, red impact line,
-    # then the topic. Together these lines read the complete post heading.
-    lead_font = ImageFont.truetype(font_path, 66)
-    impact_font = ImageFont.truetype(font_path, 63)
+    lead_font = ImageFont.truetype(font_path, 47)
+    impact_font = ImageFont.truetype(font_path, 57)
     topic_text = visual_heading(post["heading"])
-    topic_size = 76 if len(topic_text) <= 22 else (64 if len(topic_text) <= 36 else 54)
-    topic_font = ImageFont.truetype(font_path, topic_size)
-
-    def centered(text, y_pos, font, color):
-        box = draw.textbbox((0, 0), text, font=font)
-        draw.text(((TARGET_W - (box[2] - box[0])) // 2, y_pos), text, font=font, fill=color)
-        return y_pos + (box[3] - box[1]) + 12
-
+    topic_font = ImageFont.truetype(font_path, 55 if len(topic_text) <= 22 else (45 if len(topic_text) <= 36 else 38))
+    eyebrow_font = ImageFont.truetype(font_path, 20)
     flag_count = post.get("flag_count", 4)
-    y = 244
-    y = centered(f"{flag_count} RED FLAGS YOU ARE", y, lead_font, (245, 245, 245, 255))
-    y = centered("BEING MANIPULATED BY", y, impact_font, (232, 18, 25, 255))
-    y += 6
-    for line in wrap_text(draw, topic_text, topic_font, 830)[:2]:
-        y = centered(line, y, topic_font, (245, 245, 245, 255))
-    y += 22
-    draw.line((135, y, 945, y), fill=(145, 15, 22, 255), width=3)
-    y += 26
+
+    # Title hierarchy follows the supplied reference: white lead, large red impact, topic in white.
+    x, y = 68, 88
+    draw.text((x, y), f"{flag_count} RED FLAGS", font=lead_font, fill=(245, 245, 245, 255))
+    y += 58
+    draw.text((x, y), "DARK", font=impact_font, fill=(245, 245, 245, 255))
+    y += 61
+    draw.text((x, y), "MANIPULATION", font=impact_font, fill=(231, 17, 25, 255))
+    y += 71
+    for line in wrap_text(draw, topic_text, topic_font, 572)[:2]:
+        draw.text((x, y), line, font=topic_font, fill=(242, 242, 242, 255))
+        y += topic_font.size + 6
+    y += 15
+    draw.line((x, y, 658, y), fill=(190, 18, 25, 230), width=3)
+    y += 24
 
     benefits = post["benefits"]
     count = len(benefits)
-    available = 1625 - y
-    block_h = max(96, min(220, available // max(1, count)))
-    # Smaller cards keep 6–10 red flags readable on one Reel card.
+    available = 1580 - y
+    block_h = max(82, min(166, available // max(1, count)))
     if count <= 5:
-        card_body_font = body_font
-        card_num_font = num_font
-        max_lines, line_step = 4, 45
+        body_size, num_size, max_lines, line_step = 27, 25, 3, 32
     elif count <= 7:
-        card_body_font = ImageFont.truetype(regular_path, 31)
-        card_num_font = ImageFont.truetype(font_path, 29)
-        max_lines, line_step = 3, 37
+        body_size, num_size, max_lines, line_step = 22, 21, 2, 26
     else:
-        card_body_font = ImageFont.truetype(regular_path, 24)
-        card_num_font = ImageFont.truetype(font_path, 23)
-        max_lines, line_step = 2, 30
-    marker_size = 64 if count <= 5 else (54 if count <= 7 else 44)
+        body_size, num_size, max_lines, line_step = 18, 18, 2, 22
+    body_font = ImageFont.truetype(regular_path, body_size)
+    num_font = ImageFont.truetype(font_path, num_size)
+    marker_size = 42 if count <= 5 else (37 if count <= 7 else 32)
+
     for i, benefit in enumerate(benefits, 1):
         active = active_index == i
-        x1, x2 = 128, 952
-        fill = (25, 4, 6, 245) if active else (7, 7, 8, 220)
-        border = (245, 25, 33, 255) if active else (104, 14, 20, 255)
-        draw.rounded_rectangle((x1, y, x2, y + block_h - 16), radius=16, fill=fill, outline=border, width=4 if active else 2)
-        # Numbered red marker acts as a clean information-card icon.
-        marker_fill = (235, 20, 28, 255) if active else (35, 5, 8, 255)
-        marker_y = y + max(14, (block_h - marker_size) // 2)
-        draw.ellipse((x1+18, marker_y, x1+18+marker_size, marker_y+marker_size), fill=marker_fill, outline=(255, 55, 60, 255), width=2)
-        nbox = draw.textbbox((0, 0), str(i), font=card_num_font)
-        draw.text((x1+18+marker_size//2-(nbox[2]-nbox[0])//2, marker_y+marker_size//2-(nbox[3]-nbox[1])//2), str(i), font=card_num_font, fill=(255,255,255,255))
-        lines = wrap_text(draw, benefit, card_body_font, 690)
-        text_color = (255, 255, 255, 255) if active else (184, 184, 184, 255)
-        ty = y + max(12, (block_h - min(len(lines), max_lines) * line_step) // 2)
-        for line in lines[:max_lines]:
-            draw.text((x1+105, ty), line, font=card_body_font, fill=text_color)
+        x1, x2 = 62, 666
+        fill = (37, 4, 7, 234) if active else (5, 5, 6, 202)
+        border = (242, 26, 35, 255) if active else (99, 15, 21, 210)
+        draw.rounded_rectangle((x1, y, x2, y + block_h - 10), radius=12, fill=fill, outline=border, width=3 if active else 1)
+        marker_y = y + max(10, (block_h - marker_size) // 2)
+        draw.ellipse((x1 + 14, marker_y, x1 + 14 + marker_size, marker_y + marker_size), fill=(220, 18, 27, 255), outline=(255, 70, 75, 255), width=1)
+        nbox = draw.textbbox((0, 0), str(i), font=num_font)
+        draw.text((x1 + 14 + marker_size // 2 - (nbox[2]-nbox[0]) // 2, marker_y + marker_size // 2 - (nbox[3]-nbox[1]) // 2), str(i), font=num_font, fill=(255, 255, 255, 255))
+        lines = wrap_text(draw, benefit, body_font, 510)[:max_lines]
+        ty = y + max(9, (block_h - len(lines) * line_step) // 2)
+        for line in lines:
+            draw.text((x1 + 70, ty), line, font=body_font, fill=(255, 255, 255, 255) if active else (205, 205, 205, 255))
             ty += line_step
         y += block_h
 
-    # Bottom line stays clear of the Facebook caption overlay area.
-    draw.text((135, 1650), "NOTICE THE PATTERN. KEEP YOUR BOUNDARIES.", font=eyebrow_font, fill=(235, 235, 235, 255))
+    draw.text((68, 1685), "NOTICE THE PATTERN. PROTECT YOUR PEACE.", font=eyebrow_font, fill=(235, 235, 235, 255))
     image.save(output_png)
 
 def clean_narration_text(text: str) -> str:
@@ -12121,6 +12099,23 @@ def make_red_flag_points(post: dict, count: int) -> list[str]:
     return (core + extra_points)[:count]
 
 
+def pick_background_video() -> Path:
+    """Choose one of the creator-supplied background clips from assets/videos."""
+    videos = sorted(path for path in VIDEO_DIR.glob("*") if path.is_file() and path.suffix.lower() in VIDEO_EXTENSIONS)
+    if not videos:
+        raise RuntimeError(
+            f"No background videos found in {VIDEO_DIR}. Add at least one .mp4, .mov, .m4v, or .webm file to assets/videos/."
+        )
+    selected = random.choice(videos)
+    try:
+        if video_duration(selected) <= 0:
+            raise RuntimeError("duration is zero")
+    except Exception as error:
+        raise RuntimeError(f"Cannot read background video {selected.name}: {error}") from error
+    print(f"Using background video: {selected.name}")
+    return selected
+
+
 def build_video(post: dict, output_path: Path) -> None:
     """Create a black editorial Reel with impact shakes, narration, karaoke, and local music."""
     # Keep the visible heading, spoken opening, and number of red-flag slides aligned.
@@ -12148,9 +12143,12 @@ def build_video(post: dict, output_path: Path) -> None:
     total_duration = sum(slide_times)
     music = pick_next_music()
 
-    # Pure black base matches the supplied dark editorial reference. Each new spoken card
-    # gets a brief, restrained impact shake; it is visual emphasis, not nonstop motion.
-    filters = ["[0:v]format=rgba[base]"]
+    # Creator-supplied footage fills the frame. Crop vertically and darken it so the moving
+    # character remains visible without competing with the red-and-white poster copy.
+    background_video = pick_background_video()
+    filters = [
+        f"[0:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,crop={TARGET_W}:{TARGET_H},eq=brightness=-0.24:saturation=0.58,format=rgba[base]"
+    ]
     previous, start_time = "base", 0.0
     for i, slide_time in enumerate(slide_times):
         end_time = start_time + slide_time
@@ -12173,8 +12171,7 @@ def build_video(post: dict, output_path: Path) -> None:
     # made the track effectively inaudible on phone speakers.
     narration_input = len(pngs) + 1
     command = [
-        "ffmpeg", "-y", "-f", "lavfi", "-i",
-        f"color=c=black:s={TARGET_W}x{TARGET_H}:r=30:d={total_duration:.3f}",
+        "ffmpeg", "-y", "-stream_loop", "-1", "-i", str(background_video),
     ]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
