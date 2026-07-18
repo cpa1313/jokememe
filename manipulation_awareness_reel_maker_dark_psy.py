@@ -11895,8 +11895,10 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
 
     # No panel or outer border: the source video remains fully visible behind the text.
 
-    lead_font = ImageFont.truetype(font_path, 47)
-    impact_font = ImageFont.truetype(font_path, 57)
+    # Exact requested pixel sizes for the reference style.
+    lead_font = ImageFont.truetype(font_path, 30)          # “4 RED FLAGS” — 30 px
+    dark_font = ImageFont.truetype(font_path, 35)          # “DARK” — 35 px
+    impact_font = ImageFont.truetype(font_path, 35)        # “MANIPULATION” — 35 px
     topic_text = visual_heading(post["heading"])
     # The main post heading fills the full video width; all other header text keeps its original size.
     heading_x = 40
@@ -11916,11 +11918,11 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     # Title hierarchy follows the supplied reference: white lead, large red impact, topic in white.
     x, y = 68, 88
     draw.text((x, y), f"{flag_count} RED FLAGS", font=lead_font, fill=(245, 245, 245, 255))
-    y += 58
-    draw.text((x, y), "DARK", font=impact_font, fill=(245, 245, 245, 255))
-    y += 61
+    y += 34
+    draw.text((x, y), "DARK", font=dark_font, fill=(245, 245, 245, 255))
+    y += 34
     draw.text((x, y), "MANIPULATION", font=impact_font, fill=(231, 17, 25, 255))
-    y += 71
+    y += 43
     # The post heading alone uses the full video width. Its height grows only as needed.
     for line in wrap_text(draw, topic_text, topic_font, heading_width)[:2]:
         draw.text((heading_x, y), line, font=topic_font, fill=(242, 242, 242, 255))
@@ -11931,12 +11933,13 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     count = len(benefits)
     available = 1580 - y
     block_h = max(82, min(166, available // max(1, count)))
+    # List copy and red-circle numerals use the requested fixed sizes.
     if count <= 5:
-        body_size, num_size, max_lines, line_step = 27, 25, 3, 32
+        body_size, num_size, max_lines, line_step = 20, 21, 3, 26
     elif count <= 7:
-        body_size, num_size, max_lines, line_step = 22, 21, 2, 26
+        body_size, num_size, max_lines, line_step = 20, 21, 2, 26
     else:
-        body_size, num_size, max_lines, line_step = 18, 18, 2, 22
+        body_size, num_size, max_lines, line_step = 20, 21, 2, 26
     body_font = ImageFont.truetype(regular_path, body_size)
     num_font = ImageFont.truetype(font_path, num_size)
     marker_size = 42 if count <= 5 else (37 if count <= 7 else 32)
@@ -12032,39 +12035,63 @@ def ass_escape(text: str) -> str:
 
 
 def make_karaoke_ass(slides: list[str], durations: list[float], output_ass: Path) -> None:
-    """Write word-progress karaoke captions. Timings follow each rendered voice clip."""
+    """Write audio-synced captions that animate one complete line at a time.
+
+    Unlike word karaoke, a whole readable line appears, rises in gently, then yields
+    to the following line.  Line durations are proportionate to the words spoken.
+    """
+    from PIL import ImageFont
+
     lines = [
         "[Script Info]", "ScriptType: v4.00+", "PlayResX: 1080", "PlayResY: 1920", "",
         "[V4+ Styles]",
-        # Secondary is white (unspoken); Primary is yellow (currently spoken/read).
         "Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,"
         "Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,"
         "Alignment,MarginL,MarginR,MarginV,Encoding",
-        "Style: Karaoke,DejaVu Sans,56,&H0000D7FF,&H00FFFFFF,&H00101010,&H96000000,1,0,0,0,100,100,0,0,1,3,1,2,70,70,270,1",
+        # White, centered, easy to read over moving footage. No karaoke colour change.
+        "Style: SingleLine,DejaVu Sans,48,&H00FFFFFF,&H00FFFFFF,&H00101010,&H96000000,1,0,0,0,100,100,0,0,1,3,1,2,70,70,270,1",
         "", "[Events]", "Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text",
     ]
+    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    font = ImageFont.truetype(font_path, 48)
+    max_width = 930
     cursor = 0.0
+
     for text, duration in zip(slides, durations):
         words = clean_narration_text(text).split()
         if not words:
             cursor += duration
             continue
-        # Allocate caption progress by word length, normalized to the measured voice duration.
-        weights = [max(1, len(word.strip(".,!?'-"))) for word in words]
+
+        # Build complete, natural single lines that fit inside the safe caption width.
+        caption_lines, current = [], []
+        for word in words:
+            trial = " ".join(current + [word])
+            if current and font.getlength(trial) > max_width:
+                caption_lines.append(" ".join(current))
+                current = [word]
+            else:
+                current.append(word)
+        if current:
+            caption_lines.append(" ".join(current))
+
+        weights = [max(1, sum(len(w.strip(".,!?'-")) for w in line.split())) for line in caption_lines]
         total_weight = sum(weights)
-        chunks = []
-        used = 0
-        for i, (word, weight) in enumerate(zip(words, weights)):
-            cs = max(1, round(duration * 100 * weight / total_weight))
-            if i == len(words) - 1:
-                cs = max(1, round(duration * 100) - used)
-            used += cs
-            chunks.append(r"{\kf" + str(cs) + "}" + ass_escape(word))
-        caption = " ".join(chunks)
-        lines.append(
-            f"Dialogue: 0,{ass_timestamp(cursor)},{ass_timestamp(cursor + duration)},Karaoke,,0,0,0,,{{\\an2\\pos(540,1770)}}{caption}"
-        )
+        line_cursor = cursor
+        for index, (caption, weight) in enumerate(zip(caption_lines, weights)):
+            line_duration = duration * weight / total_weight
+            if index == len(caption_lines) - 1:
+                line_end = cursor + duration
+            else:
+                line_end = line_cursor + line_duration
+            # Each full line floats up and fades in; it never highlights individual words.
+            animation = r"{\an2\move(540,1810,540,1770,0,160)\fad(100,120)}"
+            lines.append(
+                f"Dialogue: 0,{ass_timestamp(line_cursor)},{ass_timestamp(line_end)},SingleLine,,0,0,0,,{animation}{ass_escape(caption)}"
+            )
+            line_cursor = line_end
         cursor += duration
+
     output_ass.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
