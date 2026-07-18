@@ -1,0 +1,50 @@
+name: 🎬 DARK Manipulation FACEBOOK REEL
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  post-reel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+      - name: Install dependencies
+        run: pip install requests Pillow edge-tts
+      - name: Prepare output and music folders
+        run: mkdir -p output assets/music
+      - name: Generate and post manipulation-awareness reel
+        env:
+          FB_ACCESS_TOKEN_DARK_PSY: ${{ secrets.FB_ACCESS_TOKEN_DARK_PSY }}
+          FB_PAGE_ID_DARK_PSY: ${{ secrets.FB_PAGE_ID_DARK_PSY }}
+          REEL_VOICE: ${{ vars.REEL_VOICE || 'en-US-AndrewMultilingualNeural' }}
+        run: python manipulation_awareness_reel_maker_dark_psy.py
+      - name: Upload rendered video
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manipulation-awareness-reel-${{ github.run_number }}
+          path: output/reel.mp4
+          retention-days: 7
+      - name: Save posting progress
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add darkmanipulator_progress.json
+          git diff --staged --quiet || git commit -m "chore: update manipulation-awareness progress [skip ci]"
+          git pull --rebase
+          git push
