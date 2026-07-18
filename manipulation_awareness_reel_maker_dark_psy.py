@@ -11896,9 +11896,9 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     # No panel or outer border: the source video remains fully visible behind the text.
 
     # Exact requested pixel sizes for the reference style.
-    lead_font = ImageFont.truetype(font_path, 30)          # “4 RED FLAGS” — 30 px
-    dark_font = ImageFont.truetype(font_path, 35)          # “DARK” — 35 px
-    impact_font = ImageFont.truetype(font_path, 35)        # “MANIPULATION” — 35 px
+    lead_font = ImageFont.truetype(font_path, 50)          # “4 RED FLAGS” — 50 px
+    dark_font = ImageFont.truetype(font_path, 55)          # “DARK” — 55 px
+    impact_font = ImageFont.truetype(font_path, 55)        # “MANIPULATION” — 55 px
     topic_text = visual_heading(post["heading"])
     # The main post heading fills the full video width; all other header text keeps its original size.
     heading_x = 40
@@ -11935,11 +11935,11 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     block_h = max(82, min(166, available // max(1, count)))
     # List copy and red-circle numerals use the requested fixed sizes.
     if count <= 5:
-        body_size, num_size, max_lines, line_step = 20, 21, 3, 26
+        body_size, num_size, max_lines, line_step = 35, 36, 3, 43
     elif count <= 7:
-        body_size, num_size, max_lines, line_step = 20, 21, 2, 26
+        body_size, num_size, max_lines, line_step = 35, 36, 2, 43
     else:
-        body_size, num_size, max_lines, line_step = 20, 21, 2, 26
+        body_size, num_size, max_lines, line_step = 35, 36, 2, 43
     body_font = ImageFont.truetype(regular_path, body_size)
     num_font = ImageFont.truetype(font_path, num_size)
     marker_size = 42 if count <= 5 else (37 if count <= 7 else 32)
