@@ -11938,11 +11938,11 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     block_h = max(82, min(166, available // max(1, count)))
     # List copy and red-circle numerals use the requested fixed sizes.
     if count <= 5:
-        body_size, num_size, max_lines, line_step = 35, 36, 3, 43
+        body_size, num_size, max_lines, line_step = 42, 36, 3, 50
     elif count <= 7:
-        body_size, num_size, max_lines, line_step = 35, 36, 2, 43
+        body_size, num_size, max_lines, line_step = 42, 36, 3, 50
     else:
-        body_size, num_size, max_lines, line_step = 35, 36, 2, 43
+        body_size, num_size, max_lines, line_step = 42, 36, 3, 50
     body_font = ImageFont.truetype(regular_path, body_size)
     num_font = ImageFont.truetype(font_path, num_size)
     marker_size = 42 if count <= 5 else (37 if count <= 7 else 32)
@@ -11951,7 +11951,7 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
         active = active_index == i
         # Keep the heading layout untouched. Widen only the benefit cards so they
         # use the screen comfortably while retaining a clean left/right margin.
-        x1, x2 = 62, 990  # 85.9% of the 1080 px frame width
+        x1, x2 = 62, 700  # Narrow left-side bullet area; the right-side video remains visible.
         fill = (37, 4, 7, 0) if active else (5, 5, 6, 0)
         border = (242, 26, 35, 255) if active else (99, 15, 21, 210)
         draw.rounded_rectangle((x1, y, x2, y + block_h - 10), radius=12, fill=fill, outline=border, width=3 if active else 1)
@@ -11961,7 +11961,7 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
         # bearing, so every numeral sits inside its red circle rather than high/low.
         draw.text((x1 + 14 + marker_size / 2, marker_y + marker_size / 2), str(i),
                   font=num_font, fill=(255, 255, 255, 255), anchor="mm")
-        # Text width tracks the wider card; this avoids cramped, excessive wrapping.
+        # Text stays inside the narrow left-side card, leaving the right-side video unobstructed.
         text_width = x2 - (x1 + 70) - 26
         lines = wrap_text(draw, benefit, body_font, text_width)[:max_lines]
         ty = y + max(9, (block_h - len(lines) * line_step) // 2)
@@ -12057,8 +12057,8 @@ def make_karaoke_ass(slides: list[str], durations: list[float], output_ass: Path
         "Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,"
         "Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,"
         "Alignment,MarginL,MarginR,MarginV,Encoding",
-        # White, centered, easy to read over moving footage. No karaoke colour change.
-        "Style: SingleLine,DejaVu Sans,48,&H00FFFFFF,&H00FFFFFF,&H00101010,&H96000000,1,0,0,0,100,100,0,0,1,3,1,2,70,70,270,1",
+        # Bright red marks the complete line currently being spoken.
+        "Style: SingleLine,DejaVu Sans,48,&H000D18F5,&H000D18F5,&H00101010,&H96000000,1,0,0,0,100,100,0,0,1,3,1,2,70,70,820,1",
         "", "[Events]", "Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text",
     ]
     font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
@@ -12093,8 +12093,9 @@ def make_karaoke_ass(slides: list[str], durations: list[float], output_ass: Path
                 line_end = cursor + duration
             else:
                 line_end = line_cursor + line_duration
-            # Each full line floats up and fades in; it never highlights individual words.
-            animation = r"{\an2\move(540,1810,540,1770,0,160)\fad(100,120)}"
+            # Each full line is red only while it is being spoken, then yields to the next line.
+            # It sits higher to avoid Facebook Reel page-name and description overlays.
+            animation = r"{\an2\move(540,1240,540,1200,0,160)\fad(100,120)}"
             lines.append(
                 f"Dialogue: 0,{ass_timestamp(line_cursor)},{ass_timestamp(line_end)},SingleLine,,0,0,0,,{animation}{ass_escape(caption)}"
             )
