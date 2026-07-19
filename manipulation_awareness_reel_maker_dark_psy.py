@@ -6,6 +6,7 @@ import subprocess
 import time
 import sys
 import re
+import random
 from pathlib import Path
 
 
@@ -12046,7 +12047,7 @@ def ass_escape(text: str) -> str:
 def make_karaoke_ass(slides: list[str], durations: list[float], output_ass: Path) -> None:
     """Write large, all-caps, word-by-word captions synchronized to narration.
 
-    Every spoken word appears by itself in red, then yields to the following word.
+    Every spoken word appears by itself in either red or white, then yields to the following word.
     Word durations are apportioned from the narration duration by word length.
     """
     lines = [
@@ -12055,7 +12056,7 @@ def make_karaoke_ass(slides: list[str], durations: list[float], output_ass: Path
         "Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,"
         "Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,"
         "Alignment,MarginL,MarginR,MarginV,Encoding",
-        # Bold red, centered word captions, positioned below the upper heading and above Reel overlays.
+        # Centered red-or-white word captions, positioned lower while remaining above Reel overlays.
         "Style: WordPop,DejaVu Sans,70,&H000D18F5,&H000D18F5,&H00101010,&H96000000,1,0,0,0,100,100,1,0,1,4,2,2,70,70,800,1",
         "", "[Events]", "Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text",
     ]
@@ -12075,7 +12076,9 @@ def make_karaoke_ass(slides: list[str], durations: list[float], output_ass: Path
         for index, (word, weight) in enumerate(zip(words, weights)):
             word_duration = duration * weight / total_weight
             word_end = cursor + duration if index == len(words) - 1 else word_cursor + word_duration
-            animation = r"{\an2\move(540,1140,540,1100,0,120)\fad(70,100)}"
+            # Randomize each spoken word between brand red and clean white.
+            color = random.choice((r"\1c&H000D18F5&", r"\1c&HFFFFFF&"))
+            animation = rf"{{\an2\move(540,1450,540,1410,0,120)\fad(70,100){color}}}"
             lines.append(
                 f"Dialogue: 0,{ass_timestamp(word_cursor)},{ass_timestamp(word_end)},WordPop,,0,0,0,,{animation}{ass_escape(word.upper())}"
             )
