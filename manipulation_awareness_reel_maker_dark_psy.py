@@ -11916,17 +11916,18 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
     eyebrow_font = ImageFont.truetype(font_path, 20)
     flag_count = post.get("flag_count", 4)
 
-    # Keep the topic heading at its existing y-position.  Put the two short
-    # label words on one clean row, preventing their glyphs from overlapping.
-    x, y = 68, 88
+    # Phone-safe placement: move the static poster copy below the crowded top
+    # edge of Facebook Reels. Keep captions independently positioned above UI.
+    content_y_offset = 170
+    x, y = 68, 88 + content_y_offset
     draw.text((x, y), f"{flag_count} RED FLAGS", font=lead_font, fill=(245, 245, 245, 255))
-    label_y = 140
+    label_y = 140 + content_y_offset
     compact_dark_font = ImageFont.truetype(font_path, 48)
     compact_impact_font = ImageFont.truetype(font_path, 48)
     draw.text((x, label_y), "DARK", font=compact_dark_font, fill=(245, 245, 245, 255))
     draw.text((x + 157, label_y), "MANIPULATION", font=compact_impact_font, fill=(231, 17, 25, 255))
-    # Do not move the main topic heading (e.g. GUILT-TRIPPING).
-    y = 199
+    # Keep all static poster elements together in the lower, phone-safe band.
+    y = 199 + content_y_offset
     # The post heading alone uses the full video width. Its height grows only as needed.
     for line in wrap_text(draw, topic_text, topic_font, heading_width)[:2]:
         draw.text((heading_x, y), line, font=topic_font, fill=(242, 242, 242, 255))
@@ -11971,7 +11972,6 @@ def render_slide(post: dict, active_index: int, output_png: Path) -> None:
             ty += line_step
         y += block_h
 
-    draw.text((68, 1685), "NOTICE THE PATTERN. PROTECT YOUR PEACE.", font=eyebrow_font, fill=(235, 235, 235, 255))
     image.save(output_png)
 
 def clean_narration_text(text: str) -> str:
