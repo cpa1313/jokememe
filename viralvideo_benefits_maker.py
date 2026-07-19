@@ -902,6 +902,68 @@ POSTS = [
             "#MikaNurseDaily #healthtips #tips #reels"
         ),
     },
+    {
+        "heading": "DAPAT GAWIN PARA HINDI BUMAHO ANC ARI NG LALAKI",
+        "benefits": [
+            "Hugasan ang ari at singit araw2 tuwing maliligo.",
+            "Linisin ang ilalim ng Foreskin (Kung hindi pa tuli).",
+            "Patuyuing mabuti Siguraduhing tuyo ang ari at singit bago magsuot ng brief para maiwasan ang fungi at bacteria.",
+            "Magsuot ng maluwag at cotton na brief o boxer shorts para makahinga ang balat at hindi magpawis ng husto.",
+            "Regular na trim o gupitan ang pubic hair para walang kakapitan or pagsstayan ang bacteria.",
+            "Palitan agad ang underwear pagkatapos mag-exercise.",
+            "wag bum3mbang ng Kahit sino sino.",
+        ],
+        "caption": (
+            "DAPAT GAWIN PARA HINDI BUMAHO ANC ARI NG LALAKI\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "GAWIN KUNG GUSTO MAGBALIK ang ALINDOG",
+        "benefits": [
+            "Magpapawis magwalking, magjogging, kahit nasa Bahay.",
+            "Umiwas or bawasan ang pagkain na mataas ang sugar juice, white rice, cakes, etc.",
+            "Umiwas sa mga taong lagi kang niyayaya kumain.",
+            "Umiwas sa mga taong nangdodown sa pagbabalik alindog mo.",
+        ],
+        "caption": (
+            "GAWIN KUNG GUSTO MAGBALIK ang ALINDOG\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "KAILANGAN NG LALAKI SA PARTNER NYA",
+        "benefits": [
+            "RESPECT (hindi mo pinapahiya sa harap ng tropa nya at hindi kinukumpara sa ibang lalaki)",
+            "PEACE (walang stress, less drama).",
+            "APPRECIATION (kahit simpleng effort nila malaking bagay na naaappreciate sila ng partner nilang babae).",
+            "LOYALTY (physical and emotional).",
+            "SUPPORT (yung may paghuhugutan sila ng lakas at hindi puro kontra).",
+            "CONSISTENCY (hindi yung sweet ka ngayon, bukas cold kana).",
+            "REASSURANCE (kahit sila kailangan ng assurance na loyal at faithful ka).",
+            "bigyan mo sya ng Buko Juice habang tulog.",
+        ],
+        "caption": (
+            "KAILANGAN NG LALAKI SA PARTNER NYA\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "senyales na wala nang gana ang lalaki sayo",
+        "benefits": [
+            "Madaling mainis or irritable kapag kausap ka.",
+            "Laging busy or may dahilan para hindi ka makausap.",
+            "Mas madalas sa cellphone or socmed kesa makipag-usap sayo.",
+            "Maikli lang or malamig sumagot.",
+            "Mas madalas kasama ang tropa or ibang tao.",
+            "Hindi na sya interesado sa opinyon mo.",
+            "Wala nang paki at hinahayaan ka nalang Kahit magalit ka pa.",
+        ],
+        "caption": (
+            "senyales na wala nang gana ang lalaki sayo\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
     # {
     #     "heading": "Ilagay ang heading dito",
     #     "benefits": ["Unang benepisyo", "Pangalawang benepisyo"],
