@@ -964,6 +964,183 @@ POSTS = [
             "#MikaNurseDaily #healthtips #tips #reels"
         ),
     },
+    {
+        "heading": "Dapt mong GAWIN KAPAG LASING ANG BABAE",
+        "benefits": [
+            "Alagaan, wag mong b3mbangin.",
+            "huwag mong videohan.",
+            "Mas makulit pa yan sayo kapag lasing, alalayan mo lang.",
+            "Painumin ng maraming tubig.",
+            "Huwag nang patulan kapag minumura ka sa mga kasalanan mo.",
+        ],
+        "caption": (
+            "Dapt mong GAWIN KAPAG LASING ANG BABAE\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "GAWIN KAPAG LASING ANG LALAKI",
+        "benefits": [
+            "Huwag awayin at bungangaan lalo na kapag lasing.",
+            "Painumin ng madaming tubig para ma-rehydrate.",
+            "Alagaan at bigyan ng sapat na pahinga.",
+            "Kapag makulit pa din, huwag mo na lang pansinin.",
+        ],
+        "caption": (
+            "GAWIN KAPAG LASING ANG LALAKI\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "ANONG GINAGAWA NYO AFTER BEMBANG",
+        "benefits": [
+            "Maghugas para makaiwas sa infection.",
+            "bigyan ng Buku Juice si mister para sa may ROUND 2.",
+            "cuddle.",
+            "Emotional care.",
+            "Physical care.",
+            "Sweet talks.",
+        ],
+        "caption": (
+            "ANONG GINAGAWA NYO AFTER BEMBANG\n\n"
+            "Importante ang after care para mapanatili ang trust bonding, at connection.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA MATAAS ANG EMOTIONAL “INTELLIGENCE NG N PARTNER MO\".",
+        "benefits": [
+            "Marunong makinig bago sumagot.",
+            "Hindi sinusuklian ang init ng ulo mo (laging kalmado at mahinahon).",
+            "Marunong umamin kapag mali (bihira nga lang sa babae).",
+            "Alam nyang hindi lang sya lagi ang bida.",
+            "Marunong magbago kapag nasaktan ka.",
+            "Meron syang empathy (hindi nya minamadali ang healing mo).",
+            "Hindi gumaganti (marunong umunawa kesa manghusga).",
+            "magaling sa romansa bago ka b3mbangin.",
+        ],
+        "caption": (
+            "SENYALES NA MATAAS ANG EMOTIONAL “INTELLIGENCE NG N PARTNER MO\".\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SAFE BA MAKIPAG BEMBANG HABANG BUNTIS",
+        "benefits": [
+            "Yes kapag...",
+            "Walang pagdurugo or bleeding habang nagbubuntis.",
+            "Walang senyales ng abort!on or pagkalaglag.",
+            "Atleast 4months pataas na ang tiyan.",
+            "Kung hindi nakakaranas ng cramps or paninigas ng tiyan.",
+            "Walang infection sa pwerta.",
+        ],
+        "caption": (
+            "SAFE BA MAKIPAG BEMBANG HABANG BUNTIS\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "Bakit natuturn off ang lalaki during b3mbang",
+        "benefits": [
+            "may amor or mabaho ang kiffs.",
+            "hindi marunong gumalaw or tamad.",
+            "tumatawa at hindi nagcoconcentrate.",
+            "bad breath.",
+            "may putok.",
+            "nakatulala at nakatitig ng matagal.",
+            "nagsabi ka ng pangalan ng ibang lalake.",
+        ],
+        "caption": (
+            "Bakit natuturn off ang lalaki during b3mbang\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "MAAARING DAHILAN BAKIT HIRAP MABUNTIS ANG BABAE",
+        "benefits": [
+            "PCOS at Hormonal Imbalance.",
+            "Edad 35 pataas.",
+            "Issue sa Fallopian Tubes o Uterus.",
+            "Lifestyle Factors katabaan o kapayatan, mataas na stress, at labis na pag-inom ng alak.",
+            "Timing at Fertile Window “hindi sapat ng pakik!pagt@lik sa fertile window.",
+        ],
+        "caption": (
+            "MAAARING DAHILAN BAKIT HIRAP MABUNTIS ANG BABAE\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "DAPAT GAWIN SA PARTNER",
+        "benefits": [
+            "Kapag nagselos, i-reassure mo.",
+            "Kapag wala sa mood, lambingin mo.",
+            "Wag yung wala ka na ngang gagawin, sinabayan mo pa.",
+        ],
+        "caption": (
+            "DAPAT GAWIN SA PARTNER\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "best time to get pregnant.",
+        "benefits": [
+            "Kung nasa early 20s at may trabaho na.",
+            "Kung ready ka na at may ipon kahit paano.",
+            "Kapag ready ka na emotionally.",
+            "Kapag kaya mo nang tanggapin maging Nanay/Tatay.",
+            "Kung may partner na madiskarte at maalaga.",
+        ],
+        "caption": (
+            "best time to get pregnant.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "HUWAG GAWIN KAPAG MAY UTI",
+        "benefits": [
+            "Huwag magpigil sa ihi.",
+            "Iwasan uminom ng may Caffeine at Alkohol.",
+            "Iwasan ang pagkain ng maanghang at acidic.",
+            "Huwag gumamit ng matapang na sabon, spray, o douche.",
+            "Huwag mag Self-Medication.",
+            "Huwag makipag B3mb@ng!.",
+        ],
+        "caption": (
+            "HUWAG GAWIN KAPAG MAY UTI\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "cravings ng trentahin.",
+        "benefits": [
+            "peaceful workplace.",
+            "travel.",
+            "savings.",
+            "mahimbing at kumpletong tulog.",
+            "n@ked full body massage.",
+            "magpa-yummy.",
+            "kumain ng masarap (totoong pagkain).",
+        ],
+        "caption": (
+            "cravings ng trentahin.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "PAANO MAINLOVE ANG LALAKI",
+        "benefits": [
+            "Binibigay ang lahat.",
+            "marunong umiyak.",
+            "Sobra manuyo pag galit ang babae.",
+            "Ikaw lang ang maganda sa mata nya.",
+            "Faithful at loyal sigurado.",
+            "ihi lang ang pahinga kapag bin3mbang ka.",
+        ],
+        "caption": (
+            "PAANO MAINLOVE ANG LALAKI\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
     # {
     #     "heading": "Ilagay ang heading dito",
     #     "benefits": ["Unang benepisyo", "Pangalawang benepisyo"],
