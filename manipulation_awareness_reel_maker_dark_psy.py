@@ -12044,26 +12044,21 @@ def ass_escape(text: str) -> str:
 
 
 def make_karaoke_ass(slides: list[str], durations: list[float], output_ass: Path) -> None:
-    """Write audio-synced captions that animate one complete line at a time.
+    """Write large, all-caps, word-by-word captions synchronized to narration.
 
-    Unlike word karaoke, a whole readable line appears, rises in gently, then yields
-    to the following line.  Line durations are proportionate to the words spoken.
+    Every spoken word appears by itself in red, then yields to the following word.
+    Word durations are apportioned from the narration duration by word length.
     """
-    from PIL import ImageFont
-
     lines = [
         "[Script Info]", "ScriptType: v4.00+", "PlayResX: 1080", "PlayResY: 1920", "",
         "[V4+ Styles]",
         "Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,"
         "Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,"
         "Alignment,MarginL,MarginR,MarginV,Encoding",
-        # Bright red marks the complete line currently being spoken.
-        "Style: SingleLine,DejaVu Sans,48,&H000D18F5,&H000D18F5,&H00101010,&H96000000,1,0,0,0,100,100,0,0,1,3,1,2,70,70,820,1",
+        # Bold red, centered word captions, positioned below the upper heading and above Reel overlays.
+        "Style: WordPop,DejaVu Sans,70,&H000D18F5,&H000D18F5,&H00101010,&H96000000,1,0,0,0,100,100,1,0,1,4,2,2,70,70,800,1",
         "", "[Events]", "Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text",
     ]
-    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    font = ImageFont.truetype(font_path, 48)
-    max_width = 930
     cursor = 0.0
 
     for text, duration in zip(slides, durations):
@@ -12072,34 +12067,19 @@ def make_karaoke_ass(slides: list[str], durations: list[float], output_ass: Path
             cursor += duration
             continue
 
-        # Build complete, natural single lines that fit inside the safe caption width.
-        caption_lines, current = [], []
-        for word in words:
-            trial = " ".join(current + [word])
-            if current and font.getlength(trial) > max_width:
-                caption_lines.append(" ".join(current))
-                current = [word]
-            else:
-                current.append(word)
-        if current:
-            caption_lines.append(" ".join(current))
-
-        weights = [max(1, sum(len(w.strip(".,!?'-")) for w in line.split())) for line in caption_lines]
+        # Longer words receive proportionally more display time, keeping the word pops
+        # aligned with the spoken narration without changing the audio or video.
+        weights = [max(1, len(word.strip(".,!?'-"))) for word in words]
         total_weight = sum(weights)
-        line_cursor = cursor
-        for index, (caption, weight) in enumerate(zip(caption_lines, weights)):
-            line_duration = duration * weight / total_weight
-            if index == len(caption_lines) - 1:
-                line_end = cursor + duration
-            else:
-                line_end = line_cursor + line_duration
-            # Each full line is red only while it is being spoken, then yields to the next line.
-            # It sits higher to avoid Facebook Reel page-name and description overlays.
-            animation = r"{\an2\move(540,1240,540,1200,0,160)\fad(100,120)}"
+        word_cursor = cursor
+        for index, (word, weight) in enumerate(zip(words, weights)):
+            word_duration = duration * weight / total_weight
+            word_end = cursor + duration if index == len(words) - 1 else word_cursor + word_duration
+            animation = r"{\an2\move(540,1140,540,1100,0,120)\fad(70,100)}"
             lines.append(
-                f"Dialogue: 0,{ass_timestamp(line_cursor)},{ass_timestamp(line_end)},SingleLine,,0,0,0,,{animation}{ass_escape(caption)}"
+                f"Dialogue: 0,{ass_timestamp(word_cursor)},{ass_timestamp(word_end)},WordPop,,0,0,0,,{animation}{ass_escape(word.upper())}"
             )
-            line_cursor = line_end
+            word_cursor = word_end
         cursor += duration
 
     output_ass.write_text("\n".join(lines) + "\n", encoding="utf-8")
