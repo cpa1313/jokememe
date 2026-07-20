@@ -1141,6 +1141,282 @@ POSTS = [
             "#MikaNurseDaily #healthtips #tips #reels"
         ),
     },
+    {
+        "heading": "tumatanggi din ba ang lalaki sa b3mbang...",
+        "benefits": [
+            "syempre naman!!!",
+            "kung ang babae ay may menopause...",
+            "ang lalaki naman ay may ANDROPAUSE.",
+            "kadalasan nagsisimula ito edad 30 pataas.",
+            "nakakaramdam ng kawalan ng gana dahil...",
+            "sa pagbaba ng testosterone level.",
+        ],
+        "caption": (
+            "tumatanggi din ba ang lalaki sa b3mbang...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "UGALI NG LALAKI KAPAG WALANG BEMBANG",
+        "benefits": [
+            "Nagiging iritable.",
+            "Nag-iisip at nag-ooverthink.",
+            "Nagiging clingy.",
+            "Moody.",
+            "Biglang tahimik at distant.",
+            "Mas naghahanap ng attention sa iba.",
+            "laging pumupunta sa banyo.",
+        ],
+        "caption": (
+            "UGALI NG LALAKI KAPAG WALANG BEMBANG\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA AYAW NG PARTNER MO MAKIPAG b3mbang sayo.",
+        "benefits": [
+            "Busy-busyhan sa cellphone.",
+            "Panay ang labas kahit may sched kayo na pinag-usapan.",
+            "Hindi tatabi sayo matulog.",
+            "Magtutulog tulugan.",
+            "Nagpapakapagod sa maghapon para pahinga na sa gabi.",
+            "lasing na pag umuwi na sa bahay.",
+        ],
+        "caption": (
+            "SENYALES NA AYAW NG PARTNER MO MAKIPAG b3mbang sayo.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA walang dilig ang isang tao.",
+        "benefits": [
+            "Dry ang skin.",
+            "Laging mainit ang ulo.",
+            "Nangingialam na lang ng buhay ng iba.",
+            "Hindi palangiti, at umaasim ang muka.",
+            "negative palaga ang payo nya sa masayang couple.",
+        ],
+        "caption": (
+            "SENYALES NA walang dilig ang isang tao.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA SELOSA ang partner mo",
+        "benefits": [
+            "Lahat ng babae pinag-iisipan na chix mo.",
+            "Ini-stalk ang mga babaeng friends mo.",
+            "Nakabantay lagi sa partner.",
+            "Pag may lakad ang partner dapat walang babaeng kasama.",
+            "Kahit dati ng friend mo yong babae wala pa rin tiwala.",
+        ],
+        "caption": (
+            "SENYALES NA SELOSA ang partner mo\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA MAHINA NA ANG BABAE",
+        "benefits": [
+            "Laging nakahiga.",
+            "Natutuyo na and hindi na w3t.",
+            "Mas gusto mag-cp kesa makipagbembang sayo.",
+            "Bihira na pumayag, minsan galit pa.",
+        ],
+        "caption": (
+            "SENYALES NA MAHINA NA ANG BABAE\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA MAHINA NA ANG LALAKI sa b3mbang.",
+        "benefits": [
+            "Laging tulog.",
+            "Isang round lang knock down na.",
+            "Mas gusto pa uminom kesa bumembang.",
+            "2mins lang tinatagal taposna.",
+            "hindi nag wowork out.",
+        ],
+        "caption": (
+            "SENYALES NA MAHINA NA ANG LALAKI sa b3mbang.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "huwag makipag oral s3!x kapag...",
+        "benefits": [
+            "may sugat ang bibig.",
+            "hindi mo lubos na kilala.",
+            "bagong bunot ang ngipin, pasta, or any dental works.",
+            "may amoy ang k!ffy or TT.",
+            "dahil hindi ka sure sa ka b3mbang mo na walang STD/STI lalo na kung paiba iba ang partner mo.",
+        ],
+        "caption": (
+            "huwag makipag oral s3!x kapag...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA READY KA NA MAGKAANAK",
+        "benefits": [
+            "Physically and emotionally ready.",
+            "May sapat na ipon at sapat na kaalaman.",
+            "Nasa hustong gulang (25 to 30 best age).",
+            "Merong support system (hindi sugar daddy ah).",
+            "Handa na maging mabuting Nanay at Tatay.",
+            "May malusog na sperm at egg cell.",
+        ],
+        "caption": (
+            "SENYALES NA READY KA NA MAGKAANAK\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "Girl HUWAG Kang MAKIPAG INUMAN KAPAG...",
+        "benefits": [
+            "Hindi kilala ang kainuman.",
+            "Ikaw lang ang babae.",
+            "Kapag hindi ka adult.",
+            "Hindi kaya ang sarili sa kalasingan.",
+            "Kapag alam mong b3b3mbangin ka ng mga kainoman mong lalaki.",
+        ],
+        "caption": (
+            "Girl HUWAG Kang MAKIPAG INUMAN KAPAG...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "huwag kang makipag laplapan kapag...",
+        "benefits": [
+            "may lagnat, sipon, ubo, trankaso.",
+            "hindi mo kilala.",
+            "kapag may sugat sa bibig.",
+            "kapag mabaho ang hininga.",
+        ],
+        "caption": (
+            "huwag kang makipag laplapan kapag...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "PAANO MAGYAYA ANG LALAKI kapag balak ka nyang b3mbangin.",
+        "benefits": [
+            "Tara tagay tayo (pag may alak may balak!).",
+            "Tara dito sa bahay walang tao.",
+            "Pwede ba kita dalawin, may tao ba sa inyo?.",
+            "Samahan mo ko,may private room ako sa magandang place.",
+            "Magpapapogi at magpapabango.",
+            "aayain kang umakyat sa bundok.",
+        ],
+        "caption": (
+            "PAANO MAGYAYA ANG LALAKI kapag balak ka nyang b3mbangin.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "BODY PARTS NG BABAE NA GUSTO NG MGA LALAKI",
+        "benefits": [
+            "Mabangong buhok kapag hinahawakan.",
+            "flawless na Kili-kiki.",
+            "Mapang-akit na mata.",
+            "Leeg-maputi at mabango.",
+            "Malusog na ded3.",
+            "Balakang.",
+            "tambok na Pwet.",
+        ],
+        "caption": (
+            "BODY PARTS NG BABAE NA GUSTO NG MGA LALAKI\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "MAAARING DAHILAN NG PIMPLE SA K!FFY",
+        "benefits": [
+            "Genital Herpes (Ang pagkakaroon ng pimples babae ay pwedeng sintomas ng genital herps).",
+            "Human Papilloma Virus (HPV) (tandaan na ang pagkakaroon ng pimples sa ari ay maaring maging sintomas ng HPV na pwedeng maipasa sa pamamagitan ng @nal at vag1n@l s3x.",
+            "Folliculitis (Ang folliculitis ay isang impeksyon sa hair follicles ng ari, kung saan isa ito sa madalas na sanhi ng pagkakaroon ng tigyawat sa ari.",
+            "Cyst (huwag mong kakalimutan na ang tigyawat sa ari ng isang babae ay pwede ring'maging cyst o pocket tissue” na mayroong fuid, hangin at iba pang mga substance.",
+            "Syphilis (kagaya ng genital herpes at HPV maaring makuha ang Syphilis sa pakikipag-s3x, pero kung agad na makikita ang kondisyon na ito ay madali itong magamot.",
+        ],
+        "caption": (
+            "MAAARING DAHILAN NG PIMPLE SA K!FFY\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "tamang pag aalaga sa d3de ng babae",
+        "benefits": [
+            "regular na pag-check (breast self-exam: tignan kung may pagbabago ang dede buwan buwan).",
+            "magsuot ng bra na angkop ang sukat.",
+            "linisin ang dede habang naliligo.",
+            "magpakonsulta agad sa doctor kung(may nararamdamang kakaibang sakit, bukol, o pagbabago sa hugis at balat ng suso.",
+            "wag mong hayaang bigyan ka ng chikinini ng partner mo  or gusto mo talaga make sure na mag toothbrush sya.",
+        ],
+        "caption": (
+            "tamang pag aalaga sa d3de ng babae\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "pagputok ng sp3rm sa muka ng partner mo safe nga ba talaga...",
+        "benefits": [
+            "Hindi totoong may benepisyo sa kalusugan o sa balat ang semilya.",
+            "Ang paglalagay ng semilya sa mukha, lalo na kung madikit sa mata, bibig, o sa mga may sugat at bukas na pimples ay maaaring makakuha ng Chlamydia, Gonorrhea, Herpes or HPV.",
+            "Kapag nalsikan o napunta ang semilya sa loob ng mata, nagdudulot ito ng matinding hapdi, pamumula, at pamamaga (Ito ay dahil sa kemikal na komposisyon at pH level ng semilya na hindi angkop sa sensitibong bahagi ng mata).",
+            "Allergy at Pamamaga ng Balat.",
+            "pero kung gusto mo talaga, siguraduhin mong healthy yang partner mo.",
+        ],
+        "caption": (
+            "pagputok ng sp3rm sa muka ng partner mo safe nga ba talaga...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "benepisyo ng pag lulu ng isang lalaki.",
+        "benefits": [
+            "hindi ka makakabuntis.",
+            "hindi ka mahahawa sa STD/HIV.",
+            "pampasarap ng tulog.",
+            "pwede gawin anytime (in private only).",
+            "pampawala ng stress.",
+            "kalmado ka pag nakikipag argue ka sa partner mo.",
+        ],
+        "caption": (
+            "benepisyo ng pag lulu ng isang lalaki.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "BAKIT BLOOMING ANG BABAE",
+        "benefits": [
+            "Sapat ang tulog.",
+            "Hydrated ang katawan sa tubig.",
+            "Mas pinipili maging positibo at kalmado.",
+            "Ginagawa yung mga bagay na nagpapasaya sa kanya.",
+            "Kumakain ng masusustansya.",
+            "magaling bum3mbang yong partner nya.",
+        ],
+        "caption": (
+            "BAKIT BLOOMING ANG BABAE\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "nawawala ang feelings ng babae sa lalaki kapag....",
+        "benefits": [
+            "may kab3mbang na iba.",
+            "walang pangarap sa buhay para umangat.",
+            "puro bisyo alak, yosi, droga, sugal.",
+            "madaming kalandian yong lalaki na kaibigang babae.",
+            "puro heart ng heart yong lalaki sa mga sexy na picture.",
+            "sinasakal sya ng mahigpit habang nagb3b3mbangan sila.",
+            "puro b3mbang lang alam wala namang ambag.",
+        ],
+        "caption": (
+            "nawawala ang feelings ng babae sa lalaki kapag....\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
     # {
     #     "heading": "Ilagay ang heading dito",
     #     "benefits": ["Unang benepisyo", "Pangalawang benepisyo"],
