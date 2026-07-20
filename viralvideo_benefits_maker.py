@@ -1417,6 +1417,66 @@ POSTS = [
             "#MikaNurseDaily #healthtips #tips #reels"
         ),
     },
+    {
+        "heading": "MGA DAPAT GAWIN BAGO MAKIPAG B3MBANG",
+        "benefits": [
+            "Siguraduhing pareho kayong adult, willing, at walang pilitan.",
+            "Mag-usap tungkol sa protection at family planning.",
+            "Maligo at panatilihing malinis ang katawan.",
+            "Huwag gawin kapag lasing, high, takot, o hindi malinaw ang isip.",
+            "Pumili ng private at ligtas na lugar.",
+            "Magkaroon ng condoms at gamitin nang tama para bawas risk ng STI at unplanned pregnancy.",
+        ],
+        "caption": (
+            "MGA DAPAT GAWIN BAGO MAKIPAG B3MBANG\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "SENYALES NA KAILANGAN MONG HUMINTO SA B3MBANG",
+        "benefits": [
+            "May sakit, hapdi, pagdurugo, o matinding discomfort.",
+            "Bigla kang hindi komportable o gusto mong tumigil.",
+            "Hindi nakikinig ang partner sa “dahan-dahan” o “stop.”",
+            "Wala kayong protection at ayaw ninyong sumugal.",
+            "Lasing, pagod na pagod, o hindi malinaw ang consent ng isa.",
+            "May sugat, kakaibang discharge, o sintomas na dapat ipa-check sa health professional.",
+        ],
+        "caption": (
+            "SENYALES NA KAILANGAN MONG HUMINTO SA B3MBANG\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "PAANO MAGING MAS MAALAGA SA PARTNER PAGKATAPOS MAG B3MBANG",
+        "benefits": [
+            "Tanungin kung okay siya at kung may masakit o hindi komportable.",
+            "Maglinis at umihi pagkatapos kung kaya, lalo na para makatulong iwas-irritation.",
+            "Huwag mang-asar o ikuwento sa iba ang private moments ninyo.",
+            "Magbigay ng lambing at reassurance, hindi lang aalis agad.",
+            "Kung may napansin na kakaibang sintomas, magpatingin agad sa clinic.",
+            "Irespeto ang privacy at boundaries ng partner sa lahat ng oras.",
+        ],
+        "caption": (
+            "PAANO MAGING MAS MAALAGA SA PARTNER PAGKATAPOS MAG B3MBANG\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "BAKIT HINDI DAPAT PILITIN ANG PARTNER SA B3MBANG",
+        "benefits": [
+            "Ang relasyon ay hindi sukatan ng dami o dalas ng b3mbang.",
+            "Kahit mag-asawa o matagal na kayo, kailangan pa rin ng consent.",
+            "Ang “hindi,” “mamaya na,” at pananahimik ay dapat respetuhin.",
+            "Ang pressure, guilt trip, at pagbabanta ay hindi pagmamahal.",
+            "Mas tumitibay ang tiwala kapag ligtas magsabi ng tunay na nararamdaman.",
+            "Mas okay ang b3mbang kapag parehong gusto, ready, at komportable.",
+        ],
+        "caption": (
+            "BAKIT HINDI DAPAT PILITIN ANG PARTNER SA B3MBANG\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
     # {
     #     "heading": "Ilagay ang heading dito",
     #     "benefits": ["Unang benepisyo", "Pangalawang benepisyo"],
