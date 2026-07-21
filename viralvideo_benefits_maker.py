@@ -1477,6 +1477,108 @@ POSTS = [
             "#MikaNurseDaily #healthtips #tips #reels"
         ),
     },
+    {
+        "heading": "Bagong ah1t ang pechay? 1wasan mong...",
+        "benefits": [
+            "ipakain ang pechay mo (can cause bacteria).",
+            "wag mag papa b3mbang (can cause skin irritation and could cause bacteria and infection).",
+            "sexually transmitted infections (STIs) dahil ang micro-tears sa balay sa pag shashave ay open and may entry points ang bacteria and viruses.",
+            "Best Practices (mag antay ng 24 hours para maka pag heal ang balaht and mag sara yong pores and makapag build ng barrier naturally).",
+        ],
+        "caption": (
+            "Bagong ah1t ang pechay? 1wasan mong...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "ginagawa ng lalaki kapag nahuli sila...",
+        "benefits": [
+            "hindi aamin hanggang walang ebidensya.",
+            "kahit may ebidensya ka na, ituturo sa tropa.",
+            "magpapalusot na kaya lang nagloko kasi lasing.",
+            "sasabihin kaya nagloko kasi nagkulang ka (pa victim pa).",
+            "may iilan naman na umaamin, nagsosorry at bumabawi.",
+        ],
+        "caption": (
+            "ginagawa ng lalaki kapag nahuli sila...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "kahinaan ng lalaki pagdating sa babae.",
+        "benefits": [
+            "coco melon.",
+            "matambok na pwet.",
+            "malaki ang balakang.",
+            "hugis coca cola ang katawan.",
+            "matambok.",
+            "10/10 ang facecard.",
+        ],
+        "caption": (
+            "kahinaan ng lalaki pagdating sa babae.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "alin ka during b3mbang...",
+        "benefits": [
+            "ikaw ang ginagalaw \"The Receiver\".",
+            "ikaw ang gumagalaw \"The Giver\".",
+            "Both The Giver and The Receiver.",
+        ],
+        "caption": (
+            "alin ka during b3mbang...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "unang tinitignan ng babae sa lalaki...",
+        "benefits": [
+            "FaceCard 40%.",
+            "Edad 30%.",
+            "Height 10%.",
+            "Katawan 10%.",
+            "Background 5%.",
+            "Performance 5%.",
+        ],
+        "caption": (
+            "unang tinitignan ng babae sa lalaki...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "dapat gawin ng lalaki kapag may regla ang babae.",
+        "benefits": [
+            "wag makipag away.",
+            "lambingin mo.",
+            "makipagkwentuhan ka.",
+            "patawanin mo.",
+            "bigyan mo ng masarap na pagkain.",
+        ],
+        "caption": (
+            "dapat gawin ng lalaki kapag may regla ang babae.\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": "kapag nagmahal ka ng single mom...",
+        "benefits": [
+            "matured.",
+            "hindi materialistic.",
+            "madiskarte.",
+            "maalaga.",
+            "mapagmahal.",
+            "loyal/faithful.",
+            "magaling mag asikaso.",
+            "hindi strikto.",
+            "hindi ka lolokohin.",
+            "yummy.",
+        ],
+        "caption": (
+            "kapag nagmahal ka ng single mom...\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
     # {
     #     "heading": "Ilagay ang heading dito",
     #     "benefits": ["Unang benepisyo", "Pangalawang benepisyo"],
