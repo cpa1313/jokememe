@@ -1870,6 +1870,181 @@ POSTS = [
             "#MikaNurseDaily #healthtips #tips #reels"
         ),
     },
+    {
+        "heading": 'Signs na sobrang YUMMY ka pero hindi mo alam...',
+        "benefits": [
+            'Naaalala ka ng mga tao matapos kang makilala nang minsan.',
+            'Ngumingiti sa iyo ang mga estranghero nang walang malinaw na dahilan.',
+            'Patuloy kang tinitingnan ng mga tao.',
+            'Gumagawa ng mga dahilan ang mga babae para mapalapit sa iyo, at tinutukso ka sa pamamagitan ng pabirong pang-iinsulto.',
+            'You catch people making eye contact more than expected.',
+        ],
+        "caption": (
+            'Signs na sobrang YUMMY ka pero hindi mo alam...' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'Panis yang pagka cheater mo pag...',
+        "benefits": [
+            'napuntaka sa lowkey na cheater na play safe gumalaw.',
+            'nagtatago sa ilalim ng "Green Flags".',
+            'Maingat sila sa kanilang mga social media accounts at mga text messages kaya hindi sila nahuhuli.',
+            'expert sa Gaslighting.',
+        ],
+        "caption": (
+            'Panis yang pagka cheater mo pag...' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'MGA LUGAR NA MASARAP PUNTAHAN KASAMA ANG PARTNER MO',
+        "benefits": [
+            'Restaurants (Pakainin ka bago ka kainin).',
+            'Sinehan (Nood muna ng romance bago ka romansahin).',
+            'tuktok ng bundok (ihanda mo na ang bundok mo at dun ka matutumbok).',
+            'Beach (swimming sa umaga sisirin ka sa gabi).',
+            'Fireworks festival (nood ng paputok bago ka putukan).',
+            'SOGO.',
+        ],
+        "caption": (
+            'MGA LUGAR NA MASARAP PUNTAHAN KASAMA ANG PARTNER MO' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'GAANO BA DAPAT KATAGAL ANG BEMB@NG ONLY',
+        "benefits": [
+            '1 hour?',
+            '2 hour?',
+            '30 minutes?',
+            '15-30 minutes, foreplay at labing labing.',
+        ],
+        "caption": (
+            'GAANO BA DAPAT KATAGAL ANG BEMB@NG ONLY' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'EDAD NG BABAE NA MALAKAS PA SA BEMBANG',
+        "benefits": [
+            '18-20 (kaya nyan unli).',
+            '21-25 (siguro 5-7 rounds pa).',
+            '26-30 (kaya pa mga 5 rounds).',
+            '31-35 (mga 2-3 siguro kaya pa).',
+            '36-40 (mag start na magtuyot, 2-3 rounds na lang siguro pilit pa).',
+            '41-50 (medyo tuyot na, paisa isa nalang).',
+            '50 and above (lambingan nalang kaya).',
+        ],
+        "caption": (
+            'EDAD NG BABAE NA MALAKAS PA SA BEMBANG' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'DAPAT GAWIN PARA HINDI AGAD MALOSYANG',
+        "benefits": [
+            'Umiwas at lumayo sa mga toxic na tao.',
+            'Panatilihing positive ang mindset (dahil stress ang nagpapabilis magmukhang losyang).',
+            'Maglaan ng oras para sa sarili at hobbies (para blooming lagi).',
+            'Kumain ng masustansya at bawasan ang instant at oily foods.',
+            'Uminom ng sapat na tubig araw-araw para laging fresh ang skin.',
+            'Matulog ng 7-8hours at iwas puyat (mabilis makalosyang ang kulang sa tulog).',
+            'May sapat na bemb@ng.',
+        ],
+        "caption": (
+            'DAPAT GAWIN PARA HINDI AGAD MALOSYANG' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'SENYALES NA EASY A TO GET ANG BABAE',
+        "benefits": [
+            'Kahit may jowa na nag eentertain pa ng iba.',
+            'Isang yaya mo lang sasama na agad.',
+            'Naglalasing lasingan sa inuman.',
+            'Nagpapakita ng motibo sayo.',
+            'Hindi humihindi at G lang ng G kahit saan kahit sya lang ang babae sa inuman.',
+        ],
+        "caption": (
+            'SENYALES NA EASY A TO GET ANG BABAE' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'MGA BAGAY NA NAKAKAPAGPA-INLOVE SA LALAKI',
+        "benefits": [
+            'Yung babae na marunong rumespeto kahit galit.',
+            'Yung maalaga kahit sa simpleng bagay lang.',
+            'Yung marunong makisama sa pamilya at tropa niya.',
+            'Yung hindi siya pinapahiya sa ibang tao.',
+            'Yung consistent magbigay ng lambing at effort.',
+            'Yung may sariling pangarap pero sinusuportahan din ang kanya.',
+        ],
+        "caption": (
+            'MGA BAGAY NA NAKAKAPAGPA-INLOVE SA LALAKI' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'SENYALES NA MAY TINATAGO ANG PARTNER MO',
+        "benefits": [
+            'Biglang itinatago ang phone kapag lumalapit ka.',
+            'Naiinis agad kapag simpleng nagtatanong ka.',
+            'Madalas may dahilan para hindi mag-update.',
+            'Nagbabago ang kwento kapag tinatanong mo ulit.',
+            'Biglang sobrang private sa social media.',
+            'Ramdam mong may pagbabago pero ayaw niyang pag-usapan.',
+        ],
+        "caption": (
+            'SENYALES NA MAY TINATAGO ANG PARTNER MO' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'GAWIN KAPAG MAY TOPAK ANG PARTNER MO',
+        "benefits": [
+            'Huwag sabayan ng sigaw o galit.',
+            'Tanungin kung gusto muna niya ng space o kausap.',
+            'Makinig bago magbigay ng paliwanag.',
+            'Lambingin sa paraang komportable siya.',
+            'Mag-sorry kung may mali ka, mag-sorry ka padin kahit mali nya kahit maliit na bagay, mahirap iexplain pero ganyan talaga kaming mga babae always right.',
+            'Huwag gawing biro ang nararamdaman niya.',
+        ],
+        "caption": (
+            'GAWIN KAPAG MAY TOPAK ANG PARTNER MO' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'SENYALES NA COMFORTABLE SAYO ANG ISANG BABAE',
+        "benefits": [
+            'Kaya niyang maging makulit at weird sa harap mo.',
+            'Hindi siya nahihiyang magkwento ng personal na bagay.',
+            'Humihingi siya ng advice kapag may problema.',
+            'Kahit tahimik kayo, hindi siya naiilang.',
+            'Sumasabay siya sa humor at asar mo.',
+            'Naaalala niya ang maliliit na detalye tungkol sayo.',
+        ],
+        "caption": (
+            'SENYALES NA COMFORTABLE SAYO ANG ISANG BABAE' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
+    {
+        "heading": 'BAGO MAG-B3MBANG, ITO MUNA ANG DAPAT PAG-USAPAN',
+        "benefits": [
+            'Pareho ba kayong ready at gusto ito gawin.',
+            'Ano ang boundaries at mga bagay na ayaw ninyo.',
+            'May protection ba kayo na gagamitin.',
+            'Kailan huling nagpa-test para sa s3xu@l health para iwas sakit.',
+            'Tandaan: consent dapat malinaw, malaya, at puwedeng bawiin anumang oras.',
+        ],
+        "caption": (
+            'BAGO MAG-B3MBANG, ITO MUNA ANG DAPAT PAG-USAPAN' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
     # {
     #     "heading": "Ilagay ang heading dito",
     #     "benefits": ["Unang benepisyo", "Pangalawang benepisyo"],
