@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-"""Benefit Reel Maker — renders a heading, then numbered benefits, and posts to Facebook Reels."""
-import json
 import os
 import subprocess
 import sys
@@ -2045,11 +2042,179 @@ POSTS = [
             "#MikaNurseDaily #healthtips #tips #reels"
         ),
     },
+    {
+        "heading": 'Senyales na plastik ang isang tao.',
+        "benefits": [
+            'Sila ang mga taong labis na mabait sa harap mo, ngunit panay ang sira at tsismis sa ibang tao kapag wala ka.',
+            'Nagpapakita lamang sila kapag may kailangan sila sa iyo, tulad ng pabor o tulong.',
+            'Ang kanilang mga papuri ay madalas insincere o may kasamang nakatagong panlalait (backhanded compliments).',
+            'Hindi sila tunay na masaya sa iyong mga tagumpay at madalas ay pilit itong binabale-wala o dinadaan sa biro.',
+            'Kapag nahuli mo sila sa kanilang mga maling gawain o paninira, mahusay silang magdahilan at magbaliktad ng sitwasyon para sila ang maging biktima.',
+        ],
+        "caption": (
+            'Senyales na plastik ang isang tao.' + "\n\n"
+            "#MikaNurseDaily #healthtips #tips #reels"
+        ),
+    },
     # {
     #     "heading": "Ilagay ang heading dito",
     #     "benefits": ["Unang benepisyo", "Pangalawang benepisyo"],
     #     "caption": "Heading at caption dito\n\n#healthtips #tips #reels",
-    # },
+    # },,
+    {
+        "heading": 'RED FLAGS SA FIRST DATE NA HUWAG BALewalain',
+        "benefits": [
+            'Bastos sa waiter, driver, o kahit sinong service crew.',
+            'Puro ex ang topic at lahat ng ex niya ang may kasalanan.',
+            'Pinipilit kang uminom o gawin ang ayaw mo.',
+            'Hindi marunong rumespeto sa oras mo.',
+            'Sobrang bilis manghingi ng personal na impormasyon o pera.',
+        ],
+        "caption": 'RED FLAGS SA FIRST DATE NA HUWAG BALewalain\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'SENYALES NA GUSTO KA NG KATRABAHO MO',
+        "benefits": [
+            'May dahilan lagi para mag-message kahit work-related lang dapat.',
+            'Sinasabay niya ang break o uwi niya sayo.',
+            'Napapansin niya ang maliliit na pagbabago sa itsura mo.',
+            'Madalas kang inaasar pero ikaw lang ang espesyal na inaasar.',
+            'Tinutulungan ka niya kahit hindi mo naman hinihingi.',
+        ],
+        "caption": 'SENYALES NA GUSTO KA NG KATRABAHO MO\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'BAKIT MAS NAKAKAHATAK ANG TAONG MAY CONFIDENCE',
+        "benefits": [
+            'Hindi siya takot maging sarili niya.',
+            'Marunong siyang magsalita pero marunong din makinig.',
+            'Hindi siya naghahabol sa atensyon ng lahat.',
+            'May boundaries siya at marunong siyang tumanggi.',
+            'May sariling buhay at goals kaya hindi siya madaling mawalan ng value.',
+        ],
+        "caption": 'BAKIT MAS NAKAKAHATAK ANG TAONG MAY CONFIDENCE\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'MGA BAGAY NA NAKAKASIRA NG KA POGIHAN NG ISANG LALAKE',
+        "benefits": [
+            'Puro yabang pero walang gawa.',
+            'Hindi marunong magpasalamat sa maliliit na effort.',
+            'Laging may sinisisi kapag may mali.',
+            'Sobrang selos pero siya naman ang hindi mapagkakatiwalaan.',
+            'Mabait lang kapag may kapalit.',
+        ],
+        "caption": 'MGA BAGAY NA NAKAKASIRA NG KA POGIHAN NG ISANG LALAKE\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'SENYALES NA PATAY NA PATAY PA SYA SA EX NYA',
+        "benefits": [
+            'Laging nasisingit ang pangalan ng ex niya kahit hindi naman related ang usapan.',
+            'May saved pa ring pictures, chats, o regalo na ayaw niyang alisin.',
+            'Kinukumpara ka niya sa ex niya, kahit pabiro lang.',
+            'Alam pa rin niya ang bawat update sa buhay ng ex niya.',
+            'Biglang nag-iiba ang mood niya kapag nababanggit na may bago nang kausap ang ex niya.',
+        ],
+        "caption": 'SENYALES NA PATAY NA PATAY PA SYA SA EX NYA\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'GAWIN KAPAG GHOSTED KA',
+        "benefits": [
+            'Huwag maghabol ng sampung message para lang humingi ng reply.',
+            'Isipin na ang silence niya ay sagot na rin.',
+            'Huwag sisihin ang sarili mo sa kawalan niya ng respeto.',
+            'I-focus ang oras sa mga taong malinaw ang intention sayo.',
+            'Tandaan: hindi mo kailangang ipilit ang sarili sa taong ayaw mag-stay.',
+        ],
+        "caption": 'GAWIN KAPAG GHOSTED KA\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'SENYALES NA MAALAGA ANG ISANG PARTNER',
+        "benefits": [
+            'Naaalala niya ang mga bagay na gusto at ayaw mo.',
+            'Pinapaalalahanan ka niyang kumain, magpahinga, at mag-ingat.',
+            'Hindi siya nawawala kapag may sakit o may problema ka.',
+            'Inuuna niyang intindihin ang nararamdaman mo bago magsalita.',
+            'Ginagawan ka niya ng paraan kahit simple lang ang kaya niya.',
+        ],
+        "caption": 'SENYALES NA MAALAGA ANG ISANG PARTNER\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'BAKIT NAWAWALAN NG GANA ANG BABAE',
+        "benefits": [
+            'Kapag paulit-ulit na lang ang promises pero walang pagbabago.',
+            'Kapag kailangan pa niyang magmakaawa para sa basic effort.',
+            'Kapag hindi mo siya pinapakinggan kahit nagsasalita na siya.',
+            'Kapag siya lang ang laging umiintindi.',
+            'Kapag naubos na ang peace niya kakasalo sa problema mo.',
+        ],
+        "caption": 'BAKIT NAWAWALAN NG GANA ANG BABAE\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'MGA SENYALES NA MATURE MAG-ISIP ANG ISANG TAO',
+        "benefits": [
+            'Marunong siyang umamin kapag mali siya.',
+            'Hindi siya nagpaparinig sa social media kapag may problema.',
+            'Kaya niyang makipag-usap nang hindi naninigaw.',
+            'Hindi lahat ng bagay kailangan niyang sagutin agad sa galit.',
+            'Alam niyang ang peace ay mas mahalaga kaysa laging manalo sa argumento.',
+        ],
+        "caption": 'MGA SENYALES NA MATURE MAG-ISIP ANG ISANG TAO\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'MGA BAGAY NA DAPAT HINDI MO GINAGAWA SA PARTNER MO',
+        "benefits": [
+            'Huwag mong ikumpara siya sa ex mo.',
+            'Huwag mong gawing joke ang insecurities niya.',
+            'Huwag mong ilabas sa ibang tao ang private na problema ninyo.',
+            'Huwag mong gamitin ang hiwalayan bilang panakot sa bawat away.',
+            'Huwag mong hintayin mawala siya bago mo ibigay ang effort.',
+        ],
+        "caption": 'MGA BAGAY NA DAPAT HINDI MO GINAGAWA SA PARTNER MO\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'SENYALES NA IKAW ANG FAVORITE PERSON NIYA',
+        "benefits": [
+            'Ikaw ang una niyang gustong kwentuhan kapag may nangyari.',
+            'Hinahanap niya ang opinion mo bago gumawa ng decision.',
+            'Kahit busy siya, gumagawa siya ng oras para sayo.',
+            'Naalala niya ang random na bagay dahil nakita niya at ikaw ang pumasok sa isip niya.',
+            'Mas gumagaan ang mood niya kapag kausap ka.',
+        ],
+        "caption": 'SENYALES NA IKAW ANG FAVORITE PERSON NIYA\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'BAGO KA MAGTIWALA, ITO MUNA ANG TINGNAN MO',
+        "benefits": [
+            'Pareho ba ang salita at gawa niya.',
+            'Paano siya makitungo sa mga taong wala siyang mapapala.',
+            'Marunong ba siyang rumespeto kapag nagsabi ka ng no.',
+            'Paano siya humawak ng problema at galit.',
+            'Consistent ba siya kahit walang nakakakita.',
+        ],
+        "caption": 'BAGO KA MAGTIWALA, ITO MUNA ANG TINGNAN MO\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'MGA BAGAY NA MASARAP GAWIN KASAMA ANG PARTNER MO KAHIT WALANG PERA',
+        "benefits": [
+            'Magluto ng paborito ninyong pagkain sa bahay.',
+            'Maglakad sa park at magkwentuhan tungkol sa future.',
+            'Manood ng movie habang may yakap at kumot.',
+            'Maglaro ng tanong-sagot para mas makilala pa ang isa’t isa.',
+            'Magplano ng dream date ninyo kahit ipon stage pa lang.',
+        ],
+        "caption": 'MGA BAGAY NA MASARAP GAWIN KASAMA ANG PARTNER MO KAHIT WALANG PERA\n\n#MikaNurseDaily #healthtips #tips #reels',
+    },
+    {
+        "heading": 'BAGO MAG-B3MBANG, TANDAAN ITO',
+        "benefits": [
+            'Pareho kayong dapat ready at walang pilitan.',
+            'Mag-usap tungkol sa protection para iwas problema.',
+            'Igalang ang boundaries ng bawat isa.',
+            'Alagaan ang s3xu@l health at magpa-test kung kailangan.',
+            'Ang tunay na nagmamahal, inuuna ang safety at comfort ng partner.',
+        ],
+        "caption": 'BAGO MAG-B3MBANG, TANDAAN ITO\n\n#MikaNurseDaily #healthtips #tips #reels',
+    }
 ]
 
 
