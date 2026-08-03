@@ -108,23 +108,31 @@ def font(size: int):
     return ImageFont.load_default()
 
 
-def render_slide(story_number: int, stage: int, text: str, output: Path) -> None:
+def split_sentences(text: str) -> list[str]:
+    """Keep each card short: one complete narrated sentence at a time."""
+    return [part.strip() for part in re.split(r"(?<=[.!?])\s+", text.strip()) if part.strip()]
+
+
+def render_slide(story_number: int, label: str, text: str, output: Path) -> None:
     image = Image.new("RGBA", (TARGET_W, TARGET_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
     accent = (255, 205, 46, 255)
-    draw.rounded_rectangle((55, 190, 1025, 1610), radius=42, fill=(8, 13, 32, 205), outline=accent, width=5)
-    draw.text((540, 300), "PINOY MYSTERY", anchor="mm", font=font(52), fill=accent)
-    labels = ("THE STORY", "THE ENDING")
-    draw.text((540, 410), labels[stage], anchor="mm", font=font(33), fill=(180, 205, 255, 255))
-    text_font = font(74 if len(text) < 58 else 60)
-    lines = wrap(draw, text, text_font, 830)
-    y = 820 - len(lines) * 42
+    # The panel is deliberately lower and the text is short so labels never overlap it.
+    draw.rounded_rectangle((62, 330, 1018, 1545), radius=42,
+                           fill=(7, 12, 29, 224), outline=accent, width=5)
+    draw.text((540, 150), "PINOY MYSTERY", anchor="mm", font=font(48), fill=accent)
+    draw.text((540, 235), label, anchor="mm", font=font(30), fill=(185, 207, 252, 255))
+    text_font = font(68 if len(text) <= 110 else 58)
+    lines = wrap(draw, text, text_font, 805)
+    line_gap = 22
+    text_height = len(lines) * text_font.size + max(0, len(lines) - 1) * line_gap
+    y = 935 - text_height // 2
     for line in lines:
-        draw.text((540, y), line, anchor="mm", font=text_font, fill=(255, 255, 255, 255))
-        y += text_font.size + 22
-    draw.text((540, 1500), f"FICTIONAL STORY #{story_number}  •  FOLLOW FOR MORE", anchor="mm", font=font(27), fill=(198, 208, 230, 255))
+        draw.text((540, y), line, anchor="ma", font=text_font, fill=(255, 255, 255, 255))
+        y += text_font.size + line_gap
+    draw.text((540, 1695), f"FICTIONAL STORY #{story_number}  •  FOLLOW FOR MORE",
+              anchor="mm", font=font(25), fill=(200, 211, 236, 255))
     image.save(output)
-
 
 def narration(text: str, output: Path) -> float:
     raw = output.with_suffix(".mp3")
@@ -156,22 +164,36 @@ def output_video_path(story_number: int, story: dict[str, str]) -> Path:
 
 
 def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> None:
+    # Title plus one sentence per card: easy to read and each beat gets its own shake.
+    beats = [("THE STORY", story["header"])]
+    sentences = split_sentences(story["body"])
+    for index, sentence in enumerate(sentences):
+        label = "THE ENDING" if index == len(sentences) - 1 else "THE STORY"
+        beats.append((label, sentence))
+
     pngs, wavs, times = [], [], []
-    for stage, line in enumerate((story["header"], story["body"])):
-        png, wav = OUTPUT_DIR / f"slide_{stage}.png", OUTPUT_DIR / f"voice_{stage}.wav"
-        render_slide(story_number, stage, line, png)
-        pngs.append(png); wavs.append(wav); times.append(narration(line, wav))
+    for index, (label, text) in enumerate(beats):
+        png, wav = OUTPUT_DIR / f"slide_{index}.png", OUTPUT_DIR / f"voice_{index}.wav"
+        render_slide(story_number, label, text, png)
+        pngs.append(png); wavs.append(wav); times.append(narration(text, wav))
     manifest = OUTPUT_DIR / "audio.txt"
     manifest.write_text("".join(f"file '{p.resolve()}'\n" for p in wavs), encoding="utf-8")
     audio = OUTPUT_DIR / "narration.wav"
     subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(manifest), "-c:a", "pcm_s16le", str(audio)], check=True)
     total = sum(times)
     filters = [f"[0:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,crop={TARGET_W}:{TARGET_H},eq=brightness=-0.16:saturation=0.8[base]"]
-    previous, start = "base", 0.0
+    previous, start_time = "base", 0.0
     for i, slide_time in enumerate(times):
-        end = start + slide_time
-        filters.append(f"[{i + 1}:v]scale={TARGET_W}:{TARGET_H}[s{i}];[{previous}][s{i}]overlay=enable='between(t\\,{start:.3f}\\,{end:.3f})'[v{i}]")
-        previous, start = f"v{i}", end
+        end_time = start_time + slide_time
+        # A fast 0.45-second shake on every new sentence/card, then it settles completely.
+        shake_until = start_time + 0.45
+        x = rf"if(lt(t\,{shake_until:.3f})\,12*sin(78*t)\,0)"
+        y = rf"if(lt(t\,{shake_until:.3f})\,7*sin(103*t)\,0)"
+        filters.append(
+            f"[{i + 1}:v]scale={TARGET_W}:{TARGET_H}[s{i}];"
+            rf"[{previous}][s{i}]overlay=x='{x}':y='{y}':enable='between(t\,{start_time:.3f}\,{end_time:.3f})'[v{i}]"
+        )
+        previous, start_time = f"v{i}", end_time
     command = ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(background(story_number))]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
