@@ -1,0 +1,49 @@
+name: 🎬 Funny Jokes Maker
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render-reel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+      - name: Install dependencies
+        run: pip install requests Pillow edge-tts
+      - name: Prepare output folder
+        run: mkdir -p output
+      - name: Generate funny joke reel
+        env:
+          REEL_VOICE: ${{ vars.REEL_VOICE || 'fil-PH-AngeloNeural' }}
+        run: python funnyjokes_maker.py
+      - name: Upload rendered video as an artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: funny-joke-reel-${{ github.run_number }}
+          path: output/*.mp4
+          retention-days: 7
+          if-no-files-found: error
+      - name: Save rendered video and progress to GitHub
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add funnyjokes_progress.json output/*.mp4
+          git diff --staged --quiet || git commit -m "chore: save funny joke reel and progress [skip ci]"
+          git pull --rebase
+          git push
