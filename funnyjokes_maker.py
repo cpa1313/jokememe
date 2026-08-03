@@ -185,10 +185,11 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
     previous, start_time = "base", 0.0
     for i, slide_time in enumerate(times):
         end_time = start_time + slide_time
-        # Shake only the opening title for 0.45 seconds; every story sentence stays steady.
+        # Gentle intro movement only: a small, slow one-time drift (no rapid shaking).
+        # Story sentences remain completely steady for comfortable reading.
         if i == 0:
-            x = r"if(lt(t\,0.450)\,12*sin(78*t)\,0)"
-            y = r"if(lt(t\,0.450)\,7*sin(103*t)\,0)"
+            x = r"if(lt(t\,0.650)\,3*sin(9*t)\,0)"
+            y = r"if(lt(t\,0.650)\,2*sin(7*t)\,0)"
         else:
             x = y = "0"
         filters.append(
@@ -197,13 +198,15 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
         )
         previous, start_time = f"v{i}", end_time
 
-    # One short glitch is placed at a random safe point after the intro, never repeated.
+    # One mild visual interruption is placed at a random safe point after the intro.
+    # It is a single, low-contrast colour offset—never flashing, flickering, noisy, or repeated.
     glitch_start = random.uniform(max(1.0, total * 0.28), max(1.2, total * 0.78))
-    glitch_end = min(total - 0.15, glitch_start + 0.18)
+    glitch_end = min(total - 0.15, glitch_start + 0.12)
     filters.append(
         f"[{previous}]split[clean][glitch_source];"
-        f"[glitch_source]rgbashift=rh=16:bh=-16:gv=8,noise=alls=14:allf=t+u[glitched];"
-        rf"[clean][glitched]overlay=enable='between(t\,{glitch_start:.3f}\,{glitch_end:.3f})'[final]"
+        f"[glitch_source]rgbashift=rh=4:bh=-4:gv=2[glitched];"
+        f"[clean][glitched]blend=all_mode=average[mild_glitch];"
+        rf"[clean][mild_glitch]overlay=enable='between(t\,{glitch_start:.3f}\,{glitch_end:.3f})'[final]"
     )
     previous = "final"
     command = ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(background(story_number))]
