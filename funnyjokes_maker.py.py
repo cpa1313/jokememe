@@ -30,7 +30,7 @@ VIDEO_DIR = ROOT / "assets" / "videos"
 PROGRESS_FILE = ROOT / "funnyjokes_progress.json"
 TARGET_W, TARGET_H = 1080, 1920
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v", ".webm"}
-VOICE = os.environ.get("REEL_VOICE", "en-US-AndrewMultilingualNeural")
+VOICE = os.environ.get("REEL_VOICE", "fil-PH-AngeloNeural")
 
 # Each joke is rendered as: hook → setup → punchline. Add future jokes at the end.
 # Jokes imported exactly from viralvideo_maker.py. Add future entries at the end.
