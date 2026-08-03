@@ -20,8 +20,7 @@ def ensure_packages(*packages: str) -> None:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "--quiet", *missing])
 
 
-ensure_packages("PIL", "requests")
-import requests
+ensure_packages("PIL")
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent
@@ -29,10 +28,9 @@ OUTPUT_DIR = ROOT / "output"
 OUTPUT_DIR.mkdir(exist_ok=True)
 VIDEO_DIR = ROOT / "assets" / "videos"
 PROGRESS_FILE = ROOT / "funnyjokes_progress.json"
-OUTPUT_VIDEO = OUTPUT_DIR / "reel.mp4"
 TARGET_W, TARGET_H = 1080, 1920
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v", ".webm"}
-VOICE = os.environ.get("REEL_VOICE", "en-US-AndrewMultilingualNeural")
+VOICE = os.environ.get("REEL_VOICE", "fil-PH-AngeloNeural")
 
 # Each joke is rendered as: hook → setup → punchline. Add future jokes at the end.
 # Jokes imported exactly from viralvideo_maker.py. Add future entries at the end.
@@ -965,12 +963,6 @@ JOKES = [
 ]
 
 
-def require_env(name: str) -> str:
-    value = os.environ.get(name, "").strip()
-    if not value:
-        raise RuntimeError(f"Missing required environment setting: {name}")
-    return value
-
 
 def natural_key(path: Path) -> list:
     return [int(part) if part.isdigit() else part.casefold() for part in re.split(r"(\d+)", path.name)]
@@ -1059,7 +1051,14 @@ def background(sequence: int) -> Path:
     return clips[(sequence - 1) % len(clips)]
 
 
-def build_reel(joke_number: int, joke: dict[str, str]) -> None:
+def output_video_path(joke_number: int, joke: dict[str, str]) -> Path:
+    # A readable, filesystem-safe filename based on the first line of the joke.
+    title = re.sub(r"[^a-z0-9]+", "-", joke["header"].lower()).strip("-")
+    title = title[:70].rstrip("-") or "funny-joke"
+    return OUTPUT_DIR / f"funny-joke-{joke_number:03d}-{title}.mp4"
+
+
+def build_reel(joke_number: int, joke: dict[str, str], output_video: Path) -> None:
     pngs, wavs, times = [], [], []
     for stage, line in enumerate((joke["header"], joke["body"])):
         png, wav = OUTPUT_DIR / f"slide_{stage}.png", OUTPUT_DIR / f"voice_{stage}.wav"
@@ -1079,29 +1078,18 @@ def build_reel(joke_number: int, joke: dict[str, str]) -> None:
     command = ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(background(joke_number))]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
-    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", f"{len(pngs)+1}:a", "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(OUTPUT_VIDEO)]
+    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", f"{len(pngs)+1}:a", "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(output_video)]
     subprocess.run(command, check=True)
 
-
-def publish(video: Path, caption: str) -> str:
-    token, page_id = require_env("FB_ACCESS_TOKEN"), require_env("FB_PAGE_ID")
-    endpoint = f"https://graph.facebook.com/v25.0/{page_id}/video_reels"
-    started = requests.post(endpoint, data={"upload_phase": "start", "access_token": token}, timeout=60); started.raise_for_status()
-    data = started.json(); video_id = data["video_id"]
-    with video.open("rb") as handle:
-        uploaded = requests.post(data.get("upload_url", f"https://rupload.facebook.com/video-upload/v25.0/{video_id}"), headers={"Authorization": f"OAuth {token}", "offset": "0", "file_size": str(video.stat().st_size), "Content-Type": "application/octet-stream"}, data=handle, timeout=300)
-    uploaded.raise_for_status()
-    finished = requests.post(endpoint, data={"upload_phase": "finish", "video_id": video_id, "access_token": token, "description": caption, "video_state": "PUBLISHED"}, timeout=60); finished.raise_for_status()
-    return video_id
 
 
 def main() -> None:
     number, joke = next_joke()
     print(f"Making joke {number}: {joke['header']}")
-    build_reel(number, joke)
-    video_id = publish(OUTPUT_VIDEO, joke["caption"])
+    video_path = output_video_path(number, joke)
+    build_reel(number, joke, video_path)
     save_progress(number)
-    print(f"Published Facebook Reel: {video_id}")
+    print(f"Rendered video saved to: {video_path}")
 
 
 if __name__ == "__main__":
