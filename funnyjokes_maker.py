@@ -164,7 +164,7 @@ def output_video_path(story_number: int, story: dict[str, str]) -> Path:
 
 
 def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> None:
-    # Title plus one sentence per card: easy to read and each beat gets its own shake.
+    # Title plus one sentence per card: easy to read, with motion used sparingly.
     beats = [("THE STORY", story["header"])]
     sentences = split_sentences(story["body"])
     for index, sentence in enumerate(sentences):
@@ -185,15 +185,27 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
     previous, start_time = "base", 0.0
     for i, slide_time in enumerate(times):
         end_time = start_time + slide_time
-        # A fast 0.45-second shake on every new sentence/card, then it settles completely.
-        shake_until = start_time + 0.45
-        x = rf"if(lt(t\,{shake_until:.3f})\,12*sin(78*t)\,0)"
-        y = rf"if(lt(t\,{shake_until:.3f})\,7*sin(103*t)\,0)"
+        # Shake only the opening title for 0.45 seconds; every story sentence stays steady.
+        if i == 0:
+            x = r"if(lt(t\,0.450)\,12*sin(78*t)\,0)"
+            y = r"if(lt(t\,0.450)\,7*sin(103*t)\,0)"
+        else:
+            x = y = "0"
         filters.append(
             f"[{i + 1}:v]scale={TARGET_W}:{TARGET_H}[s{i}];"
             rf"[{previous}][s{i}]overlay=x='{x}':y='{y}':enable='between(t\,{start_time:.3f}\,{end_time:.3f})'[v{i}]"
         )
         previous, start_time = f"v{i}", end_time
+
+    # One short glitch is placed at a random safe point after the intro, never repeated.
+    glitch_start = random.uniform(max(1.0, total * 0.28), max(1.2, total * 0.78))
+    glitch_end = min(total - 0.15, glitch_start + 0.18)
+    filters.append(
+        f"[{previous}]split[clean][glitch_source];"
+        f"[glitch_source]rgbashift=rh=16:bh=-16:gv=8,noise=alls=14:allf=t+u[glitched];"
+        rf"[clean][glitched]overlay=enable='between(t\,{glitch_start:.3f}\,{glitch_end:.3f})'[final]"
+    )
+    previous = "final"
     command = ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(background(story_number))]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
