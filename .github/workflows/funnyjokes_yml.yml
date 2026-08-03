@@ -28,7 +28,7 @@ jobs:
         run: mkdir -p output
       - name: Generate funny joke reel
         env:
-          REEL_VOICE: ${{ vars.REEL_VOICE || 'en-US-AndrewMultilingualNeural' }}
+          REEL_VOICE: ${{ vars.REEL_VOICE || 'fil-PH-AngeloNeural' }}
         run: python funnyjokes_maker.py
       - name: Upload rendered video as an artifact
         if: always()
