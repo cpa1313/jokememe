@@ -203,10 +203,11 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
     glitch_start = random.uniform(max(1.0, total * 0.28), max(1.2, total * 0.78))
     glitch_end = min(total - 0.15, glitch_start + 0.12)
     filters.append(
-        f"[{previous}]split[clean][glitch_source];"
+        f"[{previous}]split=2[clean_for_overlay][clean_for_blend];"
+        f"[clean_for_blend]split=2[blend_original][glitch_source];"
         f"[glitch_source]rgbashift=rh=4:bh=-4:gv=2[glitched];"
-        f"[clean][glitched]blend=all_mode=average[mild_glitch];"
-        rf"[clean][mild_glitch]overlay=enable='between(t\,{glitch_start:.3f}\,{glitch_end:.3f})'[final]"
+        f"[blend_original][glitched]blend=all_mode=average[mild_glitch];"
+        rf"[clean_for_overlay][mild_glitch]overlay=enable='between(t\,{glitch_start:.3f}\,{glitch_end:.3f})'[final]"
     )
     previous = "final"
     command = ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(background(story_number))]
