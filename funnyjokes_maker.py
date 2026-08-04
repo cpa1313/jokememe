@@ -198,6 +198,9 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path, bac
     audio = OUTPUT_DIR / "narration.wav"
     subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(manifest), "-c:a", "pcm_s16le", str(audio)], check=True)
     total = sum(times)
+    background_duration = duration(background_video)
+    # Keep the finished video as long as the narration requires; otherwise let the full source video play.
+    reel_duration = max(total, background_duration)
     # Do not repeat a short background clip. Instead, hold its final frame until the narration ends.
     filters = [
         f"[0:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,"
@@ -235,7 +238,7 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path, bac
     command = ["ffmpeg", "-y", "-i", str(background_video)]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
-    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", f"{len(pngs)+1}:a", "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(output_video)]
+    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", f"{len(pngs)+1}:a", "-t", f"{reel_duration:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(output_video)]
     subprocess.run(command, check=True)
 
 
