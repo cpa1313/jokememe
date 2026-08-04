@@ -35,9 +35,16 @@ VOICE = os.environ.get("REEL_VOICE", "fil-PH-AngeloNeural")
 # Each story has a complete ending. Add future original stories at the end.
 STORIES = [
     {
+        "number": 1,
         "header": "Ang Pinto na Hindi Dapat Buksan",
         "body": "Noong nagsimula si Marco bilang night guard sa isang lumang paaralan, iisa lang ang bilin sa kanya: Huwag mong bubuksan ang pinto sa dulo ng ikatlong palapag. Tuwing alas-dose ng gabi, may maririnig kang tatlong katok. Kahit anong mangyari, huwag mong papansinin. Sa ikatlong gabi, narinig niya ang tatlong katok. Maya-maya, may mahinang boses na nagsabi, 'Tulungan mo ako.' Hindi siya gumalaw. Ilang minuto ang lumipas at dumating ang principal na halatang kinakabahan. Sinabi nito, 'Salamat... kung binuksan mo ang pinto, wala ka na sana rito.' Kinaumagahan, ipinakita sa kanya ang lumang litrato ng paaralan. Nakita niya ang parehong pinto... pero limampung taon na pala itong sementado at wala nang daan papunta roon.",
         "caption": "🚪 Pinoy Mystery #001 — Ang Pinto na Hindi Dapat Buksan\n\n⚠️ Fictional story • For entertainment only.\nIkaw ba? Bubuksan mo ba ang pinto o susundin mo ang bilin?\n\n#PinoyMystery #TagalogMystery #FictionalStory #Reels #ShortStory",
+    },
+    {
+        "number": 2,
+        "header": "Ang Huling Tawag",
+        "body": "Habang naglalakad pauwi si Carlo, may narinig siyang cellphone na paulit-ulit na tumutunog sa isang bakanteng waiting shed. Nang sagutin niya ito, isang mahinang boses ang nagsabi, 'Huwag kang lilingon.' Hindi siya lumingon. Ilang segundo lang ang lumipas, rumagasa ang isang truck at winasak ang waiting shed. Kinabukasan, nabalitaan niyang may taong namatay sa parehong lugar... eksaktong oras ng tawag na sinagot niya.",
+        "caption": "📱 Pinoy Mystery #002 — Ang Huling Tawag\n\n⚠️ Fictional story • For entertainment only.\n👻 Presented by AngKulitPranks\n\nKung ikaw si Carlo, susundin mo ba ang babala?\n\n#AngKulitPranks #PinoyMystery #TagalogMystery #FictionalStory #Reels",
     },
 ]
 
@@ -50,7 +57,7 @@ def duration(path: Path) -> float:
     return float(result.stdout.strip())
 
 
-def next_story() -> tuple[int, dict[str, str]]:
+def next_story() -> tuple[int, int, dict[str, str]]:
     try:
         state = json.loads(PROGRESS_FILE.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
@@ -58,7 +65,8 @@ def next_story() -> tuple[int, dict[str, str]]:
     if not STORIES:
         raise RuntimeError("STORIES is empty; add at least one approved story before creating a Reel.")
     index = int(state.get("next_story_index", 0)) % len(STORIES)
-    return index + 1, STORIES[index]
+    story = STORIES[index]
+    return index, int(story["number"]), story
 
 
 def load_progress() -> dict:
@@ -68,10 +76,10 @@ def load_progress() -> dict:
         return {}
 
 
-def save_progress(story_number: int, next_video_index: int) -> None:
+def save_progress(story_index: int, story_number: int, next_video_index: int) -> None:
     """Record the story position for the next run."""
     PROGRESS_FILE.write_text(json.dumps({
-        "next_story_index": story_number % len(STORIES),
+        "next_story_index": (story_index + 1) % len(STORIES),
         "last_story_number": story_number,
         "next_video_index": next_video_index,
     }, indent=2), encoding="utf-8")
@@ -253,11 +261,11 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
 
 def main() -> None:
     # Render just one complete story per run, then advance to the next story.
-    number, story = next_story()
-    print(f"Making Pinoy Mystery {number}: {story['header']}")
+    story_index, number, story = next_story()
+    print(f"Making Pinoy Mystery #{number:03d}: {story['header']}")
     video_path = output_video_path(number, story)
     next_video_index = build_reel(number, story, video_path)
-    save_progress(number, next_video_index)
+    save_progress(story_index, number, next_video_index)
     print(f"Rendered video saved to: {video_path}")
 
 
