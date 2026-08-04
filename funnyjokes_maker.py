@@ -161,7 +161,7 @@ def narration(text: str, output: Path) -> float:
 
 
 def next_backgrounds(required_duration: float) -> tuple[list[Path], int]:
-    """Take numbered background clips in order until they cover one narration."""
+    """Start at 1.mp4 and take numbered clips in order until they cover one narration."""
     clips = sorted(
         (p for p in VIDEO_DIR.glob("*") if p.is_file() and p.suffix.lower() in VIDEO_EXTENSIONS),
         key=natural_key,
@@ -169,8 +169,9 @@ def next_backgrounds(required_duration: float) -> tuple[list[Path], int]:
     if not clips:
         raise FileNotFoundError("No background clips found. Add vertical videos to assets/horror/.")
 
-    state = load_progress()
-    video_index = int(state.get("next_video_index", 0))
+    # Every reel deliberately begins with the first numbered clip (1.mp4).
+    # The clips advance only within that reel, never from a previous workflow run.
+    video_index = 0
     selected, covered = [], 0.0
     # Keep moving through the numbered files. Cycle only if every available clip is too short.
     while covered < required_duration:
