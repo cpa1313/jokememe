@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Pinoy Mystery Reel Maker — creates one original, complete mystery reel per run.
 
-Place vertical clips in assets/horror/. The Reel contains narration only.
+Place each story's vertical clips in assets/horror/001/, assets/horror/002/, etc. The Reel contains narration only.
 """
 import json
 import os
@@ -160,14 +160,18 @@ def narration(text: str, output: Path) -> float:
     return seconds
 
 
-def next_backgrounds(required_duration: float) -> tuple[list[Path], int]:
-    """Start at 1.mp4 and take numbered clips in order until they cover one narration."""
+def next_backgrounds(story_number: int, required_duration: float) -> tuple[list[Path], int]:
+    """Start at 1.mp4 in the matching story folder and take clips in numeric order."""
+    story_video_dir = VIDEO_DIR / f"{story_number:03d}"
     clips = sorted(
-        (p for p in VIDEO_DIR.glob("*") if p.is_file() and p.suffix.lower() in VIDEO_EXTENSIONS),
+        (p for p in story_video_dir.glob("*") if p.is_file() and p.suffix.lower() in VIDEO_EXTENSIONS),
         key=natural_key,
     )
     if not clips:
-        raise FileNotFoundError("No background clips found. Add vertical videos to assets/horror/.")
+        raise FileNotFoundError(
+            f"No background clips found for Pinoy Mystery #{story_number:03d}. "
+            f"Add videos to {story_video_dir.relative_to(ROOT)}/"
+        )
 
     # Every reel deliberately begins with the first numbered clip (1.mp4).
     # The clips advance only within that reel, never from a previous workflow run.
@@ -210,16 +214,17 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
     audio = OUTPUT_DIR / "narration.wav"
     subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(manifest), "-c:a", "pcm_s16le", str(audio)], check=True)
     total = sum(times)
-    background_videos, next_video_index = next_backgrounds(total)
-    print("Using background videos: " + ", ".join(video.name for video in background_videos))
+    background_videos, next_video_index = next_backgrounds(story_number, total)
+    print(
+        f"Using backgrounds for Pinoy Mystery #{story_number:03d}: "
+        + ", ".join(video.name for video in background_videos)
+    )
 
     # Concatenate numbered clips in order. The final selected clip is allowed to finish,
     # even if it extends beyond the narration; pad only as a safety net for a short source.
-    prepared = []
     filters = []
     for index, _video in enumerate(background_videos):
         label = f"bg{index}"
-        prepared.append(f"[{index}:v]")
         filters.append(
             f"[{index}:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,"
             f"crop={TARGET_W}:{TARGET_H},eq=brightness=-0.16:saturation=0.8,"
