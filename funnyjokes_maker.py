@@ -174,31 +174,65 @@ def split_sentences(text: str) -> list[str]:
 
 
 def render_slide(story_title: str, label: str, text: str, output: Path) -> None:
-    """Render clean K-drama-style subtitles over a transparent background."""
+    """Render the heading in yellow boxes and story text as clean subtitles."""
     image = Image.new("RGBA", (TARGET_W, TARGET_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
-    text_font = font(58)
-    lines = wrap(draw, text, text_font, 900)
 
-    # Keep subtitles to two readable lines and inside the social-video safe area.
-    while len(lines) > 2 and text_font.size > 42:
-        text_font = font(text_font.size - 2)
+    # The opening heading matches the reference: bold black uppercase lettering,
+    # with each centered line printed on its own rounded warm-yellow box.
+    if text == story_title:
+        heading_font = font(72)
+        heading = text.upper()
+        lines = wrap(draw, heading, heading_font, 850)
+        while len(lines) > 3 and heading_font.size > 52:
+            heading_font = font(heading_font.size - 2)
+            lines = wrap(draw, heading, heading_font, 850)
+
+        line_gap = 12
+        box_pad_x, box_pad_y = 24, 10
+        box_height = heading_font.size + box_pad_y * 2
+        y = 190
+        for line in lines:
+            bbox = draw.textbbox((0, 0), line, font=heading_font)
+            text_width = bbox[2] - bbox[0]
+            left = (TARGET_W - text_width) // 2 - box_pad_x
+            right = (TARGET_W + text_width) // 2 + box_pad_x
+            draw.rounded_rectangle(
+                (left, y, right, y + box_height),
+                radius=18,
+                fill=(244, 220, 130, 235),
+            )
+            draw.text(
+                (TARGET_W // 2, y + box_height // 2),
+                line,
+                anchor="mm",
+                font=heading_font,
+                fill=(0, 0, 0, 255),
+            )
+            y += box_height + line_gap
+    else:
+        text_font = font(58)
         lines = wrap(draw, text, text_font, 900)
 
-    line_gap = 14
-    block_height = len(lines) * text_font.size + max(0, len(lines) - 1) * line_gap
-    y = 1510 - block_height // 2
-    for line in lines:
-        draw.text(
-            (540, y),
-            line,
-            anchor="ma",
-            font=text_font,
-            fill=(255, 255, 255, 255),
-            stroke_width=5,
-            stroke_fill=(0, 0, 0, 235),
-        )
-        y += text_font.size + line_gap
+        # Keep subtitles to two readable lines and inside the social-video safe area.
+        while len(lines) > 2 and text_font.size > 42:
+            text_font = font(text_font.size - 2)
+            lines = wrap(draw, text, text_font, 900)
+
+        line_gap = 14
+        block_height = len(lines) * text_font.size + max(0, len(lines) - 1) * line_gap
+        y = 1510 - block_height // 2
+        for line in lines:
+            draw.text(
+                (540, y),
+                line,
+                anchor="ma",
+                font=text_font,
+                fill=(255, 255, 255, 255),
+                stroke_width=5,
+                stroke_fill=(0, 0, 0, 235),
+            )
+            y += text_font.size + line_gap
     image.save(output)
 
 def narration(text: str, output: Path) -> float:
