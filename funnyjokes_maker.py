@@ -60,9 +60,9 @@ STORIES = [
     },
     {
         "number": 5,
-        "header": "Ang Nawawalang Oras",
-        "body": "Tuwing umaga, nagigising si Mia na eksaktong alas-tres na ng madaling-araw ang huling oras sa kanyang relo. Kahit anong gawin niya, wala siyang maalalang nangyari mula alas-dose hanggang alas-tres. Isang gabi, naglagay siya ng camera sa loob ng kanyang kwarto. Kinaumagahan, pinanood niya ang recording. Eksaktong alas-dose, bumangon siya, binuksan ang bintana, at lumabas ng kwarto. Pagbalik niya makalipas ang tatlong oras, putik na ang sapatos niya at may mahahabang gasgas sa kanyang mga braso. Hanggang ngayon... hindi pa rin niya alam kung saan siya nagpupunta tuwing hatinggabi.",
-        "caption": "🌙 Pinoy Mystery #005 — Ang Nawawalang Oras\n\n👻 Presented by AngKulitPranks\n\n⚠️ Fictional story • Inspired by Philippine folklore.\n\n👇 Saan kaya nagpupunta si Mia tuwing hatinggabi?\n\n#AngKulitPranks #PinoyMystery #PhilippineFolklore #FictionalStory #Reels",
+        "header": "Ang Maling Send",
+        "body": "Habang nasa opisina, gusto lang sana ni Mia i-message ang boyfriend niyang si Ethan ng, 'Love you, babe. Miss na kita.' Pero sa sobrang pagmamadali, sa boss nilang si Mr. Reyes niya ito naipadala. Nanlamig si Mia nang makita ang pangalan sa chat. Buong umaga siyang kabadong naghihintay ng magiging reaksyon ng boss. Bago matapos ang araw, dumaan si Mr. Reyes sa kanyang desk, ngumiti, at sinabing, 'Mukhang hindi para sa akin 'yan. Paki-send na lang muna ang report bago matapos ang araw.' Napatawa ang buong opisina habang si Mia ay halos matunaw sa hiya.",
+        "caption": "😂 Love Comedy #005 — Ang Maling Send\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story • For entertainment only.\n\n👇 Ano ang gagawin mo kung ikaw si Mia?\n\n#AngKulitPranks #LoveComedy #OfficeHumor #FictionalStory #Reels",
     },
 ]
 
