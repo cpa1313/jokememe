@@ -86,11 +86,19 @@ def next_story() -> tuple[int, dict[str, str]]:
     return index + 1, STORIES[index]
 
 
-def save_progress(story_number: int) -> None:
-    """Record the last rendered story number."""
+def load_progress() -> dict:
+    try:
+        return json.loads(PROGRESS_FILE.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def save_progress(story_number: int, next_video_index: int) -> None:
+    """Record independent story and background-video positions for the next run."""
     PROGRESS_FILE.write_text(json.dumps({
         "next_story_index": story_number % len(STORIES),
         "last_story_number": story_number,
+        "next_video_index": next_video_index,
     }, indent=2), encoding="utf-8")
 
 
@@ -154,11 +162,17 @@ def narration(text: str, output: Path) -> float:
     return seconds
 
 
-def background(sequence: int) -> Path:
-    clips = sorted((p for p in VIDEO_DIR.glob("*") if p.is_file() and p.suffix.lower() in VIDEO_EXTENSIONS), key=natural_key)
+def next_background() -> tuple[Path, int]:
+    """Use background videos in filename order, independently of the story order."""
+    clips = sorted(
+        (p for p in VIDEO_DIR.glob("*") if p.is_file() and p.suffix.lower() in VIDEO_EXTENSIONS),
+        key=natural_key,
+    )
     if not clips:
         raise FileNotFoundError("No background clips found. Add a vertical video to assets/horror/.")
-    return clips[(sequence - 1) % len(clips)]
+    state = load_progress()
+    video_index = int(state.get("next_video_index", 0))
+    return clips[video_index % len(clips)], video_index + 1
 
 
 def output_video_path(story_number: int, story: dict[str, str]) -> Path:
@@ -168,7 +182,7 @@ def output_video_path(story_number: int, story: dict[str, str]) -> Path:
     return OUTPUT_DIR / f"pinoy-mystery-{story_number:03d}-{title}.mp4"
 
 
-def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> None:
+def build_reel(story_number: int, story: dict[str, str], output_video: Path, background_video: Path) -> None:
     # Title plus one sentence per card: easy to read, with motion used sparingly.
     beats = [("THE STORY", story["header"])]
     sentences = split_sentences(story["body"])
@@ -215,7 +229,7 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
         rf"[clean_for_overlay][mild_glitch]overlay=enable='between(t\,{glitch_start:.3f}\,{glitch_end:.3f})'[final]"
     )
     previous = "final"
-    command = ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(background(story_number))]
+    command = ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(background_video)]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
     command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", f"{len(pngs)+1}:a", "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(output_video)]
@@ -228,8 +242,10 @@ def main() -> None:
     number, story = next_story()
     print(f"Making Pinoy Mystery {number}: {story['header']}")
     video_path = output_video_path(number, story)
-    build_reel(number, story, video_path)
-    save_progress(number)
+    background_video, next_video_index = next_background()
+    print(f"Using background video: {background_video.name}")
+    build_reel(number, story, video_path, background_video)
+    save_progress(number, next_video_index)
     print(f"Rendered video saved to: {video_path}")
 
 
