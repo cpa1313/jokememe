@@ -130,9 +130,7 @@ def render_slide(story_number: int, label: str, text: str, output: Path) -> None
     image = Image.new("RGBA", (TARGET_W, TARGET_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
     accent = (255, 205, 46, 255)
-    # The panel is deliberately lower and the text is short so labels never overlap it.
-    draw.rounded_rectangle((62, 330, 1018, 1545), radius=42,
-                           fill=(7, 12, 29, 224), outline=accent, width=5)
+    # Keep the background fully visible; captions are rendered directly over the footage.
     draw.text((540, 150), "PINOY MYSTERY", anchor="mm", font=font(48), fill=accent)
     draw.text((540, 235), label, anchor="mm", font=font(30), fill=(185, 207, 252, 255))
     text_font = font(68 if len(text) <= 110 else 58)
@@ -200,7 +198,12 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path, bac
     audio = OUTPUT_DIR / "narration.wav"
     subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(manifest), "-c:a", "pcm_s16le", str(audio)], check=True)
     total = sum(times)
-    filters = [f"[0:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,crop={TARGET_W}:{TARGET_H},eq=brightness=-0.16:saturation=0.8[base]"]
+    # Do not repeat a short background clip. Instead, hold its final frame until the narration ends.
+    filters = [
+        f"[0:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,"
+        f"crop={TARGET_W}:{TARGET_H},eq=brightness=-0.16:saturation=0.8,"
+        f"tpad=stop_mode=clone:stop_duration={total:.3f}[base]"
+    ]
     previous, start_time = "base", 0.0
     for i, slide_time in enumerate(times):
         end_time = start_time + slide_time
@@ -229,7 +232,7 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path, bac
         rf"[clean_for_overlay][mild_glitch]overlay=enable='between(t\,{glitch_start:.3f}\,{glitch_end:.3f})'[final]"
     )
     previous = "final"
-    command = ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(background_video)]
+    command = ["ffmpeg", "-y", "-i", str(background_video)]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
     command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", f"{len(pngs)+1}:a", "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(output_video)]
