@@ -135,7 +135,8 @@ def render_slide(story_title: str, label: str, text: str, output: Path) -> None:
     lines = wrap(draw, text, text_font, 805)
     line_gap = 22
     text_height = len(lines) * text_font.size + max(0, len(lines) - 1) * line_gap
-    y = 935 - text_height // 2
+    # Position the main story text a little lower for better visual balance.
+    y = 1035 - text_height // 2
     for line in lines:
         draw.text((540, y), line, anchor="ma", font=text_font, fill=(255, 255, 255, 255))
         y += text_font.size + line_gap
