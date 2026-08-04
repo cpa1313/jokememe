@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Pinoy Mystery Reel Maker — creates one original, complete mystery reel per run.
 
-Place vertical clips in assets/videos/. The Reel contains narration only.
+Place vertical clips in assets/horror/. The Reel contains narration only.
 """
 import json
 import os
@@ -26,7 +26,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parent
 OUTPUT_DIR = ROOT / "output"
 OUTPUT_DIR.mkdir(exist_ok=True)
-VIDEO_DIR = ROOT / "assets" / "videos"
+VIDEO_DIR = ROOT / "assets" / "horror"
 PROGRESS_FILE = ROOT / "mystery_progress.json"
 TARGET_W, TARGET_H = 1080, 1920
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v", ".webm"}
@@ -58,6 +58,11 @@ STORIES = [
         "header": "Ang Larawang May Isang Sobra",
         "body": "Pagkatapos ng reunion, binilang ni Nico ang mga tao sa larawan: sampu lang silang magkakaibigan, pero labing-isang mukha ang nasa kuha. Nang i-zoom niya ito, nakita niyang siya ang taong nasa likod, maputla at nakangiti. Tinawagan niya ang mga kaibigan niya, ngunit hindi sila umiiyak para sa larawan. Umiyak sila dahil ang kotse ni Nico ay bumangga sa daan papunta sa reunion. Ang larawan ang huli niyang paalam.",
         "caption": "Pinoy Mystery #005 — Ang Larawang May Isang Sobra\n\nFictional story • For entertainment only.\nSino sa tingin mo ang ika-labing-isang mukha?\n\n#PinoyMystery #TagalogHorror #FictionalStory #Reels",
+    },
+    {
+        "header": "Ang Pinto na Hindi Dapat Buksan",
+        "body": "Noong nagsimula si Marco bilang night guard sa isang lumang paaralan, iisa lang ang bilin sa kanya: Huwag mong bubuksan ang pinto sa dulo ng ikatlong palapag. Tuwing alas-dose ng gabi, may maririnig kang tatlong katok. Kahit anong mangyari, huwag mong papansinin. Sa ikatlong gabi, narinig niya ang tatlong katok. Maya-maya, may mahinang boses na nagsabi, 'Tulungan mo ako.' Hindi siya gumalaw. Ilang minuto ang lumipas at dumating ang principal na halatang kinakabahan. Sinabi nito, 'Salamat... kung binuksan mo ang pinto, wala ka na sana rito.' Kinaumagahan, ipinakita sa kanya ang lumang litrato ng paaralan. Nakita niya ang parehong pinto... pero limampung taon na pala itong sementado at wala nang daan papunta roon.",
+        "caption": "🚪 Pinoy Mystery #006 — Ang Pinto na Hindi Dapat Buksan\n\n⚠️ Fictional story • For entertainment only.\nIkaw ba? Bubuksan mo ba ang pinto o susundin mo ang bilin?\n\n#PinoyMystery #TagalogMystery #FictionalStory #Reels #ShortStory",
     },
 ]
 
@@ -152,7 +157,7 @@ def narration(text: str, output: Path) -> float:
 def background(sequence: int) -> Path:
     clips = sorted((p for p in VIDEO_DIR.glob("*") if p.is_file() and p.suffix.lower() in VIDEO_EXTENSIONS), key=natural_key)
     if not clips:
-        raise FileNotFoundError("No background clips found. Add a vertical video to assets/videos/.")
+        raise FileNotFoundError("No background clips found. Add a vertical video to assets/horror/.")
     return clips[(sequence - 1) % len(clips)]
 
 
