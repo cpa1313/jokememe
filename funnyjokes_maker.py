@@ -52,6 +52,11 @@ STORIES = [
         "body": "Unang gabi ni Ben bilang guwardiya sa isang lumang opisina. Habang nanonood ng CCTV, may nakita siyang lalaking nakasuot ng security uniform na mabilis na tumatakbo papunta sa emergency exit. Agad niya itong hinabol, pero walang tao sa buong gusali. Pagbalik niya sa monitor, nakita niyang ang lalaking tumatakbo ay siya mismo. Ilang segundo lang ang lumipas, isang malakas na pagsabog ang yumanig sa kabilang palapag.",
         "caption": "📹 Pinoy Mystery #003 — Ang CCTV Replay\n\n👻 Presented by AngKulitPranks\n\n⚠️ Fictional story • For entertainment only.\n\n👇 Ano kaya ang tinatakbuhan ni Ben sa CCTV?\n\n#AngKulitPranks\n#PinoyMystery\n#TagalogMystery\n#FictionalStory\n#Reels",
     },
+    {
+        "number": 4,
+        "header": "Ang Babae sa Room 308",
+        "body": "Nag-check in si Adrian sa isang lumang hotel para magpahinga matapos ang mahabang biyahe. Habang naghihintay ng pagkain, may kumatok sa pinto. Pagbukas niya, isang tahimik na babae ang nakatayo sa hallway. Nakangiti lang ito at sinabi, 'Huwag mong bubuksan ang pinto kapag may kumatok ulit.' Bago pa siya makapagtanong, umalis na ang babae. Makalipas ang ilang minuto, may tatlong malalakas na katok. Hindi niya binuksan ang pinto. Kinaumagahan, sinabi ng receptionist na walang ibang guest sa palapag na iyon buong gabi.",
+    },
 ]
 
 def natural_key(path: Path) -> list:
