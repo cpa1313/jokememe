@@ -160,17 +160,28 @@ def narration(text: str, output: Path) -> float:
     return seconds
 
 
-def next_background() -> tuple[Path, int]:
-    """Use background videos in filename order, independently of the story order."""
+def next_backgrounds(required_duration: float) -> tuple[list[Path], int]:
+    """Take numbered background clips in order until they cover one narration."""
     clips = sorted(
         (p for p in VIDEO_DIR.glob("*") if p.is_file() and p.suffix.lower() in VIDEO_EXTENSIONS),
         key=natural_key,
     )
     if not clips:
-        raise FileNotFoundError("No background clips found. Add a vertical video to assets/horror/.")
+        raise FileNotFoundError("No background clips found. Add vertical videos to assets/horror/.")
+
     state = load_progress()
     video_index = int(state.get("next_video_index", 0))
-    return clips[video_index % len(clips)], video_index + 1
+    selected, covered = [], 0.0
+    # Keep moving through the numbered files. Cycle only if every available clip is too short.
+    while covered < required_duration:
+        clip = clips[video_index % len(clips)]
+        clip_duration = duration(clip)
+        if clip_duration <= 0:
+            raise RuntimeError(f"Background video has no usable duration: {clip}")
+        selected.append(clip)
+        covered += clip_duration
+        video_index += 1
+    return selected, video_index
 
 
 def output_video_path(story_number: int, story: dict[str, str]) -> Path:
@@ -180,7 +191,7 @@ def output_video_path(story_number: int, story: dict[str, str]) -> Path:
     return OUTPUT_DIR / f"pinoy-mystery-{story_number:03d}-{title}.mp4"
 
 
-def build_reel(story_number: int, story: dict[str, str], output_video: Path, background_video: Path) -> None:
+def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> int:
     # Title plus one sentence per card: easy to read, with motion used sparingly.
     beats = [("THE STORY", story["header"])]
     sentences = split_sentences(story["body"])
@@ -198,15 +209,28 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path, bac
     audio = OUTPUT_DIR / "narration.wav"
     subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(manifest), "-c:a", "pcm_s16le", str(audio)], check=True)
     total = sum(times)
-    background_duration = duration(background_video)
-    # Keep the finished video as long as the narration requires; otherwise let the full source video play.
+    background_videos, next_video_index = next_backgrounds(total)
+    print("Using background videos: " + ", ".join(video.name for video in background_videos))
+
+    # Concatenate numbered clips in order. The final selected clip is allowed to finish,
+    # even if it extends beyond the narration; pad only as a safety net for a short source.
+    prepared = []
+    filters = []
+    for index, _video in enumerate(background_videos):
+        label = f"bg{index}"
+        prepared.append(f"[{index}:v]")
+        filters.append(
+            f"[{index}:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,"
+            f"crop={TARGET_W}:{TARGET_H},eq=brightness=-0.16:saturation=0.8,"
+            f"fps=30,setsar=1,format=yuv420p[{label}]"
+        )
+    background_duration = sum(duration(video) for video in background_videos)
     reel_duration = max(total, background_duration)
-    # Do not repeat a short background clip. Instead, hold its final frame until the narration ends.
-    filters = [
-        f"[0:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,"
-        f"crop={TARGET_W}:{TARGET_H},eq=brightness=-0.16:saturation=0.8,"
-        f"tpad=stop_mode=clone:stop_duration={total:.3f}[base]"
-    ]
+    filters.append(
+        "".join(f"[bg{index}]" for index in range(len(background_videos)))
+        + f"concat=n={len(background_videos)}:v=1:a=0,"
+        + f"tpad=stop_mode=clone:stop_duration={total:.3f}[base]"
+    )
     previous, start_time = "base", 0.0
     for i, slide_time in enumerate(times):
         end_time = start_time + slide_time
@@ -218,7 +242,7 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path, bac
         else:
             x = y = "0"
         filters.append(
-            f"[{i + 1}:v]scale={TARGET_W}:{TARGET_H}[s{i}];"
+            f"[{len(background_videos) + i}:v]scale={TARGET_W}:{TARGET_H}[s{i}];"
             rf"[{previous}][s{i}]overlay=x='{x}':y='{y}':enable='between(t\,{start_time:.3f}\,{end_time:.3f})'[v{i}]"
         )
         previous, start_time = f"v{i}", end_time
@@ -235,11 +259,14 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path, bac
         rf"[clean_for_overlay][mild_glitch]overlay=enable='between(t\,{glitch_start:.3f}\,{glitch_end:.3f})'[final]"
     )
     previous = "final"
-    command = ["ffmpeg", "-y", "-i", str(background_video)]
+    command = ["ffmpeg", "-y"]
+    for background_video in background_videos:
+        command += ["-i", str(background_video)]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
-    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", f"{len(pngs)+1}:a", "-t", f"{reel_duration:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(output_video)]
+    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", f"{len(background_videos) + len(pngs)}:a", "-t", f"{reel_duration:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(output_video)]
     subprocess.run(command, check=True)
+    return next_video_index
 
 
 
@@ -248,9 +275,7 @@ def main() -> None:
     number, story = next_story()
     print(f"Making Pinoy Mystery {number}: {story['header']}")
     video_path = output_video_path(number, story)
-    background_video, next_video_index = next_background()
-    print(f"Using background video: {background_video.name}")
-    build_reel(number, story, video_path, background_video)
+    next_video_index = build_reel(number, story, video_path)
     save_progress(number, next_video_index)
     print(f"Rendered video saved to: {video_path}")
 
