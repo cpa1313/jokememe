@@ -61,7 +61,7 @@ STORIES = [
     {
         "number": 5,
         "header": "Ang Maling Send",
-        "body": "Habang nasa opisina, gusto lang sana ni Mia i-message ang boyfriend niyang si Ethan ng, 'Love you, babe. Miss na kita.' Pero sa sobrang pagmamadali, sa boss nilang si Mr. Reyes niya ito naipadala. Nanlamig si Mia nang makita ang pangalan sa chat. Buong umaga siyang kabadong naghihintay ng magiging reaksyon ng boss. Bago matapos ang araw, dumaan si Mr. Reyes sa kanyang desk, ngumiti, at sinabing, 'Mukhang hindi para sa akin 'yan. Paki-send na lang muna ang report bago matapos ang araw.' Napatawa ang buong opisina habang si Mia ay halos matunaw sa hiya.",
+        "body": "Habang nasa opisina, gusto lang sana ni Mia i-message ang boyfriend niyang si Ethan ng, 'Love you, babe. Miss na kita.' Pero sa sobrang pagmamadali, kay Boss Reyes niya ito naipadala. Nanlamig si Mia nang makita ang pangalan sa chat. Buong umaga siyang kabadong naghihintay ng magiging reaksyon ni Boss Reyes. Bago matapos ang araw, dumaan si Boss Reyes sa kanyang desk, ngumiti, at sinabing, 'Mukhang hindi para sa akin 'yan. Paki-send na lang muna ang report bago matapos ang araw.' Napatawa ang buong opisina habang si Mia ay halos matunaw sa hiya.",
         "caption": "😂 Love Comedy #005 — Ang Maling Send\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story • For entertainment only.\n\n👇 Ano ang gagawin mo kung ikaw si Mia?\n\n#AngKulitPranks #LoveComedy #OfficeHumor #FictionalStory #Reels",
     },
 ]
