@@ -57,6 +57,15 @@ def duration(path: Path) -> float:
     return float(result.stdout.strip())
 
 
+def has_audio(path: Path) -> bool:
+    """Return True when the source video contains at least one audio stream."""
+    result = subprocess.run(
+        ["ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries", "stream=index", "-of", "csv=p=0", str(path)],
+        capture_output=True, text=True, check=True,
+    )
+    return bool(result.stdout.strip())
+
+
 def next_story() -> tuple[int, int, dict[str, str]]:
     try:
         state = json.loads(PROGRESS_FILE.read_text(encoding="utf-8"))
@@ -109,12 +118,18 @@ def split_sentences(text: str) -> list[str]:
     return [part.strip() for part in re.split(r"(?<=[.!?])\s+", text.strip()) if part.strip()]
 
 
-def render_slide(story_number: int, label: str, text: str, output: Path) -> None:
+def render_slide(story_title: str, label: str, text: str, output: Path) -> None:
     image = Image.new("RGBA", (TARGET_W, TARGET_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
     accent = (255, 205, 46, 255)
-    # Keep the background fully visible; captions are rendered directly over the footage.
-    draw.text((540, 150), "PINOY MYSTERY", anchor="mm", font=font(48), fill=accent)
+    # Show the actual story title as the heading on every card.
+    heading = story_title.upper()
+    heading_size = 48
+    heading_font = font(heading_size)
+    while heading_size > 28 and draw.textlength(heading, font=heading_font) > 920:
+        heading_size -= 2
+        heading_font = font(heading_size)
+    draw.text((540, 150), heading, anchor="mm", font=heading_font, fill=accent)
     draw.text((540, 235), label, anchor="mm", font=font(30), fill=(185, 207, 252, 255))
     text_font = font(68 if len(text) <= 110 else 58)
     lines = wrap(draw, text, text_font, 805)
@@ -124,7 +139,7 @@ def render_slide(story_number: int, label: str, text: str, output: Path) -> None
     for line in lines:
         draw.text((540, y), line, anchor="ma", font=text_font, fill=(255, 255, 255, 255))
         y += text_font.size + line_gap
-    draw.text((540, 1695), f"FICTIONAL STORY #{story_number}  •  FOLLOW FOR MORE",
+    draw.text((540, 1695), "FICTIONAL STORY  •  FOLLOW ANGKULITPRANKS FOR MORE",
               anchor="mm", font=font(25), fill=(200, 211, 236, 255))
     image.save(output)
 
@@ -190,7 +205,7 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
     pngs, wavs, times = [], [], []
     for index, (label, text) in enumerate(beats):
         png, wav = OUTPUT_DIR / f"slide_{index}.png", OUTPUT_DIR / f"voice_{index}.wav"
-        render_slide(story_number, label, text, png)
+        render_slide(story["header"], label, text, png)
         pngs.append(png); wavs.append(wav); times.append(narration(text, wav))
     manifest = OUTPUT_DIR / "audio.txt"
     manifest.write_text("".join(f"file '{p.resolve()}'\n" for p in wavs), encoding="utf-8")
@@ -213,7 +228,8 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
             f"crop={TARGET_W}:{TARGET_H},eq=brightness=-0.16:saturation=0.8,"
             f"fps=30,setsar=1,format=yuv420p[{label}]"
         )
-    background_duration = sum(duration(video) for video in background_videos)
+    background_times = [duration(video) for video in background_videos]
+    background_duration = sum(background_times)
     reel_duration = max(total, background_duration)
     filters.append(
         "".join(f"[bg{index}]" for index in range(len(background_videos)))
@@ -248,12 +264,47 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
         rf"[clean_for_overlay][mild_glitch]overlay=enable='between(t\,{glitch_start:.3f}\,{glitch_end:.3f})'[final]"
     )
     previous = "final"
+
+    # Mix narration at 100% with the original background-video sound at 20%.
+    # Silent source clips receive matching silence so audio stays synchronized.
+    background_audio_labels = []
+    for index, (video, clip_time) in enumerate(zip(background_videos, background_times)):
+        label = f"bga{index}"
+        if has_audio(video):
+            filters.append(
+                f"[{index}:a]aresample=48000,aformat=sample_fmts=fltp:channel_layouts=stereo,"
+                f"volume=0.20,atrim=duration={clip_time:.3f},asetpts=PTS-STARTPTS[{label}]"
+            )
+        else:
+            filters.append(
+                f"anullsrc=r=48000:cl=stereo,atrim=duration={clip_time:.3f},"
+                f"asetpts=PTS-STARTPTS[{label}]"
+            )
+        background_audio_labels.append(f"[{label}]")
+
+    filters.append(
+        "".join(background_audio_labels)
+        + f"concat=n={len(background_audio_labels)}:v=0:a=1,"
+        + f"apad,atrim=duration={reel_duration:.3f}[background_audio]"
+    )
+    narration_input = len(background_videos) + len(pngs)
+    filters.append(
+        f"[{narration_input}:a]aresample=48000,"
+        f"aformat=sample_fmts=fltp:channel_layouts=stereo,volume=1.0,"
+        f"apad,atrim=duration={reel_duration:.3f}[narration_audio]"
+    )
+    filters.append(
+        "[narration_audio][background_audio]"
+        "amix=inputs=2:duration=longest:normalize=0,"
+        f"alimiter=limit=0.95,atrim=duration={reel_duration:.3f}[mixed_audio]"
+    )
+
     command = ["ffmpeg", "-y"]
     for background_video in background_videos:
         command += ["-i", str(background_video)]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
-    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", f"{len(background_videos) + len(pngs)}:a", "-t", f"{reel_duration:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(output_video)]
+    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", "[mixed_audio]", "-t", f"{reel_duration:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(output_video)]
     subprocess.run(command, check=True)
     return next_video_index
 
