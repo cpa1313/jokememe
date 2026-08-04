@@ -35,34 +35,9 @@ VOICE = os.environ.get("REEL_VOICE", "fil-PH-AngeloNeural")
 # Each story has a complete ending. Add future original stories at the end.
 STORIES = [
     {
-        "header": "Ang Huling Pasahero",
-        "body": "Gabi nang magsara ang taxi ni Ben nang may babaeng sumakay at nagpahatid sa lumang sementeryo. Pagdating doon, iniabot nito ang resibong may petsang sampung taon na ang nakalipas. Sa likod ay may lumang larawan ni Ben at ng anak niyang namatay noon. Nakangiti ang babae at nagsabi: Salamat, Tatay. Sa unang pagkakataon, umuwi si Ben nang hindi na mabigat ang puso.",
-        "caption": "Pinoy Mystery #001 — Ang Huling Pasahero\n\nFictional story • For entertainment only.\nMay mensahe ka rin bang nais sabihin sa isang mahal sa buhay?\n\n#PinoyMystery #TagalogHorror #FictionalStory #Reels",
-    },
-    {
-        "header": "Ang Kumatok sa Unit 12",
-        "body": "Tuwing 3:13 ng madaling araw, may tatlong katok sa pinto ni Mara. Isang gabi, narinig niya ang boses ng nawawala niyang kapatid: Ate, huwag mong buksan. Tumawag siya sa guard, na nakakita sa CCTV ng usok na lumalabas sa bakanteng Unit 12. Sa loob ay natagpuan ang lumang cellphone ng kapatid niya at isang voice recording. Iyon pala ang huling mensahe nito bago ang sunog—at ngayon ay natanggap na rin ito ni Mara.",
-        "caption": "Pinoy Mystery #002 — Ang Kumatok sa Unit 12\n\nFictional story • For entertainment only.\nAno ang gagawin mo kung marinig mo ang boses ng nawawala mong mahal sa buhay?\n\n#PinoyMystery #TagalogHorror #FictionalStory #Reels",
-    },
-    {
-        "header": "Ang Voice Message Bukas",
-        "body": "Nakatanggap si Paolo ng voice message mula sa sarili niyang numero: Huwag kang sasakay sa bus mamayang alas-siyete. Sinunod niya ito. Kinabukasan, nabalitaang nawalan ng preno ang bus at walang nakaligtas sa aksidente. May isa pang voice message ang dumating: Salamat sa pakikinig. Pagtingin niya sa metadata, ipinadala raw ito makalipas ang dalawampung taon—mula sa sariling telepono niya.",
-        "caption": "Pinoy Mystery #003 — Ang Voice Message Bukas\n\nFictional story • For entertainment only.\nMakikinig ka ba kung ang tumatawag ay ang sarili mo mula sa hinaharap?\n\n#PinoyMystery #TagalogHorror #FictionalStory #Reels",
-    },
-    {
-        "header": "Ang Aklat na Walang Pahina",
-        "body": "May nakita si Liza sa lumang library na aklat na walang laman ang bawat pahina. Nang isulat niya ang pangalan niya, lumitaw ang buong araw niya hanggang sa linyang: Huwag mong lilingunin ang anino sa likod mo. Hindi siya lumingon at agad niyang tinawag ang librarian. Nahuli nila ang magnanakaw na nagtatago sa likod ng estante. Sa huling pahina, may lumitaw na bagong mensahe: Minsan, ang takot ang nagliligtas sa iyo.",
-        "caption": "Pinoy Mystery #004 — Ang Aklat na Walang Pahina\n\nFictional story • For entertainment only.\nSusundin mo ba ang babala ng aklat?\n\n#PinoyMystery #TagalogHorror #FictionalStory #Reels",
-    },
-    {
-        "header": "Ang Larawang May Isang Sobra",
-        "body": "Pagkatapos ng reunion, binilang ni Nico ang mga tao sa larawan: sampu lang silang magkakaibigan, pero labing-isang mukha ang nasa kuha. Nang i-zoom niya ito, nakita niyang siya ang taong nasa likod, maputla at nakangiti. Tinawagan niya ang mga kaibigan niya, ngunit hindi sila umiiyak para sa larawan. Umiyak sila dahil ang kotse ni Nico ay bumangga sa daan papunta sa reunion. Ang larawan ang huli niyang paalam.",
-        "caption": "Pinoy Mystery #005 — Ang Larawang May Isang Sobra\n\nFictional story • For entertainment only.\nSino sa tingin mo ang ika-labing-isang mukha?\n\n#PinoyMystery #TagalogHorror #FictionalStory #Reels",
-    },
-    {
         "header": "Ang Pinto na Hindi Dapat Buksan",
         "body": "Noong nagsimula si Marco bilang night guard sa isang lumang paaralan, iisa lang ang bilin sa kanya: Huwag mong bubuksan ang pinto sa dulo ng ikatlong palapag. Tuwing alas-dose ng gabi, may maririnig kang tatlong katok. Kahit anong mangyari, huwag mong papansinin. Sa ikatlong gabi, narinig niya ang tatlong katok. Maya-maya, may mahinang boses na nagsabi, 'Tulungan mo ako.' Hindi siya gumalaw. Ilang minuto ang lumipas at dumating ang principal na halatang kinakabahan. Sinabi nito, 'Salamat... kung binuksan mo ang pinto, wala ka na sana rito.' Kinaumagahan, ipinakita sa kanya ang lumang litrato ng paaralan. Nakita niya ang parehong pinto... pero limampung taon na pala itong sementado at wala nang daan papunta roon.",
-        "caption": "🚪 Pinoy Mystery #006 — Ang Pinto na Hindi Dapat Buksan\n\n⚠️ Fictional story • For entertainment only.\nIkaw ba? Bubuksan mo ba ang pinto o susundin mo ang bilin?\n\n#PinoyMystery #TagalogMystery #FictionalStory #Reels #ShortStory",
+        "caption": "🚪 Pinoy Mystery #001 — Ang Pinto na Hindi Dapat Buksan\n\n⚠️ Fictional story • For entertainment only.\nIkaw ba? Bubuksan mo ba ang pinto o susundin mo ang bilin?\n\n#PinoyMystery #TagalogMystery #FictionalStory #Reels #ShortStory",
     },
 ]
 
@@ -94,7 +69,7 @@ def load_progress() -> dict:
 
 
 def save_progress(story_number: int, next_video_index: int) -> None:
-    """Record independent story and background-video positions for the next run."""
+    """Record the story position for the next run."""
     PROGRESS_FILE.write_text(json.dumps({
         "next_story_index": story_number % len(STORIES),
         "last_story_number": story_number,
