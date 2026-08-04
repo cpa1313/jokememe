@@ -30,7 +30,9 @@ VIDEO_DIR = ROOT / "assets" / "horror"
 PROGRESS_FILE = ROOT / "mystery_progress.json"
 TARGET_W, TARGET_H = 1080, 1920
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v", ".webm"}
-VOICE = os.environ.get("REEL_VOICE", "fil-PH-AngeloNeural")
+VOICE = os.environ.get("REEL_VOICE", "fil-PH-BlessicaNeural")
+END_FREEZE_SECONDS = 1.5
+END_FADE_SECONDS = 1.0
 
 # Each story has a complete ending. Add future original stories at the end.
 STORIES = [
@@ -63,6 +65,12 @@ STORIES = [
         "header": "Ang Maling Send",
         "body": "Habang nasa opisina, gusto lang sana ni Mia i-message ang boyfriend niyang si Ethan ng, 'Love you, babe. Miss na kita.' Pero sa sobrang pagmamadali, kay Boss Reyes niya ito naipadala. Nanlamig si Mia nang makita ang pangalan sa chat. Buong umaga siyang kabadong naghihintay ng magiging reaksyon ni Boss Reyes. Bago matapos ang araw, dumaan si Boss Reyes sa kanyang desk, ngumiti, at sinabing, 'Mukhang hindi para sa akin 'yan. Paki-send na lang muna ang report bago matapos ang araw.' Napatawa ang buong opisina habang si Mia ay halos matunaw sa hiya.",
         "caption": "😂 Love Comedy #005 — Ang Maling Send\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story • For entertainment only.\n\n👇 Ano ang gagawin mo kung ikaw si Mia?\n\n#AngKulitPranks #LoveComedy #OfficeHumor #FictionalStory #Reels",
+    },
+    {
+        "number": 6,
+        "header": "My Ex is My New Coworker",
+        "body": "Excited si Mia sa unang araw niya sa bagong opisina. Pagpasok niya sa meeting room, halos mabitawan niya ang hawak na kape nang makita niyang si Ethan ang isa sa mga empleyadong naghihintay. Dalawang taon na silang hiwalay at ni minsan ay hindi na nagkita. Nagkatitigan sila nang ilang segundo bago sabay umiwas ng tingin na parang walang nangyari. Maya-maya, pumasok si Boss Reyes na may dalang folder at ngumiti. 'Welcome sa team, Mia. Simula ngayong araw, ikaw at si Ethan ang magiging partners sa bagong project.' Napabuntong-hininga si Mia habang napakamot na lang si Ethan. Mukhang mas mahaba pa ang project kaysa sa moving on nila.",
+        "caption": "😂 Love Comedy #006 — My Ex is My New Coworker\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story • For entertainment only.\n\n👇 Kakayanin mo bang makatrabaho ang ex mo araw-araw?\n\n#AngKulitPranks #LoveComedy #OfficeHumor #FictionalStory #Reels",
     },
 ]
 
@@ -132,34 +140,65 @@ def font(size: int):
 
 
 def split_sentences(text: str) -> list[str]:
-    """Keep each card short: one complete narrated sentence at a time."""
-    return [part.strip() for part in re.split(r"(?<=[.!?])\s+", text.strip()) if part.strip()]
+    """Split narration into short, natural one-to-two-line subtitle phrases."""
+    sentences = [part.strip() for part in re.split(r"(?<=[.!?])\s+", text.strip()) if part.strip()]
+    subtitles = []
+    max_chars = 74
+
+    for sentence in sentences:
+        # Prefer breaks at commas so each subtitle still sounds natural.
+        phrases = [part.strip() for part in re.split(r"(?<=,)\s+", sentence) if part.strip()]
+        current = ""
+        for phrase in phrases:
+            candidate = f"{current} {phrase}".strip()
+            if current and len(candidate) > max_chars:
+                subtitles.append(current)
+                current = phrase
+            else:
+                current = candidate
+        if current:
+            # Split an unusually long phrase safely at word boundaries.
+            words = current.split()
+            chunk = ""
+            for word in words:
+                candidate = f"{chunk} {word}".strip()
+                if chunk and len(candidate) > max_chars:
+                    subtitles.append(chunk)
+                    chunk = word
+                else:
+                    chunk = candidate
+            if chunk:
+                subtitles.append(chunk)
+
+    return subtitles
 
 
 def render_slide(story_title: str, label: str, text: str, output: Path) -> None:
+    """Render clean K-drama-style subtitles over a transparent background."""
     image = Image.new("RGBA", (TARGET_W, TARGET_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
-    accent = (255, 205, 46, 255)
-    # Show the actual story title as the heading on every card.
-    heading = story_title.upper()
-    heading_size = 48
-    heading_font = font(heading_size)
-    while heading_size > 28 and draw.textlength(heading, font=heading_font) > 920:
-        heading_size -= 2
-        heading_font = font(heading_size)
-    draw.text((540, 150), heading, anchor="mm", font=heading_font, fill=accent)
-    draw.text((540, 235), label, anchor="mm", font=font(30), fill=(185, 207, 252, 255))
-    text_font = font(68 if len(text) <= 110 else 58)
-    lines = wrap(draw, text, text_font, 805)
-    line_gap = 22
-    text_height = len(lines) * text_font.size + max(0, len(lines) - 1) * line_gap
-    # Position the main story text a little lower for better visual balance.
-    y = 1035 - text_height // 2
+    text_font = font(58)
+    lines = wrap(draw, text, text_font, 900)
+
+    # Keep subtitles to two readable lines and inside the social-video safe area.
+    while len(lines) > 2 and text_font.size > 42:
+        text_font = font(text_font.size - 2)
+        lines = wrap(draw, text, text_font, 900)
+
+    line_gap = 14
+    block_height = len(lines) * text_font.size + max(0, len(lines) - 1) * line_gap
+    y = 1510 - block_height // 2
     for line in lines:
-        draw.text((540, y), line, anchor="ma", font=text_font, fill=(255, 255, 255, 255))
+        draw.text(
+            (540, y),
+            line,
+            anchor="ma",
+            font=text_font,
+            fill=(255, 255, 255, 255),
+            stroke_width=5,
+            stroke_fill=(0, 0, 0, 235),
+        )
         y += text_font.size + line_gap
-    draw.text((540, 1695), "FICTIONAL STORY  •  FOLLOW ANGKULITPRANKS FOR MORE",
-              anchor="mm", font=font(25), fill=(200, 211, 236, 255))
     image.save(output)
 
 def narration(text: str, output: Path) -> float:
@@ -231,7 +270,11 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
     audio = OUTPUT_DIR / "narration.wav"
     subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(manifest), "-c:a", "pcm_s16le", str(audio)], check=True)
     total = sum(times)
-    background_videos, next_video_index = next_backgrounds(story_number, total)
+    # The story ends when narration ends. Keep enough source audio available so it can
+    # continue beneath the frozen frame and fade together with the picture.
+    ending_duration = total + END_FREEZE_SECONDS + END_FADE_SECONDS
+    fade_start = total + END_FREEZE_SECONDS
+    background_videos, next_video_index = next_backgrounds(story_number, ending_duration)
     print(
         f"Using backgrounds for Pinoy Mystery #{story_number:03d}: "
         + ", ".join(video.name for video in background_videos)
@@ -244,12 +287,12 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
         label = f"bg{index}"
         filters.append(
             f"[{index}:v]scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=increase,"
-            f"crop={TARGET_W}:{TARGET_H},eq=brightness=-0.16:saturation=0.8,"
+            f"crop={TARGET_W}:{TARGET_H},"
             f"fps=30,setsar=1,format=yuv420p[{label}]"
         )
     background_times = [duration(video) for video in background_videos]
     background_duration = sum(background_times)
-    reel_duration = max(total, background_duration)
+    reel_duration = total
     filters.append(
         "".join(f"[bg{index}]" for index in range(len(background_videos)))
         + f"concat=n={len(background_videos)}:v=1:a=0,"
@@ -284,6 +327,14 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
     )
     previous = "final"
 
+    # K-drama-style ending: hold the final story frame, then gently fade it to black.
+    filters.append(
+        f"[{previous}]trim=duration={reel_duration:.3f},setpts=PTS-STARTPTS,"
+        f"tpad=stop_mode=clone:stop_duration={END_FREEZE_SECONDS + END_FADE_SECONDS:.3f},"
+        f"fade=t=out:st={fade_start:.3f}:d={END_FADE_SECONDS:.3f}:color=black[ending_video]"
+    )
+    previous = "ending_video"
+
     # Mix narration at 100% with the original background-video sound at 20%.
     # Silent source clips receive matching silence so audio stays synchronized.
     background_audio_labels = []
@@ -304,18 +355,20 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
     filters.append(
         "".join(background_audio_labels)
         + f"concat=n={len(background_audio_labels)}:v=0:a=1,"
-        + f"apad,atrim=duration={reel_duration:.3f}[background_audio]"
+        + f"apad,atrim=duration={ending_duration:.3f}[background_audio]"
     )
     narration_input = len(background_videos) + len(pngs)
     filters.append(
         f"[{narration_input}:a]aresample=48000,"
         f"aformat=sample_fmts=fltp:channel_layouts=stereo,volume=1.0,"
-        f"apad,atrim=duration={reel_duration:.3f}[narration_audio]"
+        f"apad,atrim=duration={ending_duration:.3f}[narration_audio]"
     )
     filters.append(
         "[narration_audio][background_audio]"
         "amix=inputs=2:duration=longest:normalize=0,"
-        f"alimiter=limit=0.95,atrim=duration={reel_duration:.3f}[mixed_audio]"
+        f"alimiter=limit=0.95,atrim=duration={ending_duration:.3f},"
+        f"afade=t=out:st={fade_start:.3f}:d={END_FADE_SECONDS:.3f},"
+        f"apad,atrim=duration={ending_duration:.3f}[ending_audio]"
     )
 
     command = ["ffmpeg", "-y"]
@@ -323,7 +376,7 @@ def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> 
         command += ["-i", str(background_video)]
     for png in pngs:
         command += ["-loop", "1", "-i", str(png)]
-    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", "[mixed_audio]", "-t", f"{reel_duration:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(output_video)]
+    command += ["-i", str(audio), "-filter_complex", ";".join(filters), "-map", f"[{previous}]", "-map", "[ending_audio]", "-t", f"{ending_duration:.3f}", "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(output_video)]
     subprocess.run(command, check=True)
     return next_video_index
 
