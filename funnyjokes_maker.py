@@ -46,6 +46,12 @@ STORIES = [
         "body": "Habang naglalakad pauwi si Carlo, may narinig siyang cellphone na paulit-ulit na tumutunog sa isang bakanteng waiting shed. Nang sagutin niya ito, isang mahinang boses ang nagsabi, 'Huwag kang lilingon.' Hindi siya lumingon. Ilang segundo lang ang lumipas, rumagasa ang isang truck at winasak ang waiting shed. Kinabukasan, nabalitaan niyang may taong namatay sa parehong lugar... eksaktong oras ng tawag na sinagot niya.",
         "caption": "📱 Pinoy Mystery #002 — Ang Huling Tawag\n\n⚠️ Fictional story • For entertainment only.\n👻 Presented by AngKulitPranks\n\nKung ikaw si Carlo, susundin mo ba ang babala?\n\n#AngKulitPranks #PinoyMystery #TagalogMystery #FictionalStory #Reels",
     },
+    {
+        "number": 3,
+        "header": "Ang CCTV Replay",
+        "body": "Unang gabi ni Ben bilang guwardiya sa isang lumang opisina. Habang nanonood ng CCTV, may nakita siyang lalaking nakasuot ng security uniform na mabilis na tumatakbo papunta sa emergency exit. Agad niya itong hinabol, pero walang tao sa buong gusali. Pagbalik niya sa monitor, nakita niyang ang lalaking tumatakbo ay siya mismo. Ilang segundo lang ang lumipas, isang malakas na pagsabog ang yumanig sa kabilang palapag.",
+        "caption": "📹 Pinoy Mystery #003 — Ang CCTV Replay\n\n👻 Presented by AngKulitPranks\n\n⚠️ Fictional story • For entertainment only.\n\n👇 Ano kaya ang tinatakbuhan ni Ben sa CCTV?\n\n#AngKulitPranks\n#PinoyMystery\n#TagalogMystery\n#FictionalStory\n#Reels",
+    },
 ]
 
 def natural_key(path: Path) -> list:
