@@ -60,9 +60,9 @@ STORIES = [
     },
     {
         "number": 5,
-        "header": "Ang Anino sa Bubong",
-        "body": "Habang pauwi si Leo isang gabi, napansin niyang may aninong gumagalaw sa bubong ng mga bahay. Sa bawat ilaw ng poste, lumilipat din ang anino na parang may sumusunod sa kanya. Nang lakasan niya ang loob na tumingin sa itaas, wala siyang nakita. Pagdating niya sa bahay, narinig niya ang mahinang pagaspas ng malalaking pakpak sa bubong. Kinaumagahan, may nakita siyang mahahabang bakas ng kuko sa bubong ng kanilang bahay. Sabi ng kapitbahay, 'Buti hindi ka lumingon nang mas maaga.'",
-        "caption": "🦇 Pinoy Horror #005 — Ang Anino sa Bubong\n\n👻 Presented by AngKulitPranks\n\n⚠️ Fictional story • Inspired by Philippine folklore.\n\n👇 Ano sa tingin mo ang nasa bubong?\n\n#AngKulitPranks\n#PinoyHorror\n#PhilippineFolklore\n#FictionalStory\n#Reels",
+        "header": "Ang Nawawalang Alaala",
+        "body": "Halos gabi-gabi, nagigising si Mia na may putik sa kanyang mga paa at maliliit na gasgas sa kanyang mga braso, pero wala siyang maalalang nangyari. Inakala niyang naglalakad lang siya habang natutulog. Isang gabi, naglagay siya ng camera sa loob ng kanyang kwarto bago matulog. Kinaumagahan, wala na naman siyang maalala. Nang panoorin niya ang video, eksaktong alas-dose ng hatinggabi, bigla siyang bumangon, ngumiti sa camera, at dahan-dahang lumapit sa bintana. Pagkabukas nito, isang napakalaking anino na may malalawak na pakpak ang dumaan, at nawala siya sa dilim. Doon niya naisip... baka siya mismo ang matagal nang kinatatakutang Manananggal.",
+        "caption": "🦇 Pinoy Horror #005 — Ang Nawawalang Alaala\n\n👻 Presented by AngKulitPranks\n\n⚠️ Fictional story • Inspired by Philippine folklore.\n\n👇 Kung ikaw si Mia, papanoorin mo pa ba ang natitirang video?\n\n#AngKulitPranks #PinoyHorror #PhilippineFolklore #FictionalStory #Reels",
     },
 ]
 
