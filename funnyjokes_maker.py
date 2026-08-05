@@ -78,6 +78,12 @@ STORIES = [
         "body": "Nag-organisa si Boss Reyes ng company badminton tournament. Akala ng lahat, mahihirapan si Mia dahil tahimik lang siya sa opisina. Pero sa unang rally pa lang, tumalon siya at nagpakawala ng napakalakas na smash. Napa-wow ang buong court. Sunod-sunod ang puntos ni Mia hanggang siya ang manalo. Lumapit si Ethan at napangiti. 'Hindi mo sinabi na dating badminton champion ka pala.' Ngumiti si Mia. 'Hindi mo rin naman tinanong.'",
         "caption": "🏸 Love Comedy #007 — Ang Badminton Queen\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story • For entertainment only.\n\n👇 May talent ka bang ikinagulat ng mga kaibigan o katrabaho mo?\n\n#AngKulitPranks #LoveComedy #Badminton #OfficeHumor #FictionalStory",
     },
+    {
+        "number": 8,
+        "header": "Ikaw Na Nga Tinulungan, Ikaw Pa Masama",
+        "body": "Palaging lumalapit si Jenny kay Mia tuwing may problema. Minsan nanghiram ng pera, minsan pinagawa ang report, minsan nagpahatid pauwi. Hindi nagreklamo si Mia dahil kaibigan ang turing niya rito. Isang araw, humingi ulit ng pabor si Jenny pero tumanggi si Mia dahil may deadline din siyang hinahabol. Kinabukasan, napansin niyang malamig na ang pakikitungo ng mga katrabaho. Narinig pa niyang sinasabi ni Jenny, 'Simula nang ma-promote si Mia, ang yabang na niya.' Tahimik lang si Mia. Doon niya naisip... minsan, isang beses ka lang tumanggi, pero iyon lang ang matatandaan ng ibang tao.",
+        "caption": "💔 Real Life Story #008 — Ikaw Na Nga Tinulungan, Ikaw Pa Masama\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story inspired by everyday situations.\n\n👇 Naranasan mo na bang ikaw na ang tumulong, ikaw pa ang naging masama?\n\n#AngKulitPranks #RealLifeStory #Relatable #OfficeLife #FictionalStory",
+    },
 ]
 
 def natural_key(path: Path) -> list:
