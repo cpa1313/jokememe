@@ -81,8 +81,8 @@ STORIES = [
     {
         "number": 8,
         "header": "Ikaw Na Nga Tinulungan, Ikaw Pa Masama",
-        "body": "Palaging lumalapit si Jenny kay Mia tuwing may problema. Minsan nanghiram ng pera, minsan pinagawa ang report, minsan nagpahatid pauwi. Hindi nagreklamo si Mia dahil kaibigan ang turing niya rito. Isang araw, humingi ulit ng pabor si Jenny pero tumanggi si Mia dahil may deadline din siyang hinahabol. Kinabukasan, napansin niyang malamig na ang pakikitungo ng mga katrabaho. Narinig pa niyang sinasabi ni Jenny, 'Simula nang ma-promote si Mia, ang yabang na niya.' Tahimik lang si Mia. Doon niya naisip... minsan, isang beses ka lang tumanggi, pero iyon lang ang matatandaan ng ibang tao.",
-        "caption": "💔 Real Life Story #008 — Ikaw Na Nga Tinulungan, Ikaw Pa Masama\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story inspired by everyday situations.\n\n👇 Naranasan mo na bang ikaw na ang tumulong, ikaw pa ang naging masama?\n\n#AngKulitPranks #RealLifeStory #Relatable #OfficeLife #FictionalStory",
+        "body": "Nakakapagod tumulong sa taong ang akala, obligasyon mo na silang tulungan. Sa umpisa, simpleng pabor lang. Hanggang sa halos trabaho na nila ang ginagawa mo. Pero noong minsan ka lang tumanggi dahil ikaw naman ang nahihirapan... ikaw pa ang naging masama. Ang sakit, no? Kahit ilang beses kang umintindi, isang beses ka lang hindi pumayag... doon ka pa nila hinusgahan. Doon mo mare-realize... hindi pala nila na-appreciate ang kabaitan mo. Nasanay lang silang lagi kang nagsasakripisyo.",
+        "caption": "💔 Real Life Story #008 — Ikaw Na Nga Tinulungan, Ikaw Pa Masama\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story inspired by everyday office situations.\n\n👇 Naranasan mo na bang ikaw na ang tumulong, ikaw pa ang naging masama?\n\n#AngKulitPranks #RealLifeStory #OfficeLife #Relatable #FictionalStory #WorkDrama",
     },
 ]
 
