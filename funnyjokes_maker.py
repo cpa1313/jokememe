@@ -178,38 +178,49 @@ def render_slide(story_title: str, label: str, text: str, output: Path) -> None:
     image = Image.new("RGBA", (TARGET_W, TARGET_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
 
-    # The opening heading matches the reference: bold black uppercase lettering,
-    # with each centered line printed on its own rounded warm-yellow box.
-    if text == story_title:
-        heading_font = font(72)
+    # Keep the original first-frame design: each title line sits inside its own
+    # rounded yellow box. The creator credit appears directly beneath the heading.
+    is_opening = text == story_title
+    if is_opening:
+        heading_font = font(62)
         heading = text.upper()
         lines = wrap(draw, heading, heading_font, 850)
-        while len(lines) > 3 and heading_font.size > 52:
+        while len(lines) > 2 and heading_font.size > 48:
             heading_font = font(heading_font.size - 2)
             lines = wrap(draw, heading, heading_font, 850)
 
+        box_pad_x, box_pad_y = 22, 10
         line_gap = 12
-        box_pad_x, box_pad_y = 24, 10
-        box_height = heading_font.size + box_pad_y * 2
-        y = 190
+        y = 170
         for line in lines:
-            bbox = draw.textbbox((0, 0), line, font=heading_font)
-            text_width = bbox[2] - bbox[0]
-            left = (TARGET_W - text_width) // 2 - box_pad_x
-            right = (TARGET_W + text_width) // 2 + box_pad_x
-            draw.rounded_rectangle(
-                (left, y, right, y + box_height),
-                radius=18,
-                fill=(244, 220, 130, 235),
+            left, top, right, bottom = draw.textbbox((0, 0), line, font=heading_font)
+            text_w, text_h = right - left, bottom - top
+            box = (
+                TARGET_W // 2 - text_w // 2 - box_pad_x,
+                y - box_pad_y,
+                TARGET_W // 2 + text_w // 2 + box_pad_x,
+                y + text_h + box_pad_y,
             )
+            draw.rounded_rectangle(box, radius=14, fill=(250, 216, 108, 245))
             draw.text(
-                (TARGET_W // 2, y + box_height // 2),
+                (TARGET_W // 2, y - top),
                 line,
-                anchor="mm",
+                anchor="ma",
                 font=heading_font,
                 fill=(0, 0, 0, 255),
             )
-            y += box_height + line_gap
+            y = box[3] + line_gap
+
+        credit_font = font(30)
+        draw.text(
+            (TARGET_W // 2, y + 20),
+            "AI Short Film by @AngKulitPranks",
+            anchor="ma",
+            font=credit_font,
+            fill=(255, 255, 255, 245),
+            stroke_width=3,
+            stroke_fill=(0, 0, 0, 210),
+        )
     else:
         text_font = font(58)
         lines = wrap(draw, text, text_font, 900)
@@ -233,6 +244,19 @@ def render_slide(story_title: str, label: str, text: str, output: Path) -> None:
                 stroke_fill=(0, 0, 0, 235),
             )
             y += text_font.size + line_gap
+
+    # After the opening credit, keep a smaller signature on all story frames.
+    if not is_opening:
+        watermark_font = font(34)
+        draw.text(
+            (TARGET_W - 42, 62),
+            "@AngKulitPranks",
+            anchor="ra",
+            font=watermark_font,
+            fill=(255, 255, 255, 205),
+            stroke_width=3,
+            stroke_fill=(0, 0, 0, 175),
+        )
     image.save(output)
 
 def narration(text: str, output: Path) -> float:
@@ -288,7 +312,7 @@ def output_video_path(story_number: int, story: dict[str, str]) -> Path:
 
 def build_reel(story_number: int, story: dict[str, str], output_video: Path) -> int:
     # Title plus one sentence per card: easy to read, with motion used sparingly.
-    beats = [("THE STORY", story["header"])]
+    beats = [("AI Short Film by @AngKulitPranks", story["header"])]
     sentences = split_sentences(story["body"])
     for index, sentence in enumerate(sentences):
         label = "THE ENDING" if index == len(sentences) - 1 else "THE STORY"
