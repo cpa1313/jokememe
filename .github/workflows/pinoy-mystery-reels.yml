@@ -12,22 +12,28 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Install FFmpeg
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
+
       - name: Install dependencies
         run: pip install Pillow edge-tts
+
       - name: Prepare output folder
         run: mkdir -p output
+
       - name: Generate one complete Pinoy mystery reel
         env:
-          REEL_VOICE: ${{ vars.REEL_VOICE || 'fil-PH-AngeloNeural' }}
-        run: python funnyjokes_maker.py
+          REEL_VOICE: fil-PH-BlessicaNeural
+        run: python funnyjokes_maker_freeze_fade.py
+
       - name: Upload rendered video as an artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -36,6 +42,7 @@ jobs:
           path: output/*.mp4
           retention-days: 7
           if-no-files-found: error
+
       - name: Save mystery video and progress to GitHub
         if: success()
         run: |
