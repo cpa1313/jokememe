@@ -30,7 +30,7 @@ VIDEO_DIR = ROOT / "assets" / "horror"
 PROGRESS_FILE = ROOT / "mystery_progress.json"
 TARGET_W, TARGET_H = 1080, 1920
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v", ".webm"}
-VOICE = os.environ.get("REEL_VOICE", "fil-PH-BlessicaNeural")
+VOICE = os.environ.get("REEL_VOICE", "fil-PH-AngeloNeural")
 END_FREEZE_SECONDS = 1.5
 END_FADE_SECONDS = 1.0
 
