@@ -72,6 +72,12 @@ STORIES = [
         "body": "Excited si Mia sa unang araw niya sa bagong opisina. Pagpasok niya sa meeting room, halos mabitawan niya ang hawak na kape nang makita niyang si Ethan ang isa sa mga empleyadong naghihintay. Dalawang taon na silang hiwalay at ni minsan ay hindi na nagkita. Nagkatitigan sila nang ilang segundo bago sabay umiwas ng tingin na parang walang nangyari. Maya-maya, pumasok si Boss Reyes na may dalang folder at ngumiti. 'Welcome sa team, Mia. Simula ngayong araw, ikaw at si Ethan ang magiging partners sa bagong project.' Napabuntong-hininga si Mia habang napakamot na lang si Ethan. Mukhang mas mahaba pa ang project kaysa sa moving on nila.",
         "caption": "😂 Love Comedy #006 — My Ex is My New Coworker\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story • For entertainment only.\n\n👇 Kakayanin mo bang makatrabaho ang ex mo araw-araw?\n\n#AngKulitPranks #LoveComedy #OfficeHumor #FictionalStory #Reels",
     },
+    {
+        "number": 7,
+        "header": "Ang Badminton Queen",
+        "body": "Nag-organisa si Boss Reyes ng company badminton tournament. Akala ng lahat, mahihirapan si Mia dahil tahimik lang siya sa opisina. Pero sa unang rally pa lang, tumalon siya at nagpakawala ng napakalakas na smash. Napa-wow ang buong court. Sunod-sunod ang puntos ni Mia hanggang siya ang manalo. Lumapit si Ethan at napangiti. 'Hindi mo sinabi na dating badminton champion ka pala.' Ngumiti si Mia. 'Hindi mo rin naman tinanong.'",
+        "caption": "🏸 Love Comedy #007 — Ang Badminton Queen\n\n💕 Presented by AngKulitPranks\n\n⚠️ Fictional story • For entertainment only.\n\n👇 May talent ka bang ikinagulat ng mga kaibigan o katrabaho mo?\n\n#AngKulitPranks #LoveComedy #Badminton #OfficeHumor #FictionalStory",
+    },
 ]
 
 def natural_key(path: Path) -> list:
