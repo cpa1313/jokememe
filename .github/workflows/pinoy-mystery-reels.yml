@@ -31,7 +31,7 @@ jobs:
 
       - name: Generate one complete Pinoy mystery reel
         env:
-          REEL_VOICE: fil-PH-BlessicaNeural
+          REEL_VOICE: fil-PH-AngeloNeural
         run: python funnyjokes_maker.py
 
       - name: Upload rendered video as an artifact
