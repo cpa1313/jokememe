@@ -32,7 +32,7 @@ jobs:
       - name: Generate one complete Pinoy mystery reel
         env:
           REEL_VOICE: fil-PH-BlessicaNeural
-        run: python funnyjokes_maker_freeze_fade.py
+        run: python funnyjokes_maker.py
 
       - name: Upload rendered video as an artifact
         if: always()
