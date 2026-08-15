@@ -35,6 +35,83 @@ SLIDE_SECONDS = 3.0    # Relative display weight for each benefit.
 # 0 = invisible; 255 = solid yellow. 150 shows the video through the box.
 YELLOW_BOX_ALPHA = 150
 
+# De-obfuscates leetspeak/censored spelling (digits, @, ! swapped for letters,
+# stretched-out repeated letters) back to plain words. Platforms' content
+# classifiers specifically look for this "spell it weird to dodge moderation"
+# pattern, so writing plain words removes that signal even without knowing
+# every individual spelling variant in advance.
+import re as _re
+
+# Whole recurring slang roots get mapped to a clean clinical equivalent first
+# (handles all case/spacing/leet variants of these two recurring words).
+_ROOT_PATTERNS = [
+    (_re.compile(r"b[\w@]{0,3}mb[\w@]{0,3}ng", _re.IGNORECASE), "pagtatalik"),
+    (_re.compile(r"k[i1!]{1,4}f{1,4}[ys]{1,4}", _re.IGNORECASE), "ari ng babae"),
+]
+
+# Fallback: any remaining leet character sandwiched between two letters gets
+# decoded to its phonetic letter (or dropped, for digits with no clean
+# phonetic mapping like "2").
+_LEET_CHAR_MAP = {"0": "o", "1": "i", "3": "e", "@": "a", "!": "i"}
+_EMBEDDED_LEET_RE = _re.compile(r"(?<=[A-Za-z])[0-9@!](?=[A-Za-z])")
+# Collapses stretched-out repeated letters (e.g. "ffff", "iii") down to a
+# natural double, and tidies excessive punctuation the same way.
+_REPEAT_RE = _re.compile(r"(.)\1{2,}")
+
+# Several hashtag/caption-tail groups instead of one fixed block repeated
+# on every single post — reduces the "identical template stamped out on a
+# loop" signal.
+HASHTAG_GROUPS = [
+    "#MikaNurseDaily #healthtips #tips #reels",
+    "#MikaNurseDaily #kalusugan #healthfacts #reels",
+    "#MikaNurseDaily #wellness #healthph #reels",
+    "#MikaNurseDaily #nursetips #healthawareness #reels",
+]
+
+# Visual layouts the renderer rotates through so posts don't all look like
+# the same stamped template. Each entry: (box fill RGBA, text color, y-anchor).
+TEMPLATES = [
+    {"box_fill": (255, 244, 165, 150), "text_color": (0, 0, 0, 255)},   # yellow / black
+    {"box_fill": (20, 20, 20, 160), "text_color": (255, 255, 255, 255)},  # dark / white
+    {"box_fill": (255, 255, 255, 170), "text_color": (10, 10, 10, 255)},  # white / near-black
+]
+
+AI_DISCLOSURE_TEXT = "AI-generated video & voice"
+
+
+# A couple of word-initial cases the embedded-leet decoder intentionally
+# doesn't touch (it only decodes a leet char sitting *between* two letters,
+# so it never corrupts legitimate quantities like "5ml" or "30mins" which
+# start with a digit). These are known, explicit exceptions.
+_WORD_INITIAL_FIXES = [
+    (_re.compile(r"\b1wasan\b", _re.IGNORECASE), "iwasan"),
+    (_re.compile(r"(?<![A-Za-z0-9])@nal\b", _re.IGNORECASE), "anal"),
+    (_re.compile(r"\bspe+rm\b", _re.IGNORECASE), "sperm"),
+    (_re.compile(r"\bar1\b", _re.IGNORECASE), "ari"),
+    (_re.compile(r"\bded3\b", _re.IGNORECASE), "dede"),
+    (_re.compile(r"\bs3!x\b", _re.IGNORECASE), "sex"),
+]
+
+
+def _case_matched_replace(match: "_re.Match", replacement: str) -> str:
+    original = match.group(0)
+    if original.isupper():
+        return replacement.upper()
+    if original[:1].isupper():
+        return replacement.capitalize()
+    return replacement
+
+
+def sanitize_text(text: str) -> str:
+    """De-obfuscate leetspeak/censored spelling before it's used anywhere."""
+    for pattern, replacement in _ROOT_PATTERNS:
+        text = pattern.sub(lambda m: _case_matched_replace(m, replacement), text)
+    text = _EMBEDDED_LEET_RE.sub(lambda m: _LEET_CHAR_MAP.get(m.group(0), ""), text)
+    text = _REPEAT_RE.sub(lambda m: m.group(1) * 2, text)
+    for pattern, replacement in _WORD_INITIAL_FIXES:
+        text = pattern.sub(lambda m: _case_matched_replace(m, replacement), text)
+    return text
+
 # Add new topics ONLY at the bottom. Each topic is: heading first, then benefits.
 POSTS = [
     {
@@ -2231,10 +2308,36 @@ def save_progress(data: dict) -> None:
 
 
 def next_post() -> dict:
+    import random
+
     data = load_progress()
     index = (int(data.get("last_index", -1)) + 1) % len(POSTS)
-    post = POSTS[index]
-    data.update(last_index=index, last_heading=post["heading"])
+    raw = POSTS[index]
+
+    heading = sanitize_text(raw["heading"])
+    benefits = [sanitize_text(b) for b in raw["benefits"]]
+
+    # Rebuild the caption with a rotating hashtag group instead of the
+    # original fixed block, and skip the previous group so it's never
+    # repeated back-to-back.
+    prev_group = data.get("last_hashtag_group", -1)
+    choices = [i for i in range(len(HASHTAG_GROUPS)) if i != prev_group] or list(range(len(HASHTAG_GROUPS)))
+    group_index = random.choice(choices)
+    caption = f"{heading}\n\n{HASHTAG_GROUPS[group_index]}"
+
+    template_index = index % len(TEMPLATES)
+
+    post = {
+        "heading": heading,
+        "benefits": benefits,
+        "caption": caption,
+        "template_index": template_index,
+    }
+    data.update(
+        last_index=index,
+        last_heading=heading,
+        last_hashtag_group=group_index,
+    )
     save_progress(data)
     return post
 
@@ -2268,8 +2371,9 @@ def has_audio(path: Path) -> bool:
     return bool(result.stdout.strip())
 
 
-def render_slide(text: str, output_png: Path, is_heading: bool = False) -> None:
-    """Make one yellow rounded-text slide, placed high enough for Reel controls."""
+def render_slide(text: str, output_png: Path, is_heading: bool = False, template: dict | None = None) -> None:
+    """Make one rounded-text slide, placed high enough for Reel controls."""
+    template = template or TEMPLATES[0]
     if is_heading:
         text = text.upper()
     from PIL import Image, ImageDraw, ImageFont
@@ -2311,10 +2415,23 @@ def render_slide(text: str, output_png: Path, is_heading: bool = False) -> None:
         text_w = bound[2] - bound[0]
         x1 = (TARGET_W - text_w) // 2 - box_pad_x
         x2 = (TARGET_W + text_w) // 2 + box_pad_x
-        draw.rounded_rectangle((x1, y, x2, y + box_h), radius=24, fill=(255, 244, 165, YELLOW_BOX_ALPHA))
+        draw.rounded_rectangle((x1, y, x2, y + box_h), radius=24, fill=template["box_fill"])
         text_y = y + box_pad_y - bound[1]
-        draw.text(((TARGET_W - text_w) // 2, text_y), line, font=font, fill=(0, 0, 0, 255))
+        draw.text(((TARGET_W - text_w) // 2, text_y), line, font=font, fill=template["text_color"])
         y += box_h + box_gap
+
+    # Small, persistent AI-content disclosure in the corner (Meta requires
+    # this be disclosed; the in-app "AI Info" toggle isn't exposed via the
+    # Graph API yet, so a visible on-video label is the compliant fallback).
+    disclosure_font = ImageFont.truetype(font_path, 26)
+    dx, dy = 24, TARGET_H - 70
+    d_bound = draw.textbbox((dx, dy), AI_DISCLOSURE_TEXT, font=disclosure_font)
+    draw.rounded_rectangle(
+        (d_bound[0] - 12, d_bound[1] - 8, d_bound[2] + 12, d_bound[3] + 8),
+        radius=10, fill=(0, 0, 0, 130),
+    )
+    draw.text((dx, dy), AI_DISCLOSURE_TEXT, font=disclosure_font, fill=(255, 255, 255, 230))
+
     image.save(output_png)
 
 
@@ -2328,10 +2445,11 @@ def build_video(post: dict, output_path: Path) -> None:
     timing_weights = [HEADING_SECONDS] + [SLIDE_SECONDS] * len(post["benefits"])
     seconds_per_weight = duration / sum(timing_weights)
     slide_times = [weight * seconds_per_weight for weight in timing_weights]
+    template = TEMPLATES[post.get("template_index", 0) % len(TEMPLATES)]
     pngs = []
     for i, slide in enumerate(slides):
         png = OUTPUT_DIR / f"text_overlay_{i}.png"
-        render_slide(slide, png, is_heading=(i == 0))
+        render_slide(slide, png, is_heading=(i == 0), template=template)
         pngs.append(png)
 
     filters = [
