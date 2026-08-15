@@ -2,7 +2,12 @@ name: 🎬 Benefits Reel Poster
 
 on:
   schedule:
-    - cron: "0 10 * * *"
+    # Spread across the day instead of one fixed daily slot.
+    # Each trigger time below is a *window start* — the job adds random
+    # jitter on top so the actual post time isn't identical every day.
+    - cron: "15 1 * * *"   # ~09:15 PHT window
+    - cron: "40 5 * * *"   # ~13:40 PHT window
+    - cron: "5 10 * * *"   # ~18:05 PHT window
   workflow_dispatch:
 
 permissions:
@@ -26,6 +31,13 @@ jobs:
         run: pip install requests Pillow
       - name: Prepare output folder
         run: mkdir -p output
+      - name: Random jitter before posting
+        run: |
+          # Sleep a random 0-40 minutes so the post lands at a
+          # human-looking, non-identical time each run.
+          SLEEP_SECONDS=$(( RANDOM % 2400 ))
+          echo "Sleeping ${SLEEP_SECONDS}s before posting"
+          sleep "$SLEEP_SECONDS"
       - name: Generate and post benefits reel
         env:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
