@@ -1,13 +1,13 @@
-name: new mika nurse automation
+name: 🎬 Benefits Reel Poster
 
 on:
   schedule:
-    # Spread across the day instead of one fixed daily slot.
-    # Each trigger time below is a *window start* — the job adds random
-    # jitter on top so the actual post time isn't identical every day.
-    - cron: "15 1 * * *"   # ~09:15 PHT window
-    - cron: "40 5 * * *"   # ~13:40 PHT window
-    - cron: "5 10 * * *"   # ~18:05 PHT window
+    # Deliberately non-round minute/hour values instead of e.g. "0 10 * * *" —
+    # this alone breaks the "posted at the exact same clean timestamp every
+    # day" pattern without burning runner minutes on an in-job sleep.
+    - cron: "13 1 * * *"   # ~09:13 PHT
+    - cron: "47 5 * * *"   # ~13:47 PHT
+    - cron: "22 10 * * *"  # ~18:22 PHT
   workflow_dispatch:
 
 permissions:
@@ -31,13 +31,6 @@ jobs:
         run: pip install requests Pillow
       - name: Prepare output folder
         run: mkdir -p output
-      - name: Random jitter before posting
-        run: |
-          # Sleep a random 0-40 minutes so the post lands at a
-          # human-looking, non-identical time each run.
-          SLEEP_SECONDS=$(( RANDOM % 2400 ))
-          echo "Sleeping ${SLEEP_SECONDS}s before posting"
-          sleep "$SLEEP_SECONDS"
       - name: Generate and post benefits reel
         env:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
